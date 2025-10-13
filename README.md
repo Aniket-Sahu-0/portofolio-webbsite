@@ -1,10 +1,10 @@
-# LensCraft - Photographer Portfolio Website
+# The Wedding Shade - Photographer Portfolio Website
 
 A minimalist, dark-themed documentary photographer portfolio website built with React, TypeScript, Tailwind CSS, and Node.js. Features scroll-driven animations, auto-playing slideshows, and a cohesive grayscale aesthetic.
 
 ## 🎯 Project Overview
 
-**LensCraft** is a professional portfolio website designed for documentary photographers who value clean, understated presentation. The site emphasizes visual storytelling through:
+**The Wedding Shade** is a professional portfolio website designed for documentary photographers who value clean, understated presentation. The site emphasizes visual storytelling through:
 
 - **Minimalist Design**: Dark grayscale palette with subtle accents
 - **Scroll-Driven Interactions**: Smooth parallax effects and scroll-triggered animations
@@ -185,7 +185,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=your-test-email@ethereal.email
 SMTP_PASS=your-test-password
-EMAIL_FROM=noreply@lenscraft.com
+EMAIL_FROM=noreply@theweddingshade.com
 EMAIL_TO=your-email@example.com
 
 # Security

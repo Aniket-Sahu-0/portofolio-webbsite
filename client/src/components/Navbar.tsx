@@ -39,7 +39,7 @@ const Navbar = () => {
             isScrolled ? 'text-primary' : 'text-white'
           }`}
         >
-          LensCraft
+          The Wedding Shade
         </Link>
 
         {/* Desktop Navigation */}

@@ -123,7 +123,7 @@ const Contact = () => {
     {
       icon: <Mail className="w-6 h-6 text-accent" />,
       title: 'Email',
-      description: 'hello@lenscraft.com',
+      description: 'hello@theweddingshade.com',
     },
     {
       icon: <Phone className="w-6 h-6 text-accent" />,

@@ -72,9 +72,9 @@ class EmailService {
 
       // Send mail with defined transport object
       const info = await this.transporter.sendMail({
-        from: from || `"LensCraft" <${config.email.from}>`,
+        from: from || `"The Wedding Shade" <${config.email.from}>`,
         to: to || config.email.to,
-        subject: subject || 'New message from LensCraft Contact Form',
+        subject: subject || 'New message from The Wedding Shade Contact Form',
         text: text,
         html: html || text,
       });
@@ -126,7 +126,7 @@ class EmailService {
         </div>
         
         <div style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
-          <p>This is an automated message from the LensCraft contact form. Please do not reply to this email.</p>
+          <p>This is an automated message from The Wedding Shade contact form. Please do not reply to this email.</p>
         </div>
       </div>
     `;
