@@ -78,21 +78,18 @@ const Contact = () => {
     }
 
     try {
-      // In a real app, you would send this to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // If you want to use EmailJS, uncomment and configure these lines:
-      /*
-      if (!form.current) return;
-      
-      await emailjs.sendForm(
-        'YOUR_SERVICE_ID',
-        'YOUR_TEMPLATE_ID',
-        form.current,
-        'YOUR_PUBLIC_KEY'
-      );
-      */
+      const response = await fetch(`${API_BASE}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Something went wrong');
+      }
       
       setStatus('success');
       setFormData({

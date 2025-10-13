@@ -96,37 +96,55 @@ class EmailService {
     }
   }
 
-  async sendContactForm({ name, email, subject, message }) {
-    const emailSubject = subject || `New Contact Form Submission from ${name}`;
-    
+  async sendContactForm(formData) {
+    const { name, email, phone, location, eventCategory, eventType, eventDateStart, eventDateEnd, message } = formData;
+    const emailSubject = `New Inquiry from ${name} - ${eventCategory}`;
+
     const text = `
       New contact form submission:
-      
-      Name: ${name}
-      Email: ${email}
-      Subject: ${subject || 'No subject provided'}
-      
+
+      - Name: ${name}
+      - Email: ${email}
+      - Phone: ${phone}
+      - Event Location: ${location}
+      - Event Category: ${eventCategory}
+      - Event Type: ${eventType}
+      - Start Date: ${eventDateStart}
+      - End Date: ${eventDateEnd || 'N/A'}
+
       Message:
       ${message}
     `;
 
     const html = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #f43f5e;">New Contact Form Submission</h2>
-        
-        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0;">
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-          <p><strong>Subject:</strong> ${subject || 'No subject provided'}</p>
-          
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
-            <p><strong>Message:</strong></p>
-            <p>${message.replace(/\n/g, '<br>')}</p>
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 20px auto; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <div style="background-color: #0f172a; color: #fff; padding: 20px; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+          <h2 style="margin: 0;">New Inquiry from ${name}</h2>
+        </div>
+        <div style="padding: 25px;">
+          <h3 style="color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 0;">Event Details</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555; width: 150px;"><strong>Event Type</strong></td><td style="padding: 10px 0;">${eventCategory}</td></tr>
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555;"><strong>Location</strong></td><td style="padding: 10px 0;">${location}</td></tr>
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555;"><strong>Event Length</strong></td><td style="padding: 10px 0;">${eventType}</td></tr>
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555;"><strong>Start Date</strong></td><td style="padding: 10px 0;">${eventDateStart}</td></tr>
+            ${eventDateEnd ? `<tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555;"><strong>End Date</strong></td><td style="padding: 10px 0;">${eventDateEnd}</td></tr>` : ''}
+          </table>
+
+          <h3 style="color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 25px;">Contact Information</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555; width: 150px;"><strong>Name</strong></td><td style="padding: 10px 0;">${name}</td></tr>
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555;"><strong>Email</strong></td><td style="padding: 10px 0;"><a href="mailto:${email}">${email}</a></td></tr>
+            <tr style="border-bottom: 1px solid #f5f5f5;"><td style="padding: 10px 0; color: #555;"><strong>Phone</strong></td><td style="padding: 10px 0;">${phone}</td></tr>
+          </table>
+
+          <h3 style="color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 25px;">Message</h3>
+          <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+            <p style="margin: 0;">${message.replace(/\n/g, '<br>')}</p>
           </div>
         </div>
-        
-        <div style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
-          <p>This is an automated message from The Wedding Shade contact form. Please do not reply to this email.</p>
+        <div style="background-color: #f5f5f5; padding: 15px; font-size: 12px; color: #888; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+          <p style="margin: 0;">This is an automated message from The Wedding Shade contact form.</p>
         </div>
       </div>
     `;
