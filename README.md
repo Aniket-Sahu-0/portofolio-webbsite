@@ -2,6 +2,8 @@
 
 A minimalist, dark-themed documentary photographer portfolio website built with React, TypeScript, Tailwind CSS, and Node.js. Features scroll-driven animations, auto-playing slideshows, and a cohesive grayscale aesthetic.
 
+> Live at: [theweddingshade.com](https://theweddingshade.com)
+
 ## 🎯 Project Overview
 
 **The Wedding Shade** is a professional portfolio website designed for documentary photographers who value clean, understated presentation. The site emphasizes visual storytelling through:
