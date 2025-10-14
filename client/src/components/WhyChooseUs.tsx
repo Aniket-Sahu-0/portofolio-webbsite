@@ -23,18 +23,18 @@ const Stars = ({ rating }: { rating: number }) => (
 
 const WhyChooseUs: React.FC = () => {
   const items = testimonials.map((t, i) => (
-    <span key={`t-${i}`} className="mx-10 inline-flex items-center text-slate-200/95">
+    <span key={`t-${i}`} className="mx-10 inline-flex items-center text-light">
       <Stars rating={t.rating} />
-      <span className="font-serif text-lg md:text-2xl">“{t.text}”</span>
-      <span className="ml-3 text-slate-400 text-sm md:text-base">— {t.name}</span>
+      <span className="font-serif text-lg md:text-2xl">"{t.text}"</span>
+      <span className="ml-3 text-muted text-sm md:text-base">— {t.name}</span>
     </span>
   ));
 
   return (
-    <section className="relative w-full bg-slate-950 py-8">
+    <section className="relative w-full bg-secondary py-8">
       {/* edge fade */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-secondary to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-secondary to-transparent" />
 
       <div className="overflow-hidden">
         <motion.div

@@ -20,10 +20,10 @@ const Home = () => {
 
   return (
     <div>
-      {/* New full-screen hero slider */}
+      {/* Simple hero slider */}
       <HeroSlider />
-
-      {/* About intro (text + photos) */}
+      
+      {/* Simple intro section with text and images */}
       <AboutIntroSection />
 
       {/* Full Width Video Section */}

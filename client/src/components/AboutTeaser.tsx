@@ -50,32 +50,24 @@ const AboutTeaser: React.FC = () => {
   }, [panelIndex]);
 
   const { title, description1, description2, images } = panels[currentPanel];
-  // Choose one of the two foreground images as a blurred background for the panel
-  const bgSrc = images[currentPanel % 2];
 
   return (
-    <section ref={scrollRef} className="relative bg-rich" style={{ height: '300vh' }}>
+    <section ref={scrollRef} className="relative bg-primary" style={{ height: '300vh' }}>
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-        {/* Blurred background that changes with each panel */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`bg-${currentPanel}-${bgSrc}`}
-            className="absolute inset-0 -z-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <img
-              src={bgSrc}
-              alt="Background"
-              className="w-full h-full object-cover scale-110 blur-3xl opacity-50"
-              loading="lazy"
-            />
-            {/* gentle dark overlay for readability */}
-            <div className="absolute inset-0 bg-black/40" />
-          </motion.div>
-        </AnimatePresence>
+        {/* Luxury dark photography background */}
+        <div className="absolute inset-0 -z-10">
+          {/* Deep black base */}
+          <div className="absolute inset-0 bg-primary" />
+          {/* Gold accent tint overlay */}
+          <div className="absolute inset-0 bg-accent/5" />
+          {/* Subtle luxury vignette effect */}
+          <div 
+            className="absolute inset-0" 
+            style={{ 
+              background: 'radial-gradient(80% 80% at 50% 20%, rgba(139,115,85,0.08), transparent 65%)' 
+            }} 
+          />
+        </div>
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             {/* Dual Portrait Images - Leaner Layout */}

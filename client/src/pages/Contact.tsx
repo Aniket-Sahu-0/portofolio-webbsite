@@ -131,41 +131,19 @@ const Contact = () => {
 
   return (
     <div className="pt-24 pb-16">
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden bg-gray-50">
-        <div className="container px-4 mx-auto">
-          <motion.div 
-            className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl font-serif">
-              Get In Touch
-            </h1>
-            <p className="text-lg text-gray-600">
-              Have a project in mind or want to book a session? I'd love to hear from you.
-              Fill out the form below or contact me directly.
-            </p>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Contact Form & Info - Centered over blurred background */}
-      <section className="relative py-12 md:py-24">
-        {/* Background with blur and light tint */}
-        <div
-          className="absolute inset-0 -z-10"
-        >
-          <img
-            src={bgUrl ?? "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2000&auto=format&fit=crop"}
-            alt="Contact background"
-            className="w-full h-full object-cover blur-3xl opacity-80"
-            loading="lazy"
+      {/* Contact Form & Info */}
+      <section className="relative py-20 md:py-32 bg-secondary">
+        {/* Dark background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-secondary" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/50 to-secondary" />
+          <div 
+            className="absolute inset-0" 
+            style={{ 
+              background: 'radial-gradient(60% 60% at 50% 20%, rgba(139,115,85,0.05), transparent 60%)' 
+            }} 
           />
-          <div className="absolute inset-0 bg-white/5" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50" />
         </div>
         <div className="container px-4 mx-auto">
           <div className="max-w-4xl mx-auto">
@@ -176,11 +154,12 @@ const Contact = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="p-8 md:p-10 bg-slate-900/60 backdrop-blur-xl rounded-lg shadow-2xl ring-1 ring-white/15 shadow-black/50">
-                <h2 className="mb-2 text-center text-2xl font-bold md:text-3xl font-serif text-white">
-                  Tell Us About Your Event
+              <div className="p-12 md:p-16 bg-primary/80 backdrop-blur-sm border border-border shadow-2xl">
+                <h2 className="mb-4 text-center text-3xl md:text-4xl font-display font-light tracking-widest text-white">
+                  INQUIRE
                 </h2>
-                <p className="text-center text-slate-300 mb-8">Fill out the details below and our team will get back within 24–48 hours.</p>
+                <p className="text-cursive text-center mb-2">Photography Services</p>
+                <p className="text-center text-muted mb-12 tracking-wide">Share your vision and we'll craft something extraordinary together.</p>
                 
                 {status === 'success' ? (
                   <motion.div 
@@ -394,29 +373,6 @@ const Contact = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      
-      {/* CTA Section */}
-      <section className="py-16 text-white bg-gray-900">
-        <div className="container px-4 mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl font-serif">Ready to Start Your Project?</h2>
-            <p className="max-w-2xl mx-auto mb-8 text-gray-300">
-              Let's discuss how I can help capture your vision. I'm just a message away!
-            </p>
-            <a
-              href="#contact-form"
-              className="inline-flex items-center px-8 py-3 text-sm font-medium text-gray-900 bg-white rounded-md hover:bg-gray-100"
-            >
-              Get In Touch
-            </a>
-          </motion.div>
         </div>
       </section>
     </div>

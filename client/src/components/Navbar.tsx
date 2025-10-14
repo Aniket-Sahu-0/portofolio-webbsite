@@ -26,20 +26,20 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ${
         isScrolled
-          ? 'bg-white/60 backdrop-blur-md shadow-sm' // translucent when scrolled
+          ? 'bg-primary/98 backdrop-blur-sm border-b border-border' // luxury dark when scrolled
           : 'bg-transparent' // fully transparent over hero
       }`}
     >
-      <nav className="container flex items-center justify-between h-20">
+      <nav className="container flex items-center justify-between h-24">
         <Link
           to="/"
-          className={`text-2xl font-bold font-serif ${
-            isScrolled ? 'text-primary' : 'text-white'
+          className={`text-xl font-display font-light tracking-widest transition-all duration-500 ${
+            isScrolled ? 'text-white hover:text-accent' : 'text-white hover:text-accent'
           }`}
         >
-          The Wedding Shade
+          THE WEDDING SHADE
         </Link>
 
         {/* Desktop Navigation */}
@@ -48,12 +48,12 @@ const Navbar = () => {
             <Link
               key={link.path}
               to={link.path}
-              className={`group relative px-2 py-1 text-sm font-medium transition-colors ${
+              className={`group relative px-4 py-2 text-xs font-body font-medium tracking-widest uppercase transition-all duration-500 ${
                 location.pathname === link.path
                   ? 'text-accent'
                   : isScrolled
-                    ? 'text-gray-700 hover:text-accent'
-                    : 'text-white hover:text-accent'
+                    ? 'text-muted hover:text-accent'
+                    : 'text-light hover:text-accent'
               }`}
             >
               {link.name}

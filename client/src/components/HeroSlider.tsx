@@ -14,7 +14,12 @@ const SLIDE_DURATION = SLIDE_DURATION_MS; // ms (shared)
 
 const HeroSlider: React.FC = () => {
   const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
-  const [slides, setSlides] = useState<Slide[]>([]);
+  // Start with fallback slides immediately to prevent empty state
+  const [slides, setSlides] = useState<Slide[]>([
+    { type: 'image', src: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1920&auto=format&fit=crop', alt: 'Wedding candid' },
+    { type: 'video', src: 'https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4', poster: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop' },
+    { type: 'parallax', src: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=1920&auto=format&fit=crop', alt: 'Celebration with parallax' },
+  ]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -81,6 +86,7 @@ const HeroSlider: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
+    if (slides.length === 0) return; // Safety check
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % slides.length);
     }, SLIDE_DURATION);
@@ -105,7 +111,7 @@ const HeroSlider: React.FC = () => {
   const yParallax = useTransform(scrollY, [0, 600], [0, -80]); // subtle upward drift
 
   return (
-    <section ref={containerRef} className="relative h-screen w-full overflow-hidden bg-rich">
+    <section ref={containerRef} className="relative w-full h-screen overflow-hidden">
       <AnimatePresence mode="wait">
         {slides.map((slide, i) =>
           i === index ? (
@@ -147,16 +153,16 @@ const HeroSlider: React.FC = () => {
                 />
               )}
 
-              {/* Dark overlay to ensure legible copy */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/40 to-black/50" />
+              {/* Dark overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-secondary/90" />
 
-              {/* Centered copy - minimal, no CTA */}
+              {/* Minimalist centered copy */}
               <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-                <h1 className="text-white font-serif font-bold text-4xl md:text-6xl lg:text-7xl drop-shadow-md">
-                  Raw, Honest, Unfussy
+                <h1 className="text-white font-display font-light text-5xl md:text-7xl lg:text-8xl drop-shadow-2xl tracking-widest mb-8">
+                  THE WEDDING SHADE
                 </h1>
-                <p className="mt-4 text-gray-200 max-w-xl">
-                  Documentary-style wedding stories crafted with feeling.
+                <p className="font-accent text-2xl md:text-3xl italic text-accent tracking-wide">
+                  Photography & Storytelling
                 </p>
               </div>
             </motion.div>

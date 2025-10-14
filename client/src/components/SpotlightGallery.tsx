@@ -111,11 +111,16 @@ const SpotlightGallery: React.FC = () => {
 
   return (
     <section className="relative w-full h-screen">
-      {/* dark, hazy background that feels like its own section */}
-      <div className="absolute inset-0 bg-gray-900/90" />
-      {/* subtle neutral vignette */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(70%_70%_at_50%_20%,rgba(255,255,255,0.06),transparent_60%)]" />
-      <div className="absolute inset-0 backdrop-blur-[2px]" />
+      {/* Luxury dark photography background */}
+      <div className="absolute inset-0 bg-primary-dark/98" />
+      {/* Gold accent vignette */}
+      <div 
+        className="absolute inset-0 pointer-events-none" 
+        style={{ 
+          background: 'radial-gradient(70% 70% at 50% 20%, rgba(139,115,85,0.08), transparent 60%)' 
+        }} 
+      />
+      <div className="absolute inset-0 backdrop-blur-[1px]" />
 
       {/* sticky viewport with discrete paging */}
       <div ref={viewportRef} className="sticky top-0 h-screen flex items-center overflow-hidden">

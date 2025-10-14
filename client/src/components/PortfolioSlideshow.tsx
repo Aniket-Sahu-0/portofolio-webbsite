@@ -45,34 +45,13 @@ const PortfolioSlideshow: React.FC = () => {
   const [index, setIndex] = useState(0);
   const SLIDE_DURATION = SLIDE_DURATION_MS; // shared cadence
 
-  // Curated theme per page to subtly shift background tone & vignette
-  const themes = useMemo(
-    () => [
-      // warm copper mood
-      {
-        base: 'rgba(17,24,39,0.94)',
-        tint: 'rgba(184,115,51,0.16)',
-        vignette: 'radial-gradient(80% 80% at 50% 20%, rgba(184,115,51,0.22), transparent 65%)',
-      },
-      // cool slate/blue mood
-      {
-        base: 'rgba(17,24,39,0.94)',
-        tint: 'rgba(59,130,246,0.16)',
-        vignette: 'radial-gradient(80% 80% at 50% 20%, rgba(59,130,246,0.22), transparent 65%)',
-      },
-      // neutral soft gray mood
-      {
-        base: 'rgba(17,24,39,0.94)',
-        tint: 'rgba(203,213,225,0.16)',
-        vignette: 'radial-gradient(80% 80% at 50% 20%, rgba(203,213,225,0.20), transparent 65%)',
-      },
-      // graphite neutral mood
-      {
-        base: 'rgba(17,24,39,0.94)',
-        tint: 'rgba(148,163,184,0.16)',
-        vignette: 'radial-gradient(80% 80% at 50% 20%, rgba(148,163,184,0.20), transparent 65%)',
-      },
-    ],
+  // Dark photography theme
+  const theme = useMemo(
+    () => ({
+      base: 'rgba(10,10,10,0.95)', // deep black with opacity
+      tint: 'rgba(139,115,85,0.08)', // dark bronze with opacity  
+      vignette: 'radial-gradient(80% 80% at 50% 20%, rgba(139,115,85,0.15), transparent 65%)', // bronze vignette
+    }),
     []
   );
 
@@ -161,9 +140,9 @@ const PortfolioSlideshow: React.FC = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: TRANSITION_DURATION_S }}
         >
-          <div className="absolute inset-0" style={{ background: themes[index % themes.length].base }} />
-          <div className="absolute inset-0" style={{ background: themes[index % themes.length].tint }} />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: themes[index % themes.length].vignette }} />
+          <div className="absolute inset-0" style={{ background: theme.base }} />
+          <div className="absolute inset-0" style={{ background: theme.tint }} />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: theme.vignette }} />
           {/* subtle texture overlay for a gallery-wall feel */}
           <div
             className="absolute inset-0 pointer-events-none opacity-10"
@@ -200,7 +179,7 @@ const PortfolioSlideshow: React.FC = () => {
                   {current.images.map((img, i) => {
                     // Use derived tint (or curated) to color the center ring subtly
                     const dt = derived[index % derived.length] || null;
-                    const fallbackTint = themes[index % themes.length].tint;
+                    const fallbackTint = theme.tint;
                     const tintStr = dt?.tint || fallbackTint; // e.g., rgba(r,g,b,0.18)
                     const ringColor = tintStr.replace(/rgba\(([^)]+),\s*([0-9.]+)\)/, 'rgba($1, 0.35)');
                     return (

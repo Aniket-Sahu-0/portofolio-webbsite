@@ -17,23 +17,43 @@
 }
   
   body {
-    @apply antialiased text-gray-100 bg-rich;
+    @apply antialiased text-light bg-primary font-body;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold leading-tight tracking-tight;
+    @apply font-display font-light leading-tight tracking-wide text-white;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-6xl lg:text-7xl font-display font-light tracking-wider;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-display font-light tracking-wide;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl font-display font-light tracking-wide;
+  }
+  
+  .text-cursive {
+    @apply font-accent text-xl md:text-2xl italic text-accent tracking-wide;
   }
   
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent;
+    @apply inline-flex items-center justify-center px-8 py-4 text-sm font-medium transition-all duration-500 font-body tracking-wider uppercase;
   }
   
   .btn-primary {
-    @apply px-8 py-3 text-white bg-accent hover:bg-accent/90;
+    @apply bg-accent text-primary hover:bg-accent-light transform hover:scale-105 shadow-2xl hover:shadow-accent/20;
   }
   
   .btn-outline {
-    @apply border border-gray-200 hover:bg-gray-100;
+    @apply border border-accent text-accent hover:bg-accent hover:text-primary transform hover:scale-105;
+  }
+  
+  .btn-ghost {
+    @apply text-light hover:text-accent hover:bg-secondary/30 border border-transparent hover:border-accent/30;
   }
   
   .section {

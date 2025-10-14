@@ -66,10 +66,15 @@ const PortfolioShowcase: React.FC = () => {
   }, [onKey]);
 
   return (
-    <section className="relative bg-slate-950">
-      {/* Blurry dark background hue */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_20%,rgba(184,115,51,0.08),transparent_60%)]" />
-      <div className="absolute inset-0 backdrop-blur-sm" />
+    <section className="relative bg-secondary">
+      {/* Luxury dark photography background */}
+      <div className="pointer-events-none absolute inset-0 bg-accent/3" />
+      <div 
+        className="absolute inset-0" 
+        style={{ 
+          background: 'radial-gradient(60% 60% at 50% 20%, rgba(139,115,85,0.06), transparent 60%)' 
+        }} 
+      />
 
       <div className="relative max-w-[1400px] mx-auto px-4 sm:px-8 py-12 md:py-16">
         <div className="text-center mb-8 md:mb-10">
