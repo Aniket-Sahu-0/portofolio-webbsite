@@ -1,4 +1,4 @@
-import React, { useState, useRef, FormEvent, ChangeEvent, useEffect } from 'react';
+import React, { useState, useRef, FormEvent, ChangeEvent, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, Send, Check, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
@@ -20,6 +20,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 const Contact = () => {
   const form = useRef<HTMLFormElement>(null);
   const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormState>({
     name: '',
@@ -39,15 +40,18 @@ const Contact = () => {
     const controller = new AbortController();
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/media/list?path=contact/backgrounds`, { signal: controller.signal });
+        const res = await fetch(`${API_HOST}/api/media/list?path=contact/backgrounds`, { signal: controller.signal });
         const json = await res.json().catch(() => ({ items: [] }));
-        if (json.items && json.items[0]) setBgUrl(json.items[0].url);
+        if (json.items && json.items[0]) {
+          const url = json.items[0].url;
+          setBgUrl(url.startsWith('/') ? `${API_HOST}${url}` : url);
+        }
       } catch (_) {
         // silent fallback
       }
     })();
     return () => controller.abort();
-  }, []);
+  }, [API_HOST]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -78,7 +82,7 @@ const Contact = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/api/contact`, {
+      const response = await fetch(`${API_HOST}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,8 +158,8 @@ const Contact = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="p-12 md:p-16 bg-primary/80 backdrop-blur-sm border border-border shadow-2xl">
-                <h2 className="mb-4 text-center text-3xl md:text-4xl font-display font-light tracking-widest text-white">
+              <div className="p-6 sm:p-8 md:p-12 lg:p-16 bg-primary/80 backdrop-blur-sm border border-border shadow-2xl">
+                <h2 className="mb-4 text-center text-2xl sm:text-3xl md:text-4xl font-display font-light tracking-widest text-white">
                   INQUIRE
                 </h2>
                 <p className="text-cursive text-center mb-2">Photography Services</p>

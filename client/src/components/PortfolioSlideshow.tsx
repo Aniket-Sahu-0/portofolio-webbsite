@@ -12,35 +12,66 @@ type Page =
   | { type: 'hero'; image: { id: string; src: string; alt: string } };
 
 const PortfolioSlideshow: React.FC = () => {
-  const pages = useMemo<Page[]>(
-    () => [
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const [portraits, setPortraits] = useState<string[]>([]);
+  const [landscapes, setLandscapes] = useState<string[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const [portraitsRes, landscapesRes] = await Promise.all([
+          fetch(`${API_HOST}/api/media/list?path=home/portfolio_slideshow/portraits`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=home/portfolio_slideshow/landscapes`, { signal: controller.signal }),
+        ]);
+        const portraitsJson = await portraitsRes.json().catch(() => ({ items: [] }));
+        const landscapesJson = await landscapesRes.json().catch(() => ({ items: [] }));
+        
+        if (portraitsJson.items && portraitsJson.items.length >= 6) {
+          setPortraits(portraitsJson.items.slice(0, 6).map((item: any) => 
+            item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
+          ));
+        }
+        if (landscapesJson.items && landscapesJson.items.length >= 2) {
+          setLandscapes(landscapesJson.items.slice(0, 2).map((item: any) => 
+            item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
+          ));
+        }
+      } catch (_) {}
+    })();
+    return () => controller.abort();
+  }, [API_HOST]);
+
+  const pages = useMemo<Page[]>(() => {
+    // Triptych uses portraits (vertical), Hero uses landscapes (horizontal)
+    return [
       {
         type: 'triptych',
         images: [
-          { id: 'v1', src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop', alt: 'Editorial portrait' },
-          { id: 'v2', src: 'https://images.unsplash.com/photo-1542596594-649ed6e6b342?q=80&w=1200&auto=format&fit=crop', alt: 'Bridal portrait' },
-          { id: 'v3', src: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1200&auto=format&fit=crop', alt: 'Candid moment' },
+          { id: 'v1', src: portraits[0] || '', alt: 'Editorial portrait' },
+          { id: 'v2', src: portraits[1] || '', alt: 'Bridal portrait' },
+          { id: 'v3', src: portraits[2] || '', alt: 'Candid moment' },
         ],
       },
       {
         type: 'hero',
-        image: { id: 'h1', src: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=1920&auto=format&fit=crop', alt: 'Celebration scene' },
+        image: { id: 'h1', src: landscapes[0] || '', alt: 'Celebration scene' },
       },
       {
         type: 'triptych',
         images: [
-          { id: 'v4', src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop', alt: 'Nature portrait' },
-          { id: 'v5', src: 'https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?q=80&w=1200&auto=format&fit=crop', alt: 'Quiet glance' },
-          { id: 'v6', src: 'https://images.unsplash.com/photo-1520367445533-93201a35a52a?q=80&w=1200&auto=format&fit=crop', alt: 'Hand in hand' },
+          { id: 'v4', src: portraits[3] || '', alt: 'Nature portrait' },
+          { id: 'v5', src: portraits[4] || '', alt: 'Quiet glance' },
+          { id: 'v6', src: portraits[5] || '', alt: 'Hand in hand' },
         ],
       },
       {
         type: 'hero',
-        image: { id: 'h2', src: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1920&auto=format&fit=crop', alt: 'Candid embrace' },
+        image: { id: 'h2', src: landscapes[1] || '', alt: 'Candid embrace' },
       },
-    ],
-    []
-  );
+    ];
+  }, [portraits, landscapes]);
 
   const [index, setIndex] = useState(0);
   const SLIDE_DURATION = SLIDE_DURATION_MS; // shared cadence
@@ -120,6 +151,11 @@ const PortfolioSlideshow: React.FC = () => {
       const results: DerivedTheme[] = [];
       for (const p of pages) {
         const src = p.type === 'triptych' ? p.images[1]?.src || p.images[0].src : p.image.src;
+        // Skip sampling if src is empty
+        if (!src) {
+          results.push(null);
+          continue;
+        }
         const sampled = await sampleTintFromImage(src);
         results.push(sampled);
       }
@@ -188,7 +224,11 @@ const PortfolioSlideshow: React.FC = () => {
                         className={`relative h-full rounded-lg overflow-hidden bg-black/25 shadow-2xl shadow-black/60 ring-1 ${i === 1 ? '' : 'ring-white/10'}`}
                         style={i === 1 ? { boxShadow: `inset 0 0 0 1px ${ringColor}, 0 10px 30px -10px rgba(0,0,0,0.7)` } : undefined}
                       >
-                        <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
+                        {img.src ? (
+                          <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-primary/50" />
+                        )}
                         <div className={`absolute inset-0 transition-opacity duration-500 ${i === 1 ? 'opacity-0' : 'opacity-50 bg-black'}`} />
                         <div className={`absolute inset-0 transition duration-500 ${i === 1 ? '' : 'backdrop-blur-[1px]'}`} />
                         <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10 rounded-lg" />
@@ -198,7 +238,11 @@ const PortfolioSlideshow: React.FC = () => {
                 </div>
               ) : (
                 <div className="relative h-full rounded-lg overflow-hidden bg-black/25 shadow-2xl shadow-black/60 ring-1 ring-accent/30">
-                  <img src={current.image.src} alt={current.image.alt} className="w-full h-full object-cover" />
+                  {current.image.src ? (
+                    <img src={current.image.src} alt={current.image.alt} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-primary/50" />
+                  )}
                   <div className="absolute inset-0 bg-black/20" />
                   <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10 rounded-lg" />
                 </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Heart, MapPin, Clock, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -18,6 +18,8 @@ const About = () => {
 
   // Dynamic media from backend
   const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const abs = useCallback((u: string | undefined | null) => (u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : ''), [API_HOST]);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
   const [approachUrls, setApproachUrls] = useState<string[]>([]);
 
@@ -26,14 +28,14 @@ const About = () => {
     async function load() {
       try {
         const [heroRes, approachRes] = await Promise.all([
-          fetch(`${API_BASE}/api/media/list?path=heroes/about`, { signal: controller.signal }),
-          fetch(`${API_BASE}/api/media/list?path=about/approach`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=heroes/about`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=about/approach`, { signal: controller.signal }),
         ]);
         const heroJson = await heroRes.json().catch(() => ({ items: [] }));
         const approachJson = await approachRes.json().catch(() => ({ items: [] }));
-        if (heroJson.items && heroJson.items[0]) setHeroUrl(heroJson.items[0].url);
+        if (heroJson.items && heroJson.items[0]) setHeroUrl(abs(heroJson.items[0].url));
         if (approachJson.items && approachJson.items.length) {
-          setApproachUrls(approachJson.items.map((it: { url: string }) => it.url));
+          setApproachUrls(approachJson.items.map((it: { url: string }) => abs(it.url)));
         }
       } catch (_) {
         // silent fallback
@@ -41,7 +43,7 @@ const About = () => {
     }
     load();
     return () => controller.abort();
-  }, []);
+  }, [API_HOST]);
 
   // Organizational stats
   const stats = [
@@ -95,7 +97,7 @@ const About = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-fixed mono"
           style={{
-            backgroundImage: `url('${heroUrl ?? "https://images.unsplash.com/photo-1554080353-a576cf803bda?q=80&w=2000&auto=format&fit=crop"}')`
+            backgroundImage: heroUrl ? `url('${heroUrl}')` : undefined
           }}
         />
         
@@ -122,7 +124,7 @@ const About = () => {
                 About Us
               </motion.div>
               <motion.h1 
-                className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-[0.9] tracking-tight"
+                className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white mb-6 sm:mb-8 leading-tight sm:leading-[0.9] tracking-tight px-4"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
@@ -131,7 +133,7 @@ const About = () => {
                 <span className="text-slate-400 font-light italic">Storytellers</span>
               </motion.h1>
               <motion.p 
-                className="text-slate-300 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
+                className="text-slate-300 text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto leading-relaxed font-light px-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.9 }}
@@ -241,34 +243,7 @@ const About = () => {
                     <img src={approachUrls[3]} alt="Client interaction" className="w-full aspect-[4/5] object-cover rounded mono" />
                   </div>
                 </>
-              ) : (
-                <>
-                  <div className="space-y-4">
-                    <img
-                      src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=600&auto=format&fit=crop"
-                      alt="Behind the scenes"
-                      className="w-full aspect-[4/5] object-cover rounded mono"
-                    />
-                    <img
-                      src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?q=80&w=600&auto=format&fit=crop"
-                      alt="Team at work"
-                      className="w-full aspect-square object-cover rounded mono"
-                    />
-                  </div>
-                  <div className="space-y-4 mt-8">
-                    <img
-                      src="https://images.unsplash.com/photo-1502904550040-7534597429ae?q=80&w=600&auto=format&fit=crop"
-                      alt="Equipment setup"
-                      className="w-full aspect-square object-cover rounded mono"
-                    />
-                    <img
-                      src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=600&auto=format&fit=crop"
-                      alt="Client interaction"
-                      className="w-full aspect-[4/5] object-cover rounded mono"
-                    />
-                  </div>
-                </>
-              )}
+              ) : null}
             </motion.div>
           </div>
         </div>

@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { SLIDE_DURATION_MS, TRANSITION_DURATION_S } from '../config/animation';
+import { applyPreset } from '../utils/imageOptimizer';
 
 // Simple, themeable hero slider that supports images, a video slide, and a parallax final slide.
 // Full-screen, auto-plays, and fades between slides. You can replace the media URLs below.
@@ -14,35 +15,40 @@ const SLIDE_DURATION = SLIDE_DURATION_MS; // ms (shared)
 
 const HeroSlider: React.FC = () => {
   const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
-  // Start with fallback slides immediately to prevent empty state
-  const [slides, setSlides] = useState<Slide[]>([
-    { type: 'image', src: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1920&auto=format&fit=crop', alt: 'Wedding candid' },
-    { type: 'video', src: 'https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4', poster: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop' },
-    { type: 'parallax', src: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=1920&auto=format&fit=crop', alt: 'Celebration with parallax' },
-  ]);
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const [slides, setSlides] = useState<Slide[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const abs = useCallback((u: string | undefined | null) => {
+    if (!u) return '';
+    return u.startsWith('/') ? `${API_HOST}${u}` : u;
+  }, [API_HOST]);
 
   useEffect(() => {
     const controller = new AbortController();
     async function loadSlides() {
       try {
         const [imagesRes, videoRes] = await Promise.all([
-          fetch(`${API_BASE}/api/media/list?path=heroes/home`, { signal: controller.signal }),
-          fetch(`${API_BASE}/api/media/list?path=home/homepage_video`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=heroes/home`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=home/homepage_video`, { signal: controller.signal }),
         ]);
 
         const imagesData = await imagesRes.json().catch(() => ({ items: [] }));
         const videoData = await videoRes.json().catch(() => ({ items: [] }));
 
+        console.log('HeroSlider: Fetched images:', imagesData.items?.length || 0);
+        console.log('HeroSlider: Fetched videos:', videoData.items?.length || 0);
+
         const imageSlides: Slide[] = (imagesData.items || []).map((item: any) => ({
           type: 'image',
-          src: item.url,
+          src: abs(item.url),
           alt: item.filename,
         }));
 
         const videoSlide: Slide | null = videoData.items && videoData.items[0] ? {
           type: 'video',
-          src: videoData.items[0].url,
-          poster: imageSlides.length > 0 ? imageSlides[0].src : 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop',
+          src: abs(videoData.items[0].url),
+          poster: imageSlides.length > 0 ? imageSlides[0].src : undefined,
         } : null;
 
         const finalSlides = [...imageSlides];
@@ -58,29 +64,20 @@ const HeroSlider: React.FC = () => {
             });
         }
 
+        console.log('HeroSlider: Final slides count:', finalSlides.length);
         if (finalSlides.length > 0) {
           setSlides(finalSlides);
-        } else {
-          // Fallback to static slides
-          setSlides([
-            { type: 'image', src: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1920&auto=format&fit=crop', alt: 'Wedding candid' },
-            { type: 'video', src: 'https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4', poster: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop' },
-            { type: 'parallax', src: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=1920&auto=format&fit=crop', alt: 'Celebration with parallax' },
-          ]);
         }
       } catch (error) {
-        console.error('Failed to load slides, using fallback', error);
-        setSlides([
-          { type: 'image', src: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1920&auto=format&fit=crop', alt: 'Wedding candid' },
-          { type: 'video', src: 'https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4', poster: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop' },
-          { type: 'parallax', src: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=1920&auto=format&fit=crop', alt: 'Celebration with parallax' },
-        ]);
+        console.error('Failed to load slides', error);
+      } finally {
+        setLoading(false);
       }
     }
 
     loadSlides();
     return () => controller.abort();
-  }, [API_BASE]);
+  }, [API_HOST]);
 
   const [index, setIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -96,6 +93,7 @@ const HeroSlider: React.FC = () => {
   useEffect(() => {
     // Play/pause when switching to/from the video slide
     const current = slides[index];
+    if (!current) return; // Safety check
     if (current.type === 'video' && videoRef.current) {
       // best-effort autoplay; browsers may block until user interaction
       videoRef.current.play().catch(() => {});
@@ -109,6 +107,40 @@ const HeroSlider: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { scrollY } = useScroll();
   const yParallax = useTransform(scrollY, [0, 600], [0, -80]); // subtle upward drift
+
+  console.log('HeroSlider render: loading=', loading, 'slides.length=', slides.length);
+
+  if (loading) {
+    return (
+      <section className="relative w-full h-screen overflow-hidden bg-primary">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-secondary/90" />
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+          <h1 className="text-white font-display font-light text-5xl md:text-7xl lg:text-8xl drop-shadow-2xl tracking-widest mb-8">
+            THE WEDDING SHADE
+          </h1>
+          <p className="font-accent text-2xl md:text-3xl italic text-accent tracking-wide">
+            Photography & Storytelling
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (slides.length === 0) {
+    return (
+      <section className="relative w-full h-screen overflow-hidden bg-primary">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-secondary/90" />
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+          <h1 className="text-white font-display font-light text-5xl md:text-7xl lg:text-8xl drop-shadow-2xl tracking-widest mb-8">
+            THE WEDDING SHADE
+          </h1>
+          <p className="font-accent text-2xl md:text-3xl italic text-accent tracking-wide">
+            Photography & Storytelling
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={containerRef} className="relative w-full h-screen overflow-hidden">
@@ -157,11 +189,11 @@ const HeroSlider: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-secondary/90" />
 
               {/* Minimalist centered copy */}
-              <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-                <h1 className="text-white font-display font-light text-5xl md:text-7xl lg:text-8xl drop-shadow-2xl tracking-widest mb-8">
+              <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4 sm:px-6">
+                <h1 className="text-white font-display font-light text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl drop-shadow-2xl tracking-wider sm:tracking-widest mb-4 sm:mb-6 md:mb-8 leading-tight">
                   THE WEDDING SHADE
                 </h1>
-                <p className="font-accent text-2xl md:text-3xl italic text-accent tracking-wide">
+                <p className="font-accent text-lg sm:text-xl md:text-2xl lg:text-3xl italic text-accent tracking-wide">
                   Photography & Storytelling
                 </p>
               </div>

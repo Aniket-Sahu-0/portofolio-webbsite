@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 const AboutIntroSection: React.FC = () => {
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(`${API_HOST}/api/media/list?path=home/intro`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ items: [] }));
+        if (json.items && json.items.length >= 4) {
+          setImages(json.items.slice(0, 4).map((item: any) => 
+            item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
+          ));
+        }
+      } catch (_) {}
+    })();
+    return () => controller.abort();
+  }, [API_HOST]);
   return (
     <section className="relative w-full bg-secondary py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
@@ -49,35 +68,43 @@ const AboutIntroSection: React.FC = () => {
             className="grid grid-cols-2 gap-4"
           >
             <div className="space-y-4">
-              <div className="aspect-[3/4] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1502904550040-7534597429ae?q=80&w=800&auto=format&fit=crop"
-                  alt="Wedding portrait"
-                  className="w-full h-full object-cover"
-                />
+              <div className="aspect-[3/4] overflow-hidden bg-primary/50">
+                {images[0] && (
+                  <img
+                    src={images[0]}
+                    alt="Wedding portrait"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop"
-                  alt="Wedding details"
-                  className="w-full h-full object-cover"
-                />
+              <div className="aspect-[4/3] overflow-hidden bg-primary/50">
+                {images[1] && (
+                  <img
+                    src={images[1]}
+                    alt="Wedding details"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
             <div className="space-y-4 mt-8">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop"
-                  alt="Couple moment"
-                  className="w-full h-full object-cover"
-                />
+              <div className="aspect-[4/3] overflow-hidden bg-primary/50">
+                {images[2] && (
+                  <img
+                    src={images[2]}
+                    alt="Couple moment"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
-              <div className="aspect-[3/4] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?q=80&w=800&auto=format&fit=crop"
-                  alt="Wedding ceremony"
-                  className="w-full h-full object-cover"
-                />
+              <div className="aspect-[3/4] overflow-hidden bg-primary/50">
+                {images[3] && (
+                  <img
+                    src={images[3]}
+                    alt="Wedding ceremony"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
           </motion.div>

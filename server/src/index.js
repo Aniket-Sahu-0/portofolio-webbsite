@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const config = require('./config');
 const logger = require('./utils/logger');
-const apiRoutes = require('./routes/api');
+const apiRoutes = require('./routes/api/index');
 
 // Initialize Express app
 const app = express();
@@ -19,7 +19,10 @@ if (!fs.existsSync(logsDir)) {
 
 // Security middleware
 if (config.helmet.enabled) {
-  app.use(helmet());
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: false, // Disable CSP in development to allow cross-origin images
+  }));
 }
 
 // Enable CORS

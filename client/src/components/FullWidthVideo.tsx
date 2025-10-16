@@ -1,9 +1,36 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const FullWidthVideo: React.FC = () => {
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(`${API_HOST}/api/media/list?path=home/video`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ items: [] }));
+        if (json.items && json.items.length > 0) {
+          // Find first video
+          const video = json.items.find((item: any) => item.type === 'video');
+          if (video) {
+            setVideoUrl(video.url.startsWith('/') ? `${API_HOST}${video.url}` : video.url);
+          }
+          // Find first image for poster
+          const poster = json.items.find((item: any) => item.type === 'image');
+          if (poster) {
+            setPosterUrl(poster.url.startsWith('/') ? `${API_HOST}${poster.url}` : poster.url);
+          }
+        }
+      } catch (_) {}
+    })();
+    return () => controller.abort();
+  }, [API_HOST]);
 
   // Ensure video plays inline on mobile
   useEffect(() => {
@@ -18,18 +45,22 @@ const FullWidthVideo: React.FC = () => {
     <div className="w-full bg-black">
       <section className="relative w-full h-[50vh] min-h-[500px] overflow-hidden mx-auto">
         {/* Video Background */}
-        <video
-          ref={videoRef}
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
-          muted
-          loop
-          playsInline
-          autoPlay
-          poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop"
-        >
-          <source src="https://cdn.coverr.co/videos/coverr-a-cinematic-shot-of-a-woman-walking-on-a-boat-294/1080p.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {videoUrl ? (
+          <video
+            ref={videoRef}
+            className="absolute top-0 left-0 w-full h-full object-cover z-0"
+            muted
+            loop
+            playsInline
+            autoPlay
+            poster={posterUrl || undefined}
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <div className="absolute top-0 left-0 w-full h-full bg-primary/80" />
+        )}
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/30 z-1"></div>

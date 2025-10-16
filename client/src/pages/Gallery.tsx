@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { applyPreset } from '../utils/imageOptimizer';
 
 type GalleryImage = {
   id: number;
@@ -23,8 +24,11 @@ const Gallery = () => {
 
   // Dynamic media from backend
   const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const abs = useCallback((u: string | undefined | null) => (u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : ''), [API_HOST]);
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
+  const [displayCount, setDisplayCount] = useState(12); // Show 12 images initially
 
   useEffect(() => {
     const controller = new AbortController();
@@ -32,9 +36,9 @@ const Gallery = () => {
       try {
         // Fetch portraits and wides
         const [portraitsRes, widesRes, heroRes] = await Promise.all([
-          fetch(`${API_BASE}/api/media/list?path=gallery/portraits`, { signal: controller.signal }),
-          fetch(`${API_BASE}/api/media/list?path=gallery/wides`, { signal: controller.signal }),
-          fetch(`${API_BASE}/api/media/list?path=heroes/gallery`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=gallery/portraits`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=gallery/wides`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/media/list?path=heroes/gallery`, { signal: controller.signal }),
         ]);
         const portraitsJson = await portraitsRes.json().catch(() => ({ items: [] }));
         const widesJson = await widesRes.json().catch(() => ({ items: [] }));
@@ -45,14 +49,14 @@ const Gallery = () => {
         const portraitSizes: Array<GalleryImage['size']> = ['small', 'medium', 'large'];
         const portraits: GalleryImage[] = (portraitsJson.items || []).map((it: MediaItem, idx: number) => ({
           id: id++,
-          src: it.url,
+          src: abs(it.url),
           title: it.filename.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' '),
           size: portraitSizes[idx % portraitSizes.length],
           collection: 'Portraits',
         }));
         const wides: GalleryImage[] = (widesJson.items || []).map((it: MediaItem) => ({
           id: id++,
-          src: it.url,
+          src: abs(it.url),
           title: it.filename.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' '),
           size: 'wide',
           collection: 'Wides',
@@ -62,14 +66,14 @@ const Gallery = () => {
         if (merged.length > 0) setImages(merged);
 
         const heroItem: MediaItem | undefined = (heroJson.items || [])[0];
-        if (heroItem) setHeroUrl(heroItem.url);
+        if (heroItem) setHeroUrl(abs(heroItem.url));
       } catch (_) {
         // ignore, use static fallback
       }
     }
     load();
     return () => controller.abort();
-  }, []);
+  }, [API_HOST]);
 
   // Helper to get sophisticated grid size classes with golden ratio proportions
   const getSizeClasses = (size: GalleryImage['size']) => {
@@ -95,7 +99,7 @@ const Gallery = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-fixed mono"
           style={{
-            backgroundImage: `url('${heroUrl ?? "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?q=80&w=2000&auto=format&fit=crop"}')`
+            backgroundImage: heroUrl ? `url('${heroUrl}')` : undefined
           }}
         />
         
@@ -122,7 +126,7 @@ const Gallery = () => {
                 Gallery
               </motion.div>
               <motion.h1 
-                className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-[0.9] tracking-tight"
+                className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white mb-6 sm:mb-8 leading-tight sm:leading-[0.9] tracking-tight px-4"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
@@ -131,7 +135,7 @@ const Gallery = () => {
                 <span className="text-slate-400 font-light italic">Collection</span>
               </motion.h1>
               <motion.p 
-                className="text-slate-300 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
+                className="text-slate-300 text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto leading-relaxed font-light px-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.9 }}
@@ -181,26 +185,26 @@ const Gallery = () => {
           </motion.div>
 
           {/* Enhanced Masonry Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-min">
-            {(images.length ? images : [] ).map((image, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-min">
+            {(images.length ? images.slice(0, displayCount) : [] ).map((image, index) => (
               <motion.div
                 key={image.id}
                 initial={{ opacity: 0, y: 40, scale: 0.95 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ 
-                  duration: 0.8, 
-                  delay: (index % 4) * 0.15,
-                  ease: [0.22, 1, 0.36, 1]
+                  duration: 0.5, 
+                  delay: (index % 4) * 0.08,
+                  ease: 'easeOut'
                 }}
-                whileHover={{ y: -8 }}
+                whileHover={{ y: -4 }}
                 className={`relative group overflow-hidden bg-black/10 rounded-sm shadow-2xl shadow-black/40 ${getSizeClasses(image.size)}`}
               >
                 <img
                   src={image.src}
                   alt={image.title}
-                  className="w-full h-full object-cover mono transition-all duration-700 group-hover:scale-110 group-hover:contrast-110"
                   loading="lazy"
+                  className="w-full h-full object-cover mono transition-all duration-500 group-hover:scale-105"
                 />
                 
                 {/* Subtle Border */}
@@ -235,6 +239,24 @@ const Gallery = () => {
               </motion.div>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {images.length > displayCount && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mt-12"
+            >
+              <button
+                onClick={() => setDisplayCount(prev => prev + 12)}
+                className="px-8 py-3 text-sm font-medium text-white bg-transparent border border-accent/40 hover:border-accent/80 hover:bg-accent/5 transition-all duration-300 uppercase tracking-[0.2em] rounded-sm"
+              >
+                Load More Images
+              </button>
+            </motion.div>
+          )}
 
           {/* Enhanced Call to Action */}
           <motion.div

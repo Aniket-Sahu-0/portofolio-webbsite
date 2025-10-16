@@ -1,44 +1,58 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-const panels = [
+const panelData = [
   {
     title: "My Story, My Vision",
     description1: "I believe photography is more than just taking pictures. It's about capturing the raw, honest, and unfussy moments that tell a unique story.",
     description2: "My approach is to blend into the background, documenting the genuine emotions and connections that unfold naturally.",
-    images: [
-      "https://images.unsplash.com/photo-1542596594-649ed6e6b342?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1589571894960-204526740f40?q=80&w=800&auto=format&fit=crop"
-    ]
   },
   {
     title: "The Unseen Moments",
     description1: "From the quiet tear to the burst of laughter, these are the moments that matter.",
     description2: "My goal is to create a visual narrative that you'll cherish for a lifetime, filled with authenticity and love.",
-    images: [
-      "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop"
-    ]
   },
   {
     title: "Let's Create Together",
     description1: "Your story is unique, and your photographs should be too. Let's collaborate to create something beautiful and timeless.",
     description2: "",
-    images: [
-      "https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1520367445533-93201a35a52a?q=80&w=800&auto=format&fit=crop"
-    ]
   },
 ];
 
 const AboutTeaser: React.FC = () => {
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const [images, setImages] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: scrollRef });
 
-  const panelIndex = useTransform(scrollYProgress, [0, 1], [0, panels.length]);
+  const panels = useMemo(() => {
+    return panelData.map((panel, idx) => ({
+      ...panel,
+      images: [images[idx * 2] || '', images[idx * 2 + 1] || '']
+    }));
+  }, [images]);
+
+  const panelIndex = useTransform(scrollYProgress, [0, 1], [0, Math.max(panels.length, 1)]);
   const [currentPanel, setCurrentPanel] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(`${API_HOST}/api/media/list?path=home/about_teaser`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ items: [] }));
+        if (json.items && json.items.length >= 6) {
+          setImages(json.items.slice(0, 6).map((item: any) => 
+            item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
+          ));
+        }
+      } catch (_) {}
+    })();
+    return () => controller.abort();
+  }, [API_HOST]);
 
   useEffect(() => {
     return panelIndex.onChange((latest) => {
@@ -49,7 +63,7 @@ const AboutTeaser: React.FC = () => {
     });
   }, [panelIndex]);
 
-  const { title, description1, description2, images } = panels[currentPanel];
+  const currentPanelData = panels[currentPanel] || { title: '', description1: '', description2: '', images: [] };
 
   return (
     <section ref={scrollRef} className="relative bg-primary" style={{ height: '300vh' }}>
@@ -81,11 +95,15 @@ const AboutTeaser: React.FC = () => {
                   exit={{ opacity: 0, x: 50 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
-                  <img 
-                    src={images[0]}
-                    alt="Portrait one"
-                    className="w-full h-full object-cover"
-                  />
+                  {currentPanelData.images[0] ? (
+                    <img 
+                      src={currentPanelData.images[0]}
+                      alt="Portrait one"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-primary/50" />
+                  )}
                 </motion.div>
                 <motion.div 
                   key={currentPanel + '-img2'}
@@ -95,11 +113,15 @@ const AboutTeaser: React.FC = () => {
                   exit={{ opacity: 0, x: -50 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
-                  <img 
-                    src={images[1]}
-                    alt="Portrait two"
-                    className="w-full h-full object-cover"
-                  />
+                  {currentPanelData.images[1] ? (
+                    <img 
+                      src={currentPanelData.images[1]}
+                      alt="Portrait two"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-primary/50" />
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -115,14 +137,14 @@ const AboutTeaser: React.FC = () => {
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6">
-                    {title}
+                    {currentPanelData.title}
                   </h2>
                   <p className="text-gray-300 mb-6 leading-relaxed">
-                    {description1}
+                    {currentPanelData.description1}
                   </p>
-                  {description2 && (
+                  {currentPanelData.description2 && (
                     <p className="text-gray-300 mb-8 leading-relaxed">
-                      {description2}
+                      {currentPanelData.description2}
                     </p>
                   )}
                   <Link 

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const MEDIA_ROOT = path.join(__dirname, '../../media');
+const MEDIA_ROOT = path.join(__dirname, '../../../media');
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif']);
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov']);

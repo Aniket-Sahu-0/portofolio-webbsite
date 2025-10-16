@@ -1,8 +1,25 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const ParallaxSection = () => {
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
+  const [bgImage, setBgImage] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(`${API_HOST}/api/media/list?path=home/parallax`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ items: [] }));
+        if (json.items && json.items[0]) {
+          setBgImage(json.items[0].url.startsWith('/') ? `${API_HOST}${json.items[0].url}` : json.items[0].url);
+        }
+      } catch (_) {}
+    })();
+    return () => controller.abort();
+  }, [API_HOST]);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
@@ -16,7 +33,8 @@ const ParallaxSection = () => {
       <motion.div 
         className="absolute inset-0 w-full h-[190%] bg-cover bg-center -top-[45%]"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1470219556762-1771e7f9427d?q=80&w=2148&auto=format&fit=crop')",
+          backgroundImage: bgImage ? `url('${bgImage}')` : undefined,
+          backgroundColor: bgImage ? undefined : 'rgba(10,10,10,0.95)',
           y
         }}
       />
