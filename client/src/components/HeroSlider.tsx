@@ -188,12 +188,12 @@ const HeroSlider: React.FC = () => {
               {/* Dark overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-secondary/90" />
 
-              {/* Minimalist centered copy */}
+              {/* Minimalist centered copy - Mobile optimized */}
               <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4 sm:px-6">
-                <h1 className="text-white font-display font-light text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl drop-shadow-2xl tracking-wider sm:tracking-widest mb-4 sm:mb-6 md:mb-8 leading-tight">
+                <h1 className="text-white font-display font-light text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl drop-shadow-2xl tracking-wider sm:tracking-widest mb-2 sm:mb-4 md:mb-6 lg:mb-8 leading-tight">
                   THE WEDDING SHADE
                 </h1>
-                <p className="font-accent text-lg sm:text-xl md:text-2xl lg:text-3xl italic text-accent tracking-wide">
+                <p className="font-accent text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl italic text-accent tracking-wide">
                   Photography & Storytelling
                 </p>
               </div>
