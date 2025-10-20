@@ -11,10 +11,10 @@ const ParallaxSection = () => {
     const controller = new AbortController();
     (async () => {
       try {
-        const res = await fetch(`${API_HOST}/api/media/list?path=home/parallax`, { signal: controller.signal });
-        const json = await res.json().catch(() => ({ items: [] }));
-        if (json.items && json.items[0]) {
-          setBgImage(json.items[0].url.startsWith('/') ? `${API_HOST}${json.items[0].url}` : json.items[0].url);
+        const res = await fetch(`${API_HOST}/api/database/category/home/parallax`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ data: { images: [] } }));
+        if (json.data?.images && json.data.images[0]) {
+          setBgImage(json.data.images[0].url.startsWith('/') ? `${API_HOST}${json.data.images[0].url}` : json.data.images[0].url);
         }
       } catch (_) {}
     })();

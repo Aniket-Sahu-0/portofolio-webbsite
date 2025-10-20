@@ -22,19 +22,19 @@ const PortfolioSlideshow: React.FC = () => {
     (async () => {
       try {
         const [portraitsRes, landscapesRes] = await Promise.all([
-          fetch(`${API_HOST}/api/media/list?path=home/portfolio_slideshow/portraits`, { signal: controller.signal }),
-          fetch(`${API_HOST}/api/media/list?path=home/portfolio_slideshow/landscapes`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/database/category/home/portfolio_slideshow/portraits`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/database/category/home/portfolio_slideshow/landscapes`, { signal: controller.signal }),
         ]);
-        const portraitsJson = await portraitsRes.json().catch(() => ({ items: [] }));
-        const landscapesJson = await landscapesRes.json().catch(() => ({ items: [] }));
+        const portraitsJson = await portraitsRes.json().catch(() => ({ data: { images: [] } }));
+        const landscapesJson = await landscapesRes.json().catch(() => ({ data: { images: [] } }));
         
-        if (portraitsJson.items && portraitsJson.items.length >= 6) {
-          setPortraits(portraitsJson.items.slice(0, 6).map((item: any) => 
+        if (portraitsJson.data?.images && portraitsJson.data.images.length >= 6) {
+          setPortraits(portraitsJson.data.images.slice(0, 6).map((item: any) => 
             item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
           ));
         }
-        if (landscapesJson.items && landscapesJson.items.length >= 2) {
-          setLandscapes(landscapesJson.items.slice(0, 2).map((item: any) => 
+        if (landscapesJson.data?.images && landscapesJson.data.images.length >= 2) {
+          setLandscapes(landscapesJson.data.images.slice(0, 2).map((item: any) => 
             item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
           ));
         }

@@ -10,10 +10,10 @@ const AboutIntroSection: React.FC = () => {
     const controller = new AbortController();
     (async () => {
       try {
-        const res = await fetch(`${API_HOST}/api/media/list?path=home/intro`, { signal: controller.signal });
-        const json = await res.json().catch(() => ({ items: [] }));
-        if (json.items && json.items.length >= 4) {
-          setImages(json.items.slice(0, 4).map((item: any) => 
+        const res = await fetch(`${API_HOST}/api/database/category/home/intro`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ data: { images: [] } }));
+        if (json.data?.images && json.data.images.length >= 4) {
+          setImages(json.data.images.slice(0, 4).map((item: any) => 
             item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
           ));
         }

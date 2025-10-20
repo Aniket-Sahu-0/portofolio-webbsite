@@ -29,25 +29,25 @@ const HeroSlider: React.FC = () => {
     async function loadSlides() {
       try {
         const [imagesRes, videoRes] = await Promise.all([
-          fetch(`${API_HOST}/api/media/list?path=heroes/home`, { signal: controller.signal }),
-          fetch(`${API_HOST}/api/media/list?path=home/homepage_video`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/database/category/heroes/home`, { signal: controller.signal }),
+          fetch(`${API_HOST}/api/database/category/home/homepage_video`, { signal: controller.signal }),
         ]);
 
-        const imagesData = await imagesRes.json().catch(() => ({ items: [] }));
-        const videoData = await videoRes.json().catch(() => ({ items: [] }));
+        const imagesData = await imagesRes.json().catch(() => ({ data: { images: [] } }));
+        const videoData = await videoRes.json().catch(() => ({ data: { images: [] } }));
 
-        console.log('HeroSlider: Fetched images:', imagesData.items?.length || 0);
-        console.log('HeroSlider: Fetched videos:', videoData.items?.length || 0);
+        console.log('HeroSlider: Fetched images:', imagesData.data?.images?.length || 0);
+        console.log('HeroSlider: Fetched videos:', videoData.data?.images?.length || 0);
 
-        const imageSlides: Slide[] = (imagesData.items || []).map((item: any) => ({
+        const imageSlides: Slide[] = (imagesData.data?.images || []).map((item: any) => ({
           type: 'image',
           src: abs(item.url),
           alt: item.filename,
         }));
 
-        const videoSlide: Slide | null = videoData.items && videoData.items[0] ? {
+        const videoSlide: Slide | null = videoData.data?.images && videoData.data.images[0] ? {
           type: 'video',
-          src: abs(videoData.items[0].url),
+          src: abs(videoData.data.images[0].url),
           poster: imageSlides.length > 0 ? imageSlides[0].src : undefined,
         } : null;
 

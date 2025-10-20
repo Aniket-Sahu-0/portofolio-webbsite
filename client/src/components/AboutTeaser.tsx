@@ -42,10 +42,10 @@ const AboutTeaser: React.FC = () => {
     const controller = new AbortController();
     (async () => {
       try {
-        const res = await fetch(`${API_HOST}/api/media/list?path=home/about_teaser`, { signal: controller.signal });
-        const json = await res.json().catch(() => ({ items: [] }));
-        if (json.items && json.items.length >= 6) {
-          setImages(json.items.slice(0, 6).map((item: any) => 
+        const res = await fetch(`${API_HOST}/api/database/category/home/about_teaser`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ data: { images: [] } }));
+        if (json.data?.images && json.data.images.length >= 6) {
+          setImages(json.data.images.slice(0, 6).map((item: any) => 
             item.url.startsWith('/') ? `${API_HOST}${item.url}` : item.url
           ));
         }
