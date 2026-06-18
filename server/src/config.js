@@ -1,5 +1,16 @@
 require('dotenv').config();
 
+// In development, accept any localhost/127.0.0.1 origin regardless of port.
+// Vite picks a different port when 3000 is taken (e.g. 3001), and a hardcoded
+// allowlist would silently break CORS for that origin — causing fetches to fail
+// and the client to fall back to placeholder (Unsplash) imagery.
+const devOrigins = (origin, callback) => {
+  if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    return callback(null, true);
+  }
+  return callback(null, false);
+};
+
 const config = {
   // Server Configuration
   env: process.env.NODE_ENV || 'development',
@@ -10,7 +21,7 @@ const config = {
     enabled: process.env.CORS_ENABLED
       ? process.env.CORS_ENABLED === 'true'
       : (process.env.NODE_ENV !== 'production'),
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || (process.env.NODE_ENV === 'production' ? false : devOrigins),
   },
   
   // Rate Limiting

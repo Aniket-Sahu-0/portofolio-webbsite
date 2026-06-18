@@ -17,7 +17,11 @@ export interface ImageOptimizationOptions {
  */
 export function optimizeImageUrl(url: string, options: ImageOptimizationOptions = {}): string {
   if (!url) return url;
-  
+
+  // Encode spaces so URLs with filenames like "IMG_9546 (1).webp" don't break
+  // srcSet parsing (spaces are candidate delimiters there).
+  url = url.replace(/ /g, '%20');
+
   // Don't optimize external URLs
   if (url.startsWith('http') && !url.includes('localhost')) {
     return url;

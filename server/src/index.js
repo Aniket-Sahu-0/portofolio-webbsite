@@ -7,6 +7,7 @@ const fs = require('fs');
 const config = require('./config');
 const logger = require('./utils/logger');
 const apiRoutes = require('./routes/api/index');
+const imageOptimizer = require('./middleware/imageOptimizer');
 
 // Initialize Express app
 const app = express();
@@ -57,7 +58,7 @@ const mediaRoot = path.join(__dirname, '../../media');
 if (!fs.existsSync(mediaRoot)) {
   fs.mkdirSync(mediaRoot, { recursive: true });
 }
-app.use('/media', express.static(mediaRoot, {
+app.use('/media', imageOptimizer, express.static(mediaRoot, {
   maxAge: '1h',
   setHeaders: (res) => {
     res.setHeader('Cache-Control', 'public, max-age=3600');

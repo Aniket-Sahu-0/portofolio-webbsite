@@ -48,10 +48,12 @@ class ImageDatabase {
 
   scanMediaDirectory() {
     const categories = {};
+
+    if (!fs.existsSync(this.mediaPath)) {
+      return this.database.images || {};
+    }
     
     const scanDirectory = (dir, relativePath = '') => {
-      if (!fs.existsSync(dir)) return;
-      
       const items = fs.readdirSync(dir);
       
       items.forEach(item => {
@@ -85,6 +87,10 @@ class ImageDatabase {
     };
 
     scanDirectory(this.mediaPath);
+
+    if (Object.keys(categories).length === 0) {
+      return this.database.images || {};
+    }
     
     // Sort images by filename for consistent ordering
     Object.keys(categories).forEach(category => {

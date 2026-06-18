@@ -1,15 +1,37 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { applyPreset } from '../utils/imageOptimizer';
+import OptimizedImage from '../components/media/OptimizedImage';
+import { loadMediaOrFallback, MediaItem } from '../utils/media';
 
 type GalleryImage = {
   id: number;
   src: string;
   title: string;
-  size: 'small' | 'medium' | 'large' | 'wide';
   collection: string;
+  aspect: number; // width / height — drives height-aware masonry placement
 };
-type MediaItem = { filename: string; url: string };
+
+function titleFromMedia(item: MediaItem): string {
+  return (item.filename || item.alt || 'Wedding photograph')
+    .replace(/\.[^.]+$/, '')
+    .replace(/[_-]/g, ' ');
+}
+
+// Proportionally interleave two lists so the shorter one (wides) is spread evenly
+// through the longer one (portraits) instead of clumping — that mix of tall/short
+// is what gives the masonry its heterogeneous, non-rowed look.
+function interleave<T>(a: T[], b: T[]): T[] {
+  const out: T[] = [];
+  let ai = 0;
+  let bi = 0;
+  while (ai < a.length || bi < b.length) {
+    const aAhead = a.length ? ai / a.length : 1;
+    const bAhead = b.length ? bi / b.length : 1;
+    if (ai < a.length && (bi >= b.length || aAhead <= bAhead)) out.push(a[ai++]);
+    else out.push(b[bi++]);
+  }
+  return out;
+}
 
 const Gallery = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -22,74 +44,91 @@ const Gallery = () => {
   const yContent = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const opacityContent = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-  // Dynamic media from backend
-  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
-  const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
-  const abs = useCallback((u: string | undefined | null) => (u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : ''), [API_HOST]);
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
-  const [displayCount, setDisplayCount] = useState(12); // Show 12 images initially
+  const [displayCount, setDisplayCount] = useState(12); // Reveal the first 12, then infinite-scroll
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  // Unsplash-style masonry column count, responsive to viewport width.
+  const [numColumns, setNumColumns] = useState(() => {
+    if (typeof window === 'undefined') return 3;
+    const w = window.innerWidth;
+    return w < 640 ? 1 : w < 1024 ? 2 : 3;
+  });
 
   useEffect(() => {
     const controller = new AbortController();
-    async function load() {
-      try {
-        // Fetch portraits and wides
-        const [portraitsRes, widesRes, heroRes] = await Promise.all([
-          fetch(`${API_HOST}/api/media/list?path=gallery/portraits`, { signal: controller.signal }),
-          fetch(`${API_HOST}/api/media/list?path=gallery/wides`, { signal: controller.signal }),
-          fetch(`${API_HOST}/api/media/list?path=heroes/gallery`, { signal: controller.signal }),
-        ]);
-        const portraitsJson = await portraitsRes.json().catch(() => ({ items: [] }));
-        const widesJson = await widesRes.json().catch(() => ({ items: [] }));
-        const heroJson = await heroRes.json().catch(() => ({ items: [] }));
+    Promise.all([
+      // Pull the whole set (metadata only) so infinite scroll can reach every photo.
+      loadMediaOrFallback('gallery', { limit: 500, signal: controller.signal }),
+      loadMediaOrFallback('galleryWides', { limit: 500, signal: controller.signal }),
+      loadMediaOrFallback('galleryHero', { limit: 1, signal: controller.signal }),
+    ]).then(([portraits, wides, hero]) => {
+      let id = 1;
+      const portraitItems = portraits.map((item) => ({
+        id: id++,
+        src: item.url,
+        title: titleFromMedia(item),
+        collection: 'Portraits',
+        aspect: 0.67, // tall (2:3-ish)
+      }));
+      const wideItems = wides.map((item) => ({
+        id: id++,
+        src: item.url,
+        title: titleFromMedia(item),
+        collection: 'Wides',
+        aspect: 1.5, // short (3:2)
+      }));
 
-        // Build gallery items
-        let id = 1;
-        const portraitSizes: Array<GalleryImage['size']> = ['small', 'medium', 'large'];
-        const portraits: GalleryImage[] = (portraitsJson.items || []).map((it: MediaItem, idx: number) => ({
-          id: id++,
-          src: abs(it.url),
-          title: it.filename.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' '),
-          size: portraitSizes[idx % portraitSizes.length],
-          collection: 'Portraits',
-        }));
-        const wides: GalleryImage[] = (widesJson.items || []).map((it: MediaItem) => ({
-          id: id++,
-          src: abs(it.url),
-          title: it.filename.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' '),
-          size: 'wide',
-          collection: 'Wides',
-        }));
-        const merged = [...portraits, ...wides];
-        // If nothing found, leave empty to allow fallback below
-        if (merged.length > 0) setImages(merged);
+      // Spread the short wides through the tall portraits for a mixed, organic grid.
+      setImages(interleave(portraitItems, wideItems));
+      setHeroUrl(hero[0]?.url || portraits[0]?.url || wides[0]?.url || null);
+    });
 
-        const heroItem: MediaItem | undefined = (heroJson.items || [])[0];
-        if (heroItem) setHeroUrl(abs(heroItem.url));
-      } catch (_) {
-        // ignore, use static fallback
-      }
-    }
-    load();
     return () => controller.abort();
-  }, [API_HOST]);
+  }, []);
 
-  // Helper to get sophisticated grid size classes with golden ratio proportions
-  const getSizeClasses = (size: GalleryImage['size']) => {
-    switch (size) {
-      case 'small':
-        return 'col-span-1 row-span-1 aspect-square';
-      case 'medium':
-        return 'col-span-1 row-span-2 aspect-[5/8]'; // Golden ratio inspired
-      case 'large':
-        return 'col-span-1 row-span-3 aspect-[3/5]'; // Taller, more elegant
-      case 'wide':
-        return 'col-span-2 row-span-1 aspect-[8/5]'; // Golden ratio landscape
-      default:
-        return 'col-span-1 row-span-1 aspect-square';
+  // Infinite scroll: reveal more images as a sentinel near the bottom enters view,
+  // until every fetched photo is shown — no "load more" button.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setDisplayCount((prev) => Math.min(prev + 8, images.length));
+        }
+      },
+      { rootMargin: '800px 0px' } // start loading well before the user hits the end
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [images.length]);
+
+  useEffect(() => {
+    const onResize = () => {
+      const w = window.innerWidth;
+      setNumColumns(w < 640 ? 1 : w < 1024 ? 2 : 3);
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // Height-aware masonry: place each image into the currently-shortest column
+  // (estimating height from its aspect ratio). This packs tall portraits and short
+  // wides into a staggered, heterogeneous layout — and because placement is
+  // sequential, a longer slice reuses the exact same column assignments for the
+  // earlier items, so infinite scroll never reshuffles what's already on screen.
+  const visible = images.slice(0, displayCount);
+  const columns = Array.from({ length: numColumns }, () => [] as GalleryImage[]);
+  const colHeights = new Array(numColumns).fill(0);
+  for (const image of visible) {
+    let shortest = 0;
+    for (let c = 1; c < numColumns; c++) {
+      if (colHeights[c] < colHeights[shortest]) shortest = c;
     }
-  };
+    columns[shortest].push(image);
+    colHeights[shortest] += 1 / image.aspect; // portrait (small aspect) adds more height
+  }
 
   return (
     <div className="bg-rich">
@@ -184,79 +223,40 @@ const Gallery = () => {
             </motion.p>
           </motion.div>
 
-          {/* Enhanced Masonry Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-min">
-            {(images.length ? images.slice(0, displayCount) : [] ).map((image, index) => (
-              <motion.div
-                key={image.id}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ 
-                  duration: 0.5, 
-                  delay: (index % 4) * 0.08,
-                  ease: 'easeOut'
-                }}
-                whileHover={{ y: -4 }}
-                className={`relative group overflow-hidden bg-black/10 rounded-sm shadow-2xl shadow-black/40 ${getSizeClasses(image.size)}`}
-              >
-                <img
-                  src={image.src}
-                  alt={image.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover mono transition-all duration-500 group-hover:scale-105"
-                />
-                
-                {/* Subtle Border */}
-                <div className="absolute inset-0 ring-1 ring-white/5 rounded-sm" />
-                
-                {/* Enhanced Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <motion.h3 
-                      className="text-white font-medium text-base md:text-lg mb-2 tracking-wide"
-                      initial={{ y: 20, opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      {image.title}
-                    </motion.h3>
-                    <motion.p 
-                      className="text-slate-300 text-sm md:text-base font-light tracking-wide"
-                      initial={{ y: 20, opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      {image.collection}
-                    </motion.p>
-                  </div>
-                </div>
+          {/* Unsplash-style masonry: equal-width columns, natural aspect ratios,
+              square corners, flat (no shadow), even gutters. */}
+          <div className="flex gap-4 sm:gap-6">
+            {columns.map((col, ci) => (
+              <div key={ci} className="flex min-w-0 flex-1 flex-col gap-4 sm:gap-6">
+                {col.map((image) => (
+                  <motion.div
+                    key={image.id}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    whileHover={{ y: -4 }}
+                    className="group relative overflow-hidden bg-white/5"
+                  >
+                    <OptimizedImage
+                      src={image.src}
+                      alt={image.title}
+                      width={1200}
+                      quality={76}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
 
-                {/* Refined Collection Tag */}
-                <div className="absolute top-4 left-4 px-3 py-1.5 text-xs font-medium text-white bg-black/60 rounded-full backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-105">
-                  {image.collection}
-                </div>
-              </motion.div>
+                    {/* Clean hover highlight — brighter ring + the image's zoom/lift; no text. */}
+                    <div className="pointer-events-none absolute inset-0 ring-1 ring-white/5 transition duration-500 group-hover:ring-2 group-hover:ring-white/30" />
+                  </motion.div>
+                ))}
+              </div>
             ))}
           </div>
 
-          {/* Load More Button */}
-          {images.length > displayCount && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mt-12"
-            >
-              <button
-                onClick={() => setDisplayCount(prev => prev + 12)}
-                className="px-8 py-3 text-sm font-medium text-white bg-transparent border border-accent/40 hover:border-accent/80 hover:bg-accent/5 transition-all duration-300 uppercase tracking-[0.2em] rounded-sm"
-              >
-                Load More Images
-              </button>
-            </motion.div>
-          )}
+          {/* Infinite-scroll trigger: reveals more images as it nears the viewport. */}
+          {displayCount < images.length && <div ref={sentinelRef} aria-hidden className="h-4 w-full" />}
 
           {/* Enhanced Call to Action */}
           <motion.div

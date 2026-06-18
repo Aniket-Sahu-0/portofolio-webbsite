@@ -37,3 +37,11 @@ Thumbs.db
 
 # Media files (optional, but good practice if they are large)
 /media
+/media-optimized
+/.tools
+/.npm-cache
+/server/cache
+client/vite-dev.*.log
+
+# Claude Code local config/settings
+.claude/

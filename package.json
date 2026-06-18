@@ -1,0 +1,15 @@
+{
+  "name": "wedding-shade-portfolio",
+  "version": "1.0.0",
+  "description": "The Wedding Shade — photographer portfolio (client + server)",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c green,cyan \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

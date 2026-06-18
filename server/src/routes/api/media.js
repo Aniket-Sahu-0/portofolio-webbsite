@@ -27,8 +27,8 @@ router.get('/all', (req, res) => {
   }
 });
 
-// Get images by category
-router.get('/category/:category', (req, res) => {
+// Get images by category, including nested media folders such as heroes/home
+router.get('/category/:category(*)', (req, res) => {
   try {
     const { category } = req.params;
     const images = imageDB.getImagesByCategory(category);
