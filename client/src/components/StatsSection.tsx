@@ -21,7 +21,7 @@ const StatsSection: React.FC = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ type: 'spring', stiffness: 80, damping: 20, delay: index * 0.12 }}
               >
                 <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-accent/10 text-accent">
                   <Icon className="w-8 h-8" />

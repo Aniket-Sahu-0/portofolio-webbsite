@@ -122,7 +122,7 @@ const HomeIntro: React.FC = () => {
   // tighter (higher stiffness, quicker settle) so it tracks the finger instead of
   // drifting/floating behind it.
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
-  const progress = useSpring(scrollYProgress, { stiffness: 600, damping: 50, restDelta: 0.001 });
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, restDelta: 0.001 });
 
   const panels = useMemo<Panel[]>(
     () => panelData.map((panel, index) => ({ ...panel, images: [images[index * 2], images[index * 2 + 1]] })),
@@ -137,16 +137,6 @@ const HomeIntro: React.FC = () => {
 
   return (
     <section ref={sectionRef} className="relative bg-primary" style={{ height: `${panelData.length * 100}vh` }}>
-      {/* One snap marker per panel, at the scroll offset where that panel is
-          centered. `scroll-snap-stop: always` stops a fast flick at each one. */}
-      {panelData.map((_, index) => (
-        <div
-          key={`snap-${index}`}
-          aria-hidden
-          className="pointer-events-none absolute left-0 h-px w-px"
-          style={{ top: `${index * 100}vh`, scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
-        />
-      ))}
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <div className="absolute inset-0 bg-primary" />
         <div className="absolute inset-0 bg-accent/5" />

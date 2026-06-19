@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, MotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { animate, motion, MotionValue, useMotionValue, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Camera, Film, Images, Mail, Quote, Sparkles } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
@@ -58,12 +58,8 @@ const ServiceCard: React.FC<CardProps> = ({ index, progress, className, label, c
     const scale = 1 - Math.min(depth, 3) * 0.035;
     return `translate3d(0, calc(-50% - ${(Math.min(depth, 4) * 18).toFixed(2)}px), 0) scale(${scale.toFixed(4)})`;
   });
-  const visibility = useTransform(progress, (p) => (index - p * TRAVEL > 1.08 ? 'hidden' : 'visible'));
+  // No visibility toggle — keep all cards composited so images are pre-painted before animating in.
   const pointerEvents = useTransform(progress, (p) => (Math.abs(index - p * TRAVEL) < 0.5 ? 'auto' : 'none'));
-  const contentY = useTransform(progress, (p) => {
-    const d = index - p * TRAVEL;
-    return d > 0 ? 28 : Math.max(-d, 0) * -10;
-  });
   const contentOpacity = useTransform(progress, (p) => {
     const d = index - p * TRAVEL;
     return d >= 0 ? 1 : Math.max(0, 1 - Math.max(-d - 0.4, 0));
@@ -82,10 +78,8 @@ const ServiceCard: React.FC<CardProps> = ({ index, progress, className, label, c
         top: 'calc(50vh + clamp(1.5rem, 4vh, 2.25rem))',
         height: 'min(74vh, calc(100vh - 8.75rem), 640px)',
         transform,
-        visibility,
         pointerEvents,
         zIndex: index + 2,
-        backfaceVisibility: 'hidden',
         willChange: 'transform',
       }}
     >
@@ -94,7 +88,7 @@ const ServiceCard: React.FC<CardProps> = ({ index, progress, className, label, c
         <span className="h-px w-8 bg-current" />
         <span>{label}</span>
       </div>
-      <motion.div className="relative z-10 flex h-full w-full" style={{ y: contentY, opacity: contentOpacity }}>
+      <motion.div className="relative z-10 flex h-full w-full" style={{ opacity: contentOpacity }}>
         {children}
       </motion.div>
       <motion.div className="pointer-events-none absolute inset-0 z-20 bg-black" style={{ opacity: overlayOpacity }} />
@@ -104,23 +98,155 @@ const ServiceCard: React.FC<CardProps> = ({ index, progress, className, label, c
 
 const HomeServices: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
-  // Tighter spring than before: tracks the scroll closely (less floaty drift) while
-  // still smoothing the granular trackpad stream. restDelta lets it settle quickly.
-  const progress = useSpring(scrollYProgress, { stiffness: 600, damping: 50, restDelta: 0.001 });
+  const progress = useMotionValue(0);
+  const currentPanel = useRef(0);
+  // Timestamps used for gesture-end detection (see handleWheel).
+  const lastAdvanceTime = useRef(-Infinity);
+  const lastEventTime = useRef(-Infinity);
+  // True after the user has scrolled past a boundary and we issued a smooth scroll
+  // to exit the section. We keep eating wheel events until the sticky is released.
+  const isExiting = useRef(false);
+
+  // Pre-decode all card images so they are GPU-ready before animating in.
+  useEffect(() => {
+    [rawImageUrl, bookingImageUrl, ...reviewImageUrls].forEach((url) => {
+      const img = new Image();
+      img.src = url;
+    });
+  }, []);
+
+  // Sync initial panel from scroll position (handles refresh / back-button restore).
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const scrollInSection = Math.max(0, window.scrollY - section.offsetTop);
+    const panel = Math.min(PANEL_COUNT - 1, Math.floor(scrollInSection / window.innerHeight));
+    currentPanel.current = panel;
+    progress.set(panel / TRAVEL);
+  }, [progress]);
+
+  // One wheel gesture = one panel advance, regardless of scroll speed or duration.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    // A panel advance is allowed only when BOTH of these are true:
+    //   1. GESTURE_END_MS of silence in the event stream — the current gesture
+    //      (and its inertia tail) has ended. Hard touchpad flicks send inertia
+    //      events every 16 ms, well below 80 ms, so inertia is always eaten.
+    //      80 ms is also above the ~50 ms gap that 3 dropped frames can cause,
+    //      so GPU load never looks like a gesture end mid-burst.
+    //      pointerdown resets lastEventTime to -Infinity, so the next scroll
+    //      after a finger re-touch always registers as a new gesture instantly.
+    //   2. MIN_COOLDOWN_MS since the last advance — keeps the spring animation
+    //      from being interrupted before it visually settles (~300 ms).
+    const GESTURE_END_MS = 80;
+    const MIN_COOLDOWN_MS = 300;
+
+    // Resets isExiting once the smooth exit scroll finishes and the section
+    // is no longer in the sticky zone.
+    const handleScroll = () => {
+      if (!isExiting.current) return;
+      const rect = section.getBoundingClientRect();
+      if (rect.top > 1 || rect.bottom < window.innerHeight - 1) {
+        isExiting.current = false;
+      }
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      // During exit: eat events while the section is still stuck so the short
+      // smooth scroll isn't interrupted; release as soon as it un-sticks.
+      if (isExiting.current) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 1 && rect.bottom >= window.innerHeight - 1) e.preventDefault();
+        return;
+      }
+
+      const rect = section.getBoundingClientRect();
+      const isStuck = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
+      if (!isStuck) return;
+
+      // Track every event that lands in the sticky zone so we can measure
+      // the silence between gestures (including deltaY=0 pointer-move events).
+      const now = performance.now();
+      const eventGap = now - lastEventTime.current;
+      lastEventTime.current = now;
+
+      const direction = Math.sign(e.deltaY);
+      if (direction === 0) return;
+
+      // Eat the event unless BOTH gate conditions are satisfied:
+      //   • gap from previous event > GESTURE_END_MS  →  start of a new gesture
+      //   • elapsed since last advance >= MIN_COOLDOWN_MS  →  spring has settled
+      const isNewGesture = eventGap > GESTURE_END_MS;
+      const cooldownExpired = now - lastAdvanceTime.current >= MIN_COOLDOWN_MS;
+
+      if (!isNewGesture || !cooldownExpired) {
+        e.preventDefault();
+        return;
+      }
+
+      // New gesture, cooldown elapsed — first event of a deliberate swipe.
+      e.preventDefault();
+
+      const next = currentPanel.current + direction;
+
+      if (next < 0 || next >= PANEL_COUNT) {
+        // Boundary: sync the real scroll position to the virtual panel position
+        // (invisible because the sticky element doesn't move visually within its
+        // range), then smooth-scroll the ~0.25 vh needed to actually un-stick.
+        // Two rAFs push both calls outside the wheel-event callstack so Chrome's
+        // compositor can re-sync before the smooth scroll starts.
+        isExiting.current = true;
+        const syncY = section.offsetTop + currentPanel.current * window.innerHeight;
+        const exitY = direction > 0
+          ? section.offsetTop + section.offsetHeight - window.innerHeight + 10
+          : Math.max(0, section.offsetTop - 10);
+        requestAnimationFrame(() => {
+          document.documentElement.scrollTop = syncY;
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: exitY, behavior: 'smooth' });
+          });
+        });
+        return;
+      }
+
+      // Non-boundary: record advance time and animate.
+      // Deliberately do NOT touch scrollTop — any programmatic scroll change
+      // triggers Chrome's compositor to re-route touchpad wheel events away from
+      // the JS handler until the next pointer move ("need to move mouse" bug).
+      lastAdvanceTime.current = now;
+      currentPanel.current = next;
+      animate(progress, next / TRAVEL, {
+        type: 'spring',
+        stiffness: 200,
+        damping: 28,
+        restDelta: 0.001,
+      });
+    };
+
+    // When the user's fingers land on the pad again, Windows Precision Touchpad
+    // cancels any active inertia immediately. Reset lastEventTime so the very
+    // next scroll event is treated as a fresh gesture — not mid-inertia — even
+    // if it arrives only 50 ms after the last inertia event.
+    // MIN_COOLDOWN_MS still guards against advancing too fast after the last
+    // panel advance, so this cannot cause a false double-advance.
+    const handlePointerDown = () => {
+      lastEventTime.current = -Infinity;
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [progress]);
 
   return (
     <section ref={sectionRef} className="relative bg-[#edf1ee]" style={{ height: `${(PANEL_COUNT + OUTRO) * 100}vh` }}>
-      {/* One snap marker per card, at the scroll offset where that card is
-          centered. `scroll-snap-stop: always` stops a fast flick at each one. */}
-      {Array.from({ length: PANEL_COUNT }).map((_, index) => (
-        <div
-          key={`snap-${index}`}
-          aria-hidden
-          className="pointer-events-none absolute left-0 h-px w-px"
-          style={{ top: `${index * 100}vh`, scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
-        />
-      ))}
       <div className="sticky top-0 h-screen overflow-hidden bg-[#edf1ee] px-3 py-4 pt-20 sm:px-6 sm:py-6 sm:pt-24 md:px-10">
         <div className="absolute inset-x-0 top-0 h-36 bg-white/50" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(19,23,21,0.04),transparent_42%,rgba(139,115,85,0.16)_100%)]" />
@@ -178,6 +304,8 @@ const HomeServices: React.FC = () => {
                 height={1100}
                 quality={78}
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                loading="eager"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,17,16,0.08),rgba(15,17,16,0.36))]" />
@@ -212,8 +340,6 @@ const HomeServices: React.FC = () => {
                   key={review.name}
                   className={`group relative min-h-0 overflow-hidden rounded-lg ring-1 ring-black/10 ${reviewIndex === 1 ? 'hidden md:block' : 'block'}`}
                 >
-                  {/* Full-bleed photo, slightly blurred so the quote reads first;
-                      sharpens on hover. scale-105 hides the blur's edge bleed. */}
                   <div
                     className="absolute inset-0 scale-105 bg-cover bg-center blur-[3px] transition duration-500 group-hover:blur-0"
                     style={{ backgroundImage: `url("${reviewImageUrls[reviewIndex]}")` }}
@@ -244,6 +370,8 @@ const HomeServices: React.FC = () => {
                 height={900}
                 quality={78}
                 sizes="(min-width: 768px) 50vw, 100vw"
+                loading="eager"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover object-center"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,23,26,0.06),rgba(20,23,26,0.44))]" />

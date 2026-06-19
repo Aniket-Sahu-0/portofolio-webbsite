@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { Heart, MapPin, Clock, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 
 const About = () => {
@@ -8,10 +8,11 @@ const About = () => {
     target: heroRef,
     offset: ['start start', 'end start'],
   });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, restDelta: 0.001 });
 
   // Parallax transforms
-  const yContent = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacityContent = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const yContent = useTransform(smoothProgress, [0, 1], ['0%', '50%']);
+  const opacityContent = useTransform(smoothProgress, [0, 0.8], [1, 0]);
 
   // FAQ state
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -19,7 +20,7 @@ const About = () => {
   // Dynamic media from backend
   const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
   const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
-  const abs = useCallback((u: string | undefined | null) => (u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : ''), [API_HOST]);
+  const abs = (u: string | undefined | null) => (u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : '');
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
   const [approachUrls, setApproachUrls] = useState<string[]>([]);
 
@@ -95,7 +96,7 @@ const About = () => {
       <section ref={heroRef} className="relative h-screen overflow-hidden">
         {/* Fixed Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-fixed mono"
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
           style={{
             backgroundImage: heroUrl ? `url('${heroUrl}')` : undefined
           }}
@@ -235,12 +236,12 @@ const About = () => {
               {approachUrls.length >= 4 ? (
                 <>
                   <div className="space-y-4">
-                    <img src={approachUrls[0]} alt="Behind the scenes" className="w-full aspect-[4/5] object-cover rounded mono" />
-                    <img src={approachUrls[1]} alt="Team at work" className="w-full aspect-square object-cover rounded mono" />
+                    <img src={approachUrls[0]} alt="Behind the scenes" className="w-full aspect-[4/5] object-cover rounded" />
+                    <img src={approachUrls[1]} alt="Team at work" className="w-full aspect-square object-cover rounded" />
                   </div>
                   <div className="space-y-4 mt-8">
-                    <img src={approachUrls[2]} alt="Equipment setup" className="w-full aspect-square object-cover rounded mono" />
-                    <img src={approachUrls[3]} alt="Client interaction" className="w-full aspect-[4/5] object-cover rounded mono" />
+                    <img src={approachUrls[2]} alt="Equipment setup" className="w-full aspect-square object-cover rounded" />
+                    <img src={approachUrls[3]} alt="Client interaction" className="w-full aspect-[4/5] object-cover rounded" />
                   </div>
                 </>
               ) : null}

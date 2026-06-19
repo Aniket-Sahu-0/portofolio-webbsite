@@ -14,14 +14,6 @@
     width: 100%;
   }
 
-  /* Let the home page's scroll scenes settle on a panel. `proximity` only
-     engages near a snap target, so the rest of the site scrolls normally;
-     the per-panel markers carry `scroll-snap-stop: always`, which stops a
-     fast flick at the next panel instead of letting it skip the whole scene. */
-  html {
-    scroll-snap-type: y proximity;
-  }
-  
   /* Improve touch targets on mobile */
   @media (max-width: 640px) {
     button, a {
@@ -44,21 +36,12 @@
     }
   }
   
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
-  
   img {
     max-width: 100%;
   }
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
 /* Hide scrollbars utility */
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
