@@ -1,260 +1,127 @@
-# The Wedding Shade - Photographer Portfolio Website
+# The Wedding Shade — Photographer Portfolio
 
-A minimalist, dark-themed documentary photographer portfolio website built with React, TypeScript, Tailwind CSS, and Node.js. Features scroll-driven animations, auto-playing slideshows, and a cohesive grayscale aesthetic.
+Cinematic wedding photography portfolio for Mohit. Dark editorial aesthetic, scroll-driven
+interactions, stacked card deck, parallax sections, and a 3D portrait flip on the About page.
 
-> Live at: [theweddingshade.com](https://theweddingshade.com)
+**Stack:** React 18 + TypeScript + Vite + Tailwind · Framer Motion · Lenis · Node/Express
 
-## 🎯 Project Overview
+---
 
-**The Wedding Shade** is a professional portfolio website designed for documentary photographers who value clean, understated presentation. The site emphasizes visual storytelling through:
+## Quick Start
 
-- **Minimalist Design**: Dark grayscale palette with subtle accents
-- **Scroll-Driven Interactions**: Smooth parallax effects and scroll-triggered animations
-- **Auto-Playing Slideshows**: Timed image transitions with themed backgrounds
-- **Responsive Layout**: Mobile-first design that scales beautifully
-- **Performance Optimized**: Fast loading with lazy-loaded images
-
-## ✨ Key Features
-
-- 🎬 **Hero Slider**: Auto-playing full-screen slideshow with parallax effects
-- 🖼️ **Portfolio Slideshow**: Image-driven background tints with framed presentation
-- 📜 **Scroll Panels**: Multi-panel about section with blurred backgrounds
-- 🎨 **Monochrome Styling**: Consistent grayscale filter across all images
-- 📧 **Contact Integration**: Secure form with email notifications
-- ⚡ **Optimized Performance**: Lazy loading, efficient animations
-- 🔒 **Security**: Rate limiting, input validation, CORS protection
-- 📱 **Mobile Responsive**: Touch-friendly interactions and layouts
-
-## 🛠️ Tech Stack & Architecture
-
-### Frontend (Client)
-- **React 18** with TypeScript for type safety
-- **Vite** for fast development and building
-- **Tailwind CSS** with custom design tokens
-- **Framer Motion** for scroll-driven animations and transitions
-- **React Router** for client-side navigation
-- **React Intersection Observer** for viewport-based triggers
-- **Canvas API** for image color sampling (background tints)
-
-### Backend (Server)
-- **Node.js** with Express framework
-- **Nodemailer** for contact form email delivery
-- **Winston** for structured logging
-- **Express Validator** for input sanitization
-- **Helmet** for security headers
-- **CORS** for cross-origin resource sharing
-- **Express Rate Limit** for API protection
-
-## 🎨 Design System
-
-### Color Palette
-```css
-/* Tailwind Custom Colors (tailwind.config.js) */
-primary: '#0f172a'    /* slate-900 - main text */
-secondary: '#64748b'  /* slate-500 - secondary text */
-accent: '#cbd5e1'     /* slate-300 - neutral highlights */
-rich: '#0b0f19'       /* charcoal - section backgrounds */
+```bash
+npm run dev          # starts client :3000 + server :5000
+npm run dev:client   # frontend only
+npm run dev:server   # backend only
 ```
 
-### Typography
-- **Headings**: Playfair Display (serif) - elegant, editorial feel
-- **Body**: Inter (sans-serif) - clean, readable
-- **Tracking**: Wide letter-spacing on small caps labels
+Requires Node 18+. Copy `server/.env.example` → `server/.env` before first run.
 
-### Animation System
-Centralized timing in `client/src/config/animation.ts`:
-```typescript
-SLIDE_DURATION_MS = 5000    // 5s per slide
-TRANSITION_DURATION_S = 0.8 // 0.8s crossfade
-EASE_CURVE = [0.22, 1, 0.36, 1] // Custom easing
-```
-
-## 📁 Component Architecture
-
-### Core Components
-
-#### `HeroSlider.tsx`
-- Full-screen auto-playing slideshow
-- Supports image, video, and parallax slides
-- Minimal overlay text (no CTA buttons)
-- Dot navigation at bottom
-
-#### `PortfolioSlideshow.tsx`
-- Non-interactive auto-advancing gallery
-- Image-driven background tints via canvas sampling
-- Triptych (3-image) and hero (single) layouts
-- Framed presentation with shadows and rings
-
-#### `AboutTeaser.tsx`
-- Scroll-driven multi-panel section
-- Blurred background from panel images
-- Dual-image overlapping layout
-- Height: 300vh for smooth scroll progression
-
-#### `ParallaxSection.tsx`
-- Full-screen parallax background image
-- Centered headline and CTA
-- Height: 90vh on mobile, 100vh on desktop
-
-#### `AboutIntroSection.tsx`
-- Two-column layout (text + dual images)
-- Consistent dark background (`bg-rich`)
-- Staggered image positioning
-
-### Utility Classes
-```css
-/* Custom utilities in index.css */
-.mono { filter: grayscale(100%) contrast(105%); }
-.no-scrollbar { /* cross-browser scrollbar hiding */ }
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js** 16.x or higher
-- **npm** 8.x or higher  
-- **Git** for version control
-
-### Quick Start
-
-1. **Clone and Setup**
-   ```bash
-   git clone <repository-url>
-   cd photographer-portfolio
-   
-   # Install frontend dependencies
-   cd client
-   npm install
-   
-   # Install backend dependencies
-   cd ../server
-   npm install
-   ```
-
-2. **Configure Environment**
-   ```bash
-   # In server directory
-   cp .env.example .env
-   # Edit .env with your SMTP settings (see Configuration section)
-   ```
-
-3. **Start Development Servers**
-   
-   **Terminal 1 (Backend):**
-   ```bash
-   cd server
-   npm run dev  # Starts on http://localhost:5000
-   ```
-   
-   **Terminal 2 (Frontend):**
-   ```bash
-   cd client
-   npm run dev  # Starts on http://localhost:3000
-   ```
-
-4. **Access the Site**
-   - **Frontend**: http://localhost:3000
-   - **Backend API**: http://localhost:5000
-   - **Health Check**: http://localhost:5000/api/health
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-#### Frontend (`client/.env`)
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-#### Backend (`server/.env`)
-```env
-# Server
-PORT=5000
-NODE_ENV=development
-
-# CORS
-CORS_ENABLED=true
-CLIENT_URL=http://localhost:3000
-
-# Rate Limiting
-RATE_LIMIT_WINDOW_MS=900000  # 15 minutes
-RATE_LIMIT_MAX=100
-
-# Email (Contact Form)
-SMTP_HOST=smtp.ethereal.email
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your-test-email@ethereal.email
-SMTP_PASS=your-test-password
-EMAIL_FROM=noreply@theweddingshade.com
-EMAIL_TO=your-email@example.com
-
-# Security
-HELMET_ENABLED=true
-MORGAN_FORMAT=dev
-```
-
-### Development Email Testing
-Use [Ethereal Email](https://ethereal.email/) for testing:
-1. Create a test account at ethereal.email
-2. Use the generated SMTP credentials in your `.env`
-3. Check sent emails in the Ethereal web interface
+---
 
 ## Project Structure
 
 ```
-photographer-portfolio/
-├── client/                  # Frontend React application
-│   ├── public/              # Static files
-│   └── src/                 # Source files
-│       ├── components/      # Reusable components
-│       ├── pages/           # Page components
-│       ├── App.tsx          # Main App component
-│       └── main.tsx         # Entry point
+├── client/src/
+│   ├── App.tsx                  # Router + conditional Lenis mount
+│   ├── pages/                   # Home, About, Gallery, Contact, Admin
+│   └── components/
+│       ├── home/
+│       │   ├── HomeHero.tsx     # Auto-playing full-screen slideshow
+│       │   ├── HomeIntro.tsx    # 300vh scroll-driven 3-panel story
+│       │   ├── HomeGalleryStrip.tsx  # Infinite dual-row marquee
+│       │   ├── HomeParallax.tsx # Fixed-bg bridal photo + quote + stats
+│       │   └── HomeServices.tsx # 425vh stacked card deck (4 panels)
+│       ├── Navbar.tsx
+│       └── media/OptimizedImage.tsx  # ?w=&q=&f=webp server transforms
 │
-├── server/                  # Backend Node.js server
-│   ├── src/
-│   │   ├── config/         # Configuration
-│   │   ├── routes/         # API routes
-│   │   ├── services/       # Business logic
-│   │   ├── utils/          # Utility functions
-│   │   └── index.js        # Server entry point
-│   └── logs/               # Log files (created at runtime)
+├── server/src/
+│   ├── index.js                 # Express entry, serves /media static
+│   ├── database/imageDatabase.js  # Scans media/ → JSON catalogue
+│   ├── routes/api/media.js      # GET /api/database/category/:cat/:sub
+│   ├── routes/api/contact.js    # POST /api/contact (email)
+│   └── middleware/imageOptimizer.js  # Sharp image transforms
 │
-└── README.md               # This file
+├── media/                       # LOCAL ONLY — gitignored, never in git
+│   ├── heroes/home/
+│   ├── gallery/portraits/
+│   ├── gallery/weddings/
+│   ├── about/approach/
+│   └── contact/backgrounds/
+│
+└── server/data/images.json      # Auto-generated file catalogue (no photo data)
 ```
+
+---
+
+## Key Features
+
+### Home page
+- **Hero** — slideshow with crossfade, dot navigation
+- **Intro** — 300 vh scroll scene, 3 panels with overlapping image pairs
+- **Gallery strip** — infinite marquee, 2 rows moving in opposite directions
+- **Parallax** — `background-attachment: fixed` bridal portrait, quote, stats
+- **Services** — stacked card deck: one wheel gesture = one panel advance (desktop);
+  scroll-position driven on mobile. 4 cards: Services / Approach / Notes / Bookings
+
+### About page
+- **Portrait flip** — 3D card flip driven by wheel scroll (desktop, with Lenis scroll lock)
+  or auto-played after 800 ms (mobile). Spring physics: `stiffness 100, damping 26`.
+- Services grid, hover-flip testimonial cards, thoughts/CTA
+
+### Architecture notes
+- Lenis smooth scroll is mounted only on non-home routes to avoid conflicts with
+  the stacked panels' wheel hijacking
+- `media/` is always gitignored — photos stay local or go to cloud storage in production
+- Image API shape: `GET /api/database/category/{category}/{subcategory}`
+  → `{ success, data: { images: [{ url, filename, size }] } }`
+
+---
+
+## Environment Variables
+
+**`server/.env`**
+```env
+PORT=5000
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+SMTP_HOST=smtp.ethereal.email
+SMTP_PORT=587
+SMTP_USER=your-ethereal-user
+SMTP_PASS=your-ethereal-pass
+EMAIL_TO=your@email.com
+```
+
+**`client/.env`** (optional, defaults to localhost)
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+---
+
+## Adding Photos
+
+Drop images into the correct `media/` subfolder and restart the server —
+`imageDatabase.js` rescans on startup and rebuilds `server/data/images.json`.
+
+```
+media/heroes/home/         → homepage hero slideshow
+media/about/approach/      → photographer portrait (About flip card)
+media/gallery/portraits/   → portraits gallery + HomeParallax background
+media/gallery/weddings/    → weddings gallery
+media/contact/backgrounds/ → contact page background
+```
+
+---
 
 ## Deployment
 
-### Frontend Deployment
+The project needs two hosting targets:
 
-1. Build the production version:
-   ```bash
-   cd client
-   npm run build
-   ```
+| Part | Recommended | Notes |
+|------|-------------|-------|
+| Frontend | Vercel | Set `VITE_API_URL` env var to backend URL |
+| Backend | Railway / Render | Needs persistent filesystem for `media/` |
+| Photos | Cloudinary (free 25 GB) | Replace local `media/` in production |
 
-2. Deploy the `dist` directory to your preferred static hosting service (Vercel, Netlify, GitHub Pages, etc.)
-
-### Backend Deployment
-
-1. Set up a production environment with Node.js
-2. Configure environment variables in your hosting platform
-3. Start the server with PM2 or similar process manager:
-   ```bash
-   cd server
-   npm install --production
-   npm start
-   ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Unsplash](https://unsplash.com/) for sample images
-- [Tailwind CSS](https://tailwindcss.com/) for utility-first CSS
-- [Framer Motion](https://www.framer.com/motion/) for animations
-- [React Icons](https://react-icons.github.io/react-icons/) for icons
+See `CLAUDE.md` for full architecture detail and `server/data/images.json` structure.
