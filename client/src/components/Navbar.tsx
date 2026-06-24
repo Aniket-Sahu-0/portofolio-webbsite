@@ -78,9 +78,7 @@ const Navbar = () => {
 
         {/* Mobile menu button */}
         <button
-          className={`p-2 md:hidden focus:outline-none ${
-            isScrolled ? 'text-gray-700' : 'text-white'
-          }`}
+          className="p-2 md:hidden focus:outline-none text-white"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -96,17 +94,17 @@ const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/95 backdrop-blur-sm overflow-hidden"
+            className="md:hidden bg-primary/98 backdrop-blur-sm border-b border-border overflow-hidden"
           >
             <div className="container py-4 space-y-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`block px-3 py-2 text-lg ${
+                  className={`block px-3 py-2 text-sm tracking-widest uppercase ${
                     location.pathname === link.path
                       ? 'text-accent font-medium'
-                      : 'text-gray-800 hover:text-accent'
+                      : 'text-muted hover:text-accent'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >

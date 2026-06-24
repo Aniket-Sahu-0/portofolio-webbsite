@@ -34,7 +34,10 @@ class EmailService {
       logger.info('Preview URL: https://ethereal.email/message`');
     } catch (error) {
       logger.error('Failed to create test email account:', error);
-      throw error;
+      // Fall back to null transporter — sendEmail() handles this gracefully
+      // by logging instead of sending. Do not rethrow: this is called unawaited
+      // from the constructor, so a rejection here becomes unhandled and crashes
+      // the process even though email is non-critical in dev.
     }
   }
 

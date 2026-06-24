@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { animate, motion, MotionValue, useMotionValue, useTransform } from 'framer-motion';
+import { animate, motion, MotionValue, useMotionValue, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Camera, Film, Images, Mail, Quote, Sparkles } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
@@ -100,12 +100,20 @@ const HomeServices: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useMotionValue(0);
   const currentPanel = useRef(0);
-  // Timestamps used for gesture-end detection (see handleWheel).
   const lastAdvanceTime = useRef(-Infinity);
-  const lastEventTime = useRef(-Infinity);
-  // True after the user has scrolled past a boundary and we issued a smooth scroll
-  // to exit the section. We keep eating wheel events until the sticky is released.
   const isExiting = useRef(false);
+  const isTouchDevice = useRef(
+    typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+  );
+
+  // Scroll-driven progress for touch/mobile — maps section scroll 1:1 to progress
+  // so each panel takes ~100 vh of natural scroll. No wheel hijacking needed.
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  useEffect(() => {
+    if (!isTouchDevice.current) return;
+    const unsub = scrollYProgress.on('change', v => progress.set(v));
+    return unsub;
+  }, [scrollYProgress, progress]);
 
   // Pre-decode all card images so they are GPU-ready before animating in.
   useEffect(() => {
@@ -117,6 +125,7 @@ const HomeServices: React.FC = () => {
 
   // Sync initial panel from scroll position (handles refresh / back-button restore).
   useEffect(() => {
+    if (isTouchDevice.current) return; // mobile uses scrollYProgress above
     const section = sectionRef.current;
     if (!section) return;
     const scrollInSection = Math.max(0, window.scrollY - section.offsetTop);
@@ -125,23 +134,23 @@ const HomeServices: React.FC = () => {
     progress.set(panel / TRAVEL);
   }, [progress]);
 
-  // One wheel gesture = one panel advance, regardless of scroll speed or duration.
+  // One wheel gesture = one panel advance. Desktop only — touch uses scrollYProgress.
   useEffect(() => {
+    if (isTouchDevice.current) return;
     const section = sectionRef.current;
     if (!section) return;
 
-    // A panel advance is allowed only when BOTH of these are true:
-    //   1. GESTURE_END_MS of silence in the event stream — the current gesture
-    //      (and its inertia tail) has ended. Hard touchpad flicks send inertia
-    //      events every 16 ms, well below 80 ms, so inertia is always eaten.
-    //      80 ms is also above the ~50 ms gap that 3 dropped frames can cause,
-    //      so GPU load never looks like a gesture end mid-burst.
-    //      pointerdown resets lastEventTime to -Infinity, so the next scroll
-    //      after a finger re-touch always registers as a new gesture instantly.
-    //   2. MIN_COOLDOWN_MS since the last advance — keeps the spring animation
-    //      from being interrupted before it visually settles (~300 ms).
-    const GESTURE_END_MS = 80;
-    const MIN_COOLDOWN_MS = 300;
+    // A panel advance fires when:
+    //   • COOLDOWN_MS has elapsed since the last advance (matches animation duration)
+    //   • |deltaY| > MIN_DELTA — filters sub-pixel inertia tail events
+    // No silence gate: removing the "wait 80 ms for event stream to go quiet"
+    // gate is what makes it feel like sohub. The silence gate was causing the
+    // "stuck" feeling on Windows touchpad (inertia lasts 1-2 s, so the gate
+    // forced a 1-2 s wait before every advance). With only the cooldown, the
+    // animation plays (650 ms), inertia events are eaten, then the very next
+    // deliberate swipe advances immediately.
+    const COOLDOWN_MS = 650;   // matches tween duration below
+    const MIN_DELTA = 2;       // ignore sub-pixel inertia tail
 
     // Resets isExiting once the smooth exit scroll finishes and the section
     // is no longer in the sticky zone.
@@ -166,22 +175,12 @@ const HomeServices: React.FC = () => {
       const isStuck = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
       if (!isStuck) return;
 
-      // Track every event that lands in the sticky zone so we can measure
-      // the silence between gestures (including deltaY=0 pointer-move events).
       const now = performance.now();
-      const eventGap = now - lastEventTime.current;
-      lastEventTime.current = now;
-
       const direction = Math.sign(e.deltaY);
-      if (direction === 0) return;
 
-      // Eat the event unless BOTH gate conditions are satisfied:
-      //   • gap from previous event > GESTURE_END_MS  →  start of a new gesture
-      //   • elapsed since last advance >= MIN_COOLDOWN_MS  →  spring has settled
-      const isNewGesture = eventGap > GESTURE_END_MS;
-      const cooldownExpired = now - lastAdvanceTime.current >= MIN_COOLDOWN_MS;
-
-      if (!isNewGesture || !cooldownExpired) {
+      // Eat everything while cooldown is active — this absorbs touchpad inertia.
+      const cooldownExpired = now - lastAdvanceTime.current >= COOLDOWN_MS;
+      if (!cooldownExpired || direction === 0 || Math.abs(e.deltaY) < MIN_DELTA) {
         e.preventDefault();
         return;
       }
@@ -218,39 +217,24 @@ const HomeServices: React.FC = () => {
       lastAdvanceTime.current = now;
       currentPanel.current = next;
       animate(progress, next / TRAVEL, {
-        type: 'spring',
-        stiffness: 200,
-        damping: 28,
-        restDelta: 0.001,
+        type: 'tween',
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1], // ease-out-expo: snaps in fast, lands clean
       });
-    };
-
-    // When the user's fingers land on the pad again, Windows Precision Touchpad
-    // cancels any active inertia immediately. Reset lastEventTime so the very
-    // next scroll event is treated as a fresh gesture — not mid-inertia — even
-    // if it arrives only 50 ms after the last inertia event.
-    // MIN_COOLDOWN_MS still guards against advancing too fast after the last
-    // panel advance, so this cannot cause a false double-advance.
-    const handlePointerDown = () => {
-      lastEventTime.current = -Infinity;
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('pointerdown', handlePointerDown);
     };
   }, [progress]);
 
   return (
-    <section ref={sectionRef} className="relative bg-[#edf1ee]" style={{ height: `${(PANEL_COUNT + OUTRO) * 100}vh` }}>
-      <div className="sticky top-0 h-screen overflow-hidden bg-[#edf1ee] px-3 py-4 pt-20 sm:px-6 sm:py-6 sm:pt-24 md:px-10">
-        <div className="absolute inset-x-0 top-0 h-36 bg-white/50" />
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(19,23,21,0.04),transparent_42%,rgba(139,115,85,0.16)_100%)]" />
-        <div className="pointer-events-none absolute bottom-4 left-[clamp(0.85rem,4vw,7rem)] right-[clamp(0.85rem,4vw,7rem)] top-24 rounded-[1.25rem] border border-[#171a1d]/10 bg-white/20 shadow-inner sm:bottom-8 sm:top-32 sm:rounded-[1.5rem]" />
+    <section ref={sectionRef} className="relative bg-[#0e1110]" style={{ height: `${(PANEL_COUNT + OUTRO) * 100}vh`, contain: 'paint style' }}>
+      <div className="sticky top-0 h-screen overflow-hidden bg-[#0e1110] px-3 py-4 pt-20 sm:px-6 sm:py-6 sm:pt-24 md:px-10" style={{ willChange: 'transform' }}>
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(201,169,110,0.04),transparent_42%,rgba(139,115,85,0.10)_100%)]" />
 
         <ServiceCard index={0} progress={progress} label="Services" className="border-[#d8c5a6]/20 bg-[#2f3433] text-white">
           <div className="grid h-full w-full grid-rows-[auto_minmax(0,1fr)] gap-4 overflow-hidden p-4 pt-14 text-center sm:p-6 sm:pt-16 lg:p-8 lg:pt-16">
