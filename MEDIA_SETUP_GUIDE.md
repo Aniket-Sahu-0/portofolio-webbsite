@@ -1,103 +1,54 @@
-# Media Folder Setup Guide
+# Media Setup Guide
 
-All components have been updated to fetch images from your local `media/` folder instead of using hardcoded stock images.
+All images are stored and served from **Cloudinary**. There is no local `media/` folder in production.
 
-## Required Folder Structure
+## Cloudinary Folder Structure
+
+Images must be uploaded to Cloudinary under these exact folder paths:
+
+| Cloudinary Folder | Feeds | Notes |
+|---|---|---|
+| `media/heroes/home/` | Homepage hero slideshow | First 5 used |
+| `media/home/about_teaser/` | Homepage intro scroll scene | First 6 (2 per panel) |
+| `media/home/portfolio_slideshow/portraits/` | Homepage gallery marquee | First 20 |
+| `media/home/parallax/` | Homepage parallax section | First 1 |
+| `media/home/approach/` | Services · Approach panel | First 1 |
+| `media/home/notes/` | Services · Notes card backgrounds | First 2 |
+| `media/home/bookings/` | Services · Bookings panel | First 1 |
+| `media/about/portrait/` | About page flip-card portrait | First 1 |
+| `media/about/testimonials/` | About testimonial cards | First 4 |
+| `media/gallery/portraits/` | Gallery page portrait grid | Up to 500 |
+| `media/gallery/wides/` | Gallery page wide row | Up to 500 |
+| `media/heroes/gallery/` | Gallery page hero | First 1 |
+| `media/contact/backgrounds/` | Contact page background | First 1 |
+
+## How to Add / Replace Images
+
+1. Log in to [Cloudinary](https://cloudinary.com)
+2. Go to **Media Library**
+3. Navigate to the folder (e.g. `media/heroes/home`)
+4. Upload your images directly into that folder
+5. Refresh the site — images update on the next page load (5-minute cache)
+
+## Image Order
+
+Images are served sorted alphabetically by filename. To control order, prefix filenames with numbers:
+```
+01-ceremony.jpg
+02-couple.jpg
+03-reception.jpg
+```
+
+## Supported Formats
+
+`.jpg`, `.jpeg`, `.png`, `.webp` — Cloudinary handles conversion and compression automatically.
+
+## Environment Variables Required
+
+The server needs these set (in Railway dashboard for production, `server/.env` for local dev):
 
 ```
-media/
-├── heroes/
-│   ├── home/          ✅ (3 images) - Homepage hero slider
-│   ├── gallery/       ✅ (2 images) - Gallery page hero
-│   └── about/         ✅ (3 images) - About page hero
-├── gallery/
-│   ├── portraits/     ✅ (13 images) - Gallery portraits grid
-│   └── wides/         ✅ (9 images) - Gallery wides grid
-├── about/
-│   └── approach/      ✅ (4 images) - About page approach mosaic
-├── contact/
-│   └── backgrounds/   ✅ (2 images) - Contact page background
-└── home/
-    ├── intro/         ⚠️ NEEDS 4 IMAGES - AboutIntroSection (2x2 grid)
-    ├── video/         ⚠️ NEEDS 1 VIDEO + 1 POSTER IMAGE - FullWidthVideo section
-    ├── about_teaser/  ⚠️ NEEDS 6 IMAGES - AboutTeaser scrolling panels (2 per panel, 3 panels)
-    ├── parallax/      ⚠️ NEEDS 1 IMAGE - ParallaxSection background
-    └── portfolio_slideshow/
-        ├── portraits/     ⚠️ NEEDS 6 PORTRAIT IMAGES - For triptych layouts
-        └── landscapes/    ⚠️ NEEDS 2 LANDSCAPE IMAGES - For hero slides
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
-
-## What You Need to Add
-
-### 1. **home/intro/** - 4 images
-   - Used in: `AboutIntroSection` component on homepage
-   - Layout: 2 columns, 2 images each
-   - Aspect ratios: portrait (3:4) and landscape (4:3) mixed
-   - **Suggested images**: Wedding portraits, couple moments, ceremony shots
-
-### 2. **home/video/** - 1 video file + 1 poster image (optional)
-   - Used in: `FullWidthVideo` component on homepage
-   - Video format: `.mp4`, `.webm`, or `.mov`
-   - Poster: Any image for video thumbnail
-   - **Suggested content**: Cinematic wedding video, couple walking, venue shots
-
-### 3. **home/about_teaser/** - 6 images
-   - Used in: `AboutTeaser` scrolling component on homepage
-   - Layout: 3 panels, 2 images per panel
-   - Images will be displayed in overlapping style
-   - **Suggested images**: Behind-the-scenes, candid moments, storytelling shots
-
-### 4. **home/parallax/** - 1 image
-   - Used in: `ParallaxSection` component on homepage
-   - Should be a wide, landscape image
-   - Will have parallax scroll effect
-   - **Suggested image**: Dramatic landscape, celebration scene, wide venue shot
-
-### 5. **home/portfolio_slideshow/portraits/** - 6 portrait images
-   - Used in: `PortfolioSlideshow` component on homepage (triptych layouts)
-   - Orientation: **Portrait/vertical** images only
-   - Layout: Two triptych slides with 3 portraits each
-   - **Suggested images**: Vertical wedding portraits, couple shots, close-ups
-
-### 6. **home/portfolio_slideshow/landscapes/** - 2 landscape images
-   - Used in: `PortfolioSlideshow` component on homepage (hero slides)
-   - Orientation: **Landscape/horizontal** images only
-   - Layout: Two full-width hero slides
-   - **Suggested images**: Wide venue shots, landscape ceremony photos, panoramic scenes
-
-## How to Add Images
-
-1. **Copy your images** into the respective folders
-2. **Supported formats**: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`
-3. **Video formats**: `.mp4`, `.webm`, `.mov`
-4. **File names**: Any name works (spaces and special characters are supported)
-5. **No restart needed**: The frontend will automatically fetch new images on page refresh
-
-## Current Status
-
-✅ **Working (already have images)**:
-- Homepage hero slider
-- Gallery page (portraits, wides, hero)
-- About page (hero, approach grid)
-- Contact page background
-
-⚠️ **Need images (sections won't show until you add them)**:
-- Homepage intro section
-- Homepage video section
-- Homepage about teaser
-- Homepage parallax section
-- Homepage portfolio slideshow
-
-## Quick Test
-
-After adding images, refresh your browser (Ctrl+R) and check:
-- Homepage should show all sections with your images
-- No more blank spaces or missing sections
-- All images should load from `http://localhost:5000/media/...`
-
-## Notes
-
-- **Minimum requirements**: Each folder needs the specified number of images
-- **If fewer images**: That section won't render (intentional, to avoid broken layouts)
-- **Order matters**: Images are used in alphabetical order by filename
-- **Rename for control**: Use numbered prefixes (e.g., `01-image.jpg`, `02-image.jpg`) to control order
