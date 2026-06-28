@@ -17,11 +17,15 @@ const config = {
   port: process.env.PORT || 5000,
   
   // CORS Configuration
+  // CLIENT_URL may be a comma-separated list (apex + www + vercel preview),
+  // which the cors package accepts as an array of allowed origins.
   cors: {
     enabled: process.env.CORS_ENABLED
       ? process.env.CORS_ENABLED === 'true'
       : (process.env.NODE_ENV !== 'production'),
-    origin: process.env.CLIENT_URL || (process.env.NODE_ENV === 'production' ? false : devOrigins),
+    origin: process.env.CLIENT_URL
+      ? process.env.CLIENT_URL.split(',').map((o) => o.trim()).filter(Boolean)
+      : (process.env.NODE_ENV === 'production' ? false : devOrigins),
   },
   
   // Rate Limiting (per IP, per window). Two separate caps — see server/src/index.js:
