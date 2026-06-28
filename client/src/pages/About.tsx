@@ -104,7 +104,7 @@ const thoughts = [
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 const About = () => {
-  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || ((import.meta as any).env?.PROD ? 'https://portofolio-webbsite-production.up.railway.app' : 'http://localhost:5000');
   const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
   const abs = (u: string | undefined | null) =>
     u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : '';

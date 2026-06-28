@@ -19,7 +19,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 const Contact = () => {
   const form = useRef<HTMLFormElement>(null);
-  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || ((import.meta as any).env?.PROD ? 'https://portofolio-webbsite-production.up.railway.app' : 'http://localhost:5000');
   const API_HOST = useMemo(() => (API_BASE as string).replace(/\/api\/?$/, ''), [API_BASE]);
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormState>({

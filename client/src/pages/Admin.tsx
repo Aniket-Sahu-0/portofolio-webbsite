@@ -23,7 +23,7 @@ const Admin: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  const API_BASE = (import.meta as any).env?.VITE_API_URL || ((import.meta as any).env?.PROD ? 'https://portofolio-webbsite-production.up.railway.app' : 'http://localhost:5000');
 
   useEffect(() => {
     fetchAllImages();

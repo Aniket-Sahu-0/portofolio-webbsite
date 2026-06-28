@@ -1,7 +1,7 @@
 import { fallbackMedia, MediaCategory } from '../data/fallbackMedia';
 import { ImagePresets, optimizeImageUrl } from './imageOptimizer';
 
-export const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+export const API_BASE = (import.meta as any).env?.VITE_API_URL || ((import.meta as any).env?.PROD ? 'https://portofolio-webbsite-production.up.railway.app' : 'http://localhost:5000');
 export const API_HOST = (API_BASE as string).replace(/\/api\/?$/, '');
 
 export type MediaItem = {
