@@ -1,6 +1,6 @@
 import React, { useState, useRef, FormEvent, ChangeEvent, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Send, Check, AlertCircle } from 'lucide-react';
+import { Mail, Send, Check, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
 type FormState = {
@@ -126,12 +126,7 @@ const Contact = () => {
     {
       icon: <Mail className="w-6 h-6 text-accent" />,
       title: 'Email',
-      description: 'hello@theweddingshade.com',
-    },
-    {
-      icon: <Phone className="w-6 h-6 text-accent" />,
-      title: 'Phone',
-      description: '+1 (555) 123-4567',
+      description: 'Mohitsahu1662@gmail.com',
     },
   ];
 

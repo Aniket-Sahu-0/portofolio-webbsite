@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { animate, motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { useLenis } from 'lenis/react';
-import { Instagram, Facebook, Mail } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
 import OptimizedImage from '../components/media/OptimizedImage';
 
 const FLIP_SPRING = { stiffness: 100, damping: 26, mass: 0.5 };
@@ -556,7 +556,7 @@ const About = () => {
                 {/* Social icons */}
                 <div className="flex items-center gap-4">
                   <a
-                    href="https://www.instagram.com/theweddingshade"
+                    href="https://www.instagram.com/the_wedding_shade?igsh=MWQ2a3V1Ymh0ZzBtcA=="
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted hover:text-white transition-colors duration-200"
@@ -565,16 +565,7 @@ const About = () => {
                     <Instagram className="w-5 h-5" />
                   </a>
                   <a
-                    href="https://www.facebook.com/theweddingshade"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted hover:text-white transition-colors duration-200"
-                    aria-label="Facebook"
-                  >
-                    <Facebook className="w-5 h-5" />
-                  </a>
-                  <a
-                    href="mailto:mohit@theweddingshade.com"
+                    href="mailto:Mohitsahu1662@gmail.com"
                     className="text-muted hover:text-white transition-colors duration-200"
                     aria-label="Email"
                   >
@@ -586,10 +577,10 @@ const About = () => {
               <div>
                 <p className="text-accent font-sans text-xs tracking-[0.25em] uppercase mb-5">/Contact</p>
                 <a
-                  href="mailto:mohit@theweddingshade.com"
+                  href="mailto:Mohitsahu1662@gmail.com"
                   className="text-muted-light hover:text-white transition-colors duration-200 text-sm"
                 >
-                  mohit@theweddingshade.com
+                  Mohitsahu1662@gmail.com
                 </a>
               </div>
             </div>

@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
-import { Instagram, Facebook, Twitter, Mail, Phone } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const CONTACT_EMAIL = 'Mohitsahu1662@gmail.com';
+const INSTAGRAM_URL = 'https://www.instagram.com/the_wedding_shade?igsh=MWQ2a3V1Ymh0ZzBtcA==';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: <Instagram size={24} />, url: 'https://instagram.com', label: 'Instagram' },
-    { icon: <Facebook size={24} />, url: 'https://facebook.com', label: 'Facebook' },
-    { icon: <Twitter size={24} />, url: 'https://twitter.com', label: 'Twitter' },
+    { icon: <Instagram size={24} />, url: INSTAGRAM_URL, label: 'Instagram', external: true },
+    { icon: <Mail size={24} />, url: `mailto:${CONTACT_EMAIL}`, label: 'Email', external: false },
   ];
 
   const quickLinks = [
@@ -33,8 +35,7 @@ const Footer = () => {
                 <motion.a
                   key={i}
                   href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   className="text-gray-300 hover:text-accent transition-colors"
                   whileHover={{ y: -2 }}
                   aria-label={s.label}
@@ -68,11 +69,9 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start justify-center md:justify-start">
                 <Mail className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                <span>hello@theweddingshade.com</span>
-              </li>
-              <li className="flex items-start justify-center md:justify-start">
-                <Phone className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                <span>+1 (555) 123-4567</span>
+                <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-accent transition-colors break-all">
+                  {CONTACT_EMAIL}
+                </a>
               </li>
             </ul>
           </div>
