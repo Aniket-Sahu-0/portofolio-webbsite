@@ -28,7 +28,7 @@ const Navbar = () => {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ${
         isScrolled
-          ? 'bg-primary/98 backdrop-blur-sm border-b border-border' // luxury dark when scrolled
+          ? 'bg-primary border-b border-border' // luxury dark when scrolled
           : 'bg-transparent' // fully transparent over hero
       }`}
     >
@@ -94,7 +94,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-primary/98 backdrop-blur-sm border-b border-border overflow-hidden"
+            className="md:hidden bg-primary border-b border-border overflow-hidden"
           >
             <div className="container py-4 space-y-4">
               {navLinks.map((link) => (

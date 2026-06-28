@@ -147,10 +147,6 @@ const HomeIntro: React.FC = () => {
           className="absolute inset-0"
           style={{ background: 'radial-gradient(70% 70% at 50% 20%, rgba(139,115,85,0.12), transparent 68%)' }}
         />
-        <div className="pointer-events-none absolute left-4 top-20 hidden text-xs uppercase tracking-[0.26em] text-white/35 md:block lg:left-8">
-          Scroll Scene
-        </div>
-
         <div className="container relative z-10 grid h-full items-center gap-6 py-20 md:grid-cols-[1fr_0.9fr] md:gap-12 lg:gap-16">
           <div className="relative mx-auto h-[34vh] w-full max-w-[560px] sm:h-[42vh] md:h-[68vh] md:max-w-none">
             {panels.map((panel, index) => (
