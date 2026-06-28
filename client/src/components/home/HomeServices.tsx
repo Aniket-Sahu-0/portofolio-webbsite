@@ -290,8 +290,8 @@ const HomeServices: React.FC = () => {
                     </span>
                   </div>
                   <h3 className="text-xl leading-tight text-white sm:text-2xl lg:text-[1.7rem]">{title}</h3>
-                  <span className="my-3 h-px w-10 bg-[#d0ac78]/45" />
-                  <p className="max-w-sm text-sm leading-6 text-white/60 sm:text-[0.95rem]">{copy}</p>
+                  <span className="my-3 hidden h-px w-10 bg-[#d0ac78]/45 md:block" />
+                  <p className="hidden max-w-sm text-sm leading-6 text-white/60 sm:text-[0.95rem] md:block">{copy}</p>
                 </div>
               ))}
             </div>

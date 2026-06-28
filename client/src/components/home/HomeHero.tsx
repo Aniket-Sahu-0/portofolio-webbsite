@@ -87,22 +87,6 @@ const HomeHero: React.FC = () => {
           </div>
         </motion.div>
       </div>
-
-      {slides.length > 1 && (
-        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-          {slides.map((slide, slideIndex) => (
-            <button
-              key={slide.id || slide.url}
-              type="button"
-              onClick={() => setIndex(slideIndex)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                slideIndex === index ? 'w-8 bg-accent' : 'w-2 bg-white/45 hover:bg-white/75'
-              }`}
-              aria-label={`Show hero image ${slideIndex + 1}`}
-            />
-          ))}
-        </div>
-      )}
     </section>
   );
 };
