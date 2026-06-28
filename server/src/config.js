@@ -59,18 +59,13 @@ const config = {
   },
 };
 
-// Validate required environment variables
-const requiredVars = [
-  'SMTP_HOST',
-  'SMTP_USER',
-  'SMTP_PASS',
-  'EMAIL_TO',
-];
-
-const missingVars = requiredVars.filter(varName => !process.env[varName]);
-if (missingVars.length > 0 && process.env.NODE_ENV === 'production') {
-  console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
-  process.exit(1);
+// Warn about missing SMTP vars but don't crash — email is optional
+if (process.env.NODE_ENV === 'production') {
+  const smtpVars = ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASS', 'EMAIL_TO'];
+  const missing = smtpVars.filter(v => !process.env[v]);
+  if (missing.length > 0) {
+    console.warn(`SMTP not configured (${missing.join(', ')} missing) — contact form emails will be disabled`);
+  }
 }
 
 module.exports = config;
