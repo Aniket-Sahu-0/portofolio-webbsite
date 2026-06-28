@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { animate, motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { useLenis } from 'lenis/react';
 import { Instagram, Facebook, Mail } from 'lucide-react';
+import OptimizedImage from '../components/media/OptimizedImage';
 
 const FLIP_SPRING = { stiffness: 100, damping: 26, mass: 0.5 };
 
@@ -109,26 +110,24 @@ const About = () => {
     u ? (u.startsWith('/') ? `${API_HOST}${u}` : u) : '';
 
   const [portraitUrl, setPortraitUrl] = useState<string | null>(null);
-  const [approachUrls, setApproachUrls] = useState<string[]>([]);
   const [coupleUrls, setCoupleUrls] = useState<string[]>([]);
 
   useEffect(() => {
     const ctrl = new AbortController();
     (async () => {
       try {
-        const [portraitRes, approachRes, coupleRes] = await Promise.all([
-          fetch(`${API_HOST}/api/database/category/about/approach`, { signal: ctrl.signal }),
-          fetch(`${API_HOST}/api/database/category/about/approach`, { signal: ctrl.signal }),
-          fetch(`${API_HOST}/api/database/category/gallery/portraits`, { signal: ctrl.signal }),
+        // Each About panel reads its own media folder, so add/remove in the folder
+        // is reflected here: about/portrait (flip card) + about/testimonials (cards,
+        // in filename order).
+        const [portraitRes, coupleRes] = await Promise.all([
+          fetch(`${API_HOST}/api/database/category/about/portrait`, { signal: ctrl.signal }),
+          fetch(`${API_HOST}/api/database/category/about/testimonials`, { signal: ctrl.signal }),
         ]);
         const p = await portraitRes.json().catch(() => ({ data: { images: [] } }));
-        const a = await approachRes.json().catch(() => ({ data: { images: [] } }));
         const c = await coupleRes.json().catch(() => ({ data: { images: [] } }));
         const pImgs: any[] = p.data?.images ?? p.images ?? [];
-        const aImgs: any[] = a.data?.images ?? a.images ?? [];
         const cImgs: any[] = c.data?.images ?? c.images ?? [];
         if (pImgs[0]) setPortraitUrl(abs(pImgs[0].url));
-        setApproachUrls(aImgs.slice(1, 3).map((i: any) => abs(i.url)));
         setCoupleUrls(cImgs.slice(0, 4).map((i: any) => abs(i.url)));
       } catch (_) {}
     })();
@@ -370,7 +369,16 @@ const About = () => {
                     <div className={`w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br ${t.gradient} relative flex flex-col justify-end p-6`}>
                       {coupleUrls[i] && (
                         <>
-                          <img src={coupleUrls[i]} alt={t.couple} className="absolute inset-0 w-full h-full object-cover rounded-2xl opacity-60" />
+                          <OptimizedImage
+                            src={coupleUrls[i]}
+                            alt={t.couple}
+                            width={640}
+                            quality={72}
+                            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                            loading="lazy"
+                            decoding="async"
+                            className="absolute inset-0 w-full h-full object-cover rounded-2xl opacity-60"
+                          />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-2xl" />
                         </>
                       )}

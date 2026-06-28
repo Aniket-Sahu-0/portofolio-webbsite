@@ -1,67 +1,57 @@
 {
   "images": {
-    "about/approach": [
+    "about/portrait": [
       {
-        "filename": "01A.webp",
-        "path": "about/approach/01A.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\approach\\01A.webp",
-        "url": "/media/about/approach/01A.webp",
-        "size": 1103268,
-        "lastModified": "2026-06-09T18:00:35.659Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "03AA.webp",
-        "path": "about/approach/03AA.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\approach\\03AA.webp",
-        "url": "/media/about/approach/03AA.webp",
-        "size": 352186,
-        "lastModified": "2026-06-09T18:00:36.067Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "04 (1).webp",
-        "path": "about/approach/04 (1).webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\approach\\04 (1).webp",
-        "url": "/media/about/approach/04 (1).webp",
-        "size": 480874,
-        "lastModified": "2026-06-09T18:00:36.500Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "05.webp",
-        "path": "about/approach/05.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\approach\\05.webp",
-        "url": "/media/about/approach/05.webp",
-        "size": 377314,
-        "lastModified": "2026-06-09T18:00:36.917Z",
+        "filename": "Screenshot 2026-06-28 123137.webp",
+        "path": "about/portrait/Screenshot 2026-06-28 123137.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\portrait\\Screenshot 2026-06-28 123137.webp",
+        "url": "/media/about/portrait/Screenshot 2026-06-28 123137.webp",
+        "size": 146222,
+        "lastModified": "2026-06-28T07:03:31.583Z",
         "type": "image",
         "extension": ".webp"
       }
     ],
-    "contact/backgrounds": [
+    "about/testimonials": [
       {
-        "filename": "_DEC6470.jpg",
-        "path": "contact/backgrounds/_DEC6470.jpg",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\contact\\backgrounds\\_DEC6470.jpg",
-        "url": "/media/contact/backgrounds/_DEC6470.jpg",
-        "size": 4100973,
-        "lastModified": "2026-06-10T16:42:46.159Z",
+        "filename": "01-couple.webp",
+        "path": "about/testimonials/01-couple.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\testimonials\\01-couple.webp",
+        "url": "/media/about/testimonials/01-couple.webp",
+        "size": 594354,
+        "lastModified": "2026-06-27T18:35:36.396Z",
         "type": "image",
-        "extension": ".jpg"
+        "extension": ".webp"
       },
       {
-        "filename": "_DEC6472.jpg",
-        "path": "contact/backgrounds/_DEC6472.jpg",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\contact\\backgrounds\\_DEC6472.jpg",
-        "url": "/media/contact/backgrounds/_DEC6472.jpg",
-        "size": 4138156,
-        "lastModified": "2026-06-10T16:43:14.472Z",
+        "filename": "02-couple.webp",
+        "path": "about/testimonials/02-couple.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\testimonials\\02-couple.webp",
+        "url": "/media/about/testimonials/02-couple.webp",
+        "size": 1384792,
+        "lastModified": "2026-06-27T18:35:36.676Z",
         "type": "image",
-        "extension": ".jpg"
+        "extension": ".webp"
+      },
+      {
+        "filename": "03-couple.webp",
+        "path": "about/testimonials/03-couple.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\testimonials\\03-couple.webp",
+        "url": "/media/about/testimonials/03-couple.webp",
+        "size": 2431118,
+        "lastModified": "2026-06-27T18:35:37.186Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "04-couple.webp",
+        "path": "about/testimonials/04-couple.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\about\\testimonials\\04-couple.webp",
+        "url": "/media/about/testimonials/04-couple.webp",
+        "size": 795952,
+        "lastModified": "2026-06-27T18:35:37.312Z",
+        "type": "image",
+        "extension": ".webp"
       }
     ],
     "gallery/portraits": [
@@ -96,6 +86,16 @@
         "extension": ".jpg"
       },
       {
+        "filename": "_DEC3877.webp",
+        "path": "gallery/portraits/_DEC3877.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\_DEC3877.webp",
+        "url": "/media/gallery/portraits/_DEC3877.webp",
+        "size": 856534,
+        "lastModified": "2026-06-26T14:34:12.619Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "_DEC6670.jpg",
         "path": "gallery/portraits/_DEC6670.jpg",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\_DEC6670.jpg",
@@ -126,12 +126,112 @@
         "extension": ".jpg"
       },
       {
+        "filename": "01-note.webp",
+        "path": "gallery/portraits/01-note.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\01-note.webp",
+        "url": "/media/gallery/portraits/01-note.webp",
+        "size": 2259752,
+        "lastModified": "2026-06-27T18:35:36.126Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "01-story-a.webp",
+        "path": "gallery/portraits/01-story-a.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\01-story-a.webp",
+        "url": "/media/gallery/portraits/01-story-a.webp",
+        "size": 1153284,
+        "lastModified": "2026-06-27T19:06:02.347Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "01A.webp",
+        "path": "gallery/portraits/01A.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\01A.webp",
+        "url": "/media/gallery/portraits/01A.webp",
+        "size": 1103268,
+        "lastModified": "2026-06-26T19:27:24.797Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "02-story-b.webp",
+        "path": "gallery/portraits/02-story-b.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\02-story-b.webp",
+        "url": "/media/gallery/portraits/02-story-b.webp",
+        "size": 424616,
+        "lastModified": "2026-06-27T19:06:38.325Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "03AA.webp",
+        "path": "gallery/portraits/03AA.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\03AA.webp",
+        "url": "/media/gallery/portraits/03AA.webp",
+        "size": 352186,
+        "lastModified": "2026-06-09T18:00:36.067Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "06-together-b.webp",
+        "path": "gallery/portraits/06-together-b.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\06-together-b.webp",
+        "url": "/media/gallery/portraits/06-together-b.webp",
+        "size": 3545112,
+        "lastModified": "2026-06-27T19:06:02.709Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "1c18cae7-c631-4cdf-b1b3-bce7a401c8fc.webp",
+        "path": "gallery/portraits/1c18cae7-c631-4cdf-b1b3-bce7a401c8fc.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\1c18cae7-c631-4cdf-b1b3-bce7a401c8fc.webp",
+        "url": "/media/gallery/portraits/1c18cae7-c631-4cdf-b1b3-bce7a401c8fc.webp",
+        "size": 634882,
+        "lastModified": "2026-06-26T14:31:39.958Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "path": "gallery/portraits/3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "url": "/media/gallery/portraits/3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "size": 362152,
+        "lastModified": "2026-06-26T14:31:40.856Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "DSC00325 copy.webp",
         "path": "gallery/portraits/DSC00325 copy.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC00325 copy.webp",
         "url": "/media/gallery/portraits/DSC00325 copy.webp",
         "size": 1055592,
         "lastModified": "2026-06-09T18:00:38.084Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC01488 - Copy.webp",
+        "path": "gallery/portraits/DSC01488 - Copy.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC01488 - Copy.webp",
+        "url": "/media/gallery/portraits/DSC01488 - Copy.webp",
+        "size": 1060072,
+        "lastModified": "2026-06-26T14:32:00.981Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC01650.webp",
+        "path": "gallery/portraits/DSC01650.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC01650.webp",
+        "url": "/media/gallery/portraits/DSC01650.webp",
+        "size": 1937504,
+        "lastModified": "2026-06-26T14:32:06.527Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -146,6 +246,26 @@
         "extension": ".webp"
       },
       {
+        "filename": "DSC03311.webp",
+        "path": "gallery/portraits/DSC03311.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC03311.webp",
+        "url": "/media/gallery/portraits/DSC03311.webp",
+        "size": 2431118,
+        "lastModified": "2026-06-26T14:34:28.250Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC03333.webp",
+        "path": "gallery/portraits/DSC03333.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC03333.webp",
+        "url": "/media/gallery/portraits/DSC03333.webp",
+        "size": 2001474,
+        "lastModified": "2026-06-26T14:34:31.690Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "DSC04180.webp",
         "path": "gallery/portraits/DSC04180.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC04180.webp",
@@ -156,12 +276,152 @@
         "extension": ".webp"
       },
       {
-        "filename": "DSC04390.webp",
-        "path": "gallery/portraits/DSC04390.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC04390.webp",
-        "url": "/media/gallery/portraits/DSC04390.webp",
+        "filename": "DSC04390 - Copy.webp",
+        "path": "gallery/portraits/DSC04390 - Copy.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC04390 - Copy.webp",
+        "url": "/media/gallery/portraits/DSC04390 - Copy.webp",
         "size": 3084998,
         "lastModified": "2026-06-09T18:00:58.210Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC06350 - Copy.webp",
+        "path": "gallery/portraits/DSC06350 - Copy.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC06350 - Copy.webp",
+        "url": "/media/gallery/portraits/DSC06350 - Copy.webp",
+        "size": 594354,
+        "lastModified": "2026-06-26T14:32:20.762Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC06352.webp",
+        "path": "gallery/portraits/DSC06352.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC06352.webp",
+        "url": "/media/gallery/portraits/DSC06352.webp",
+        "size": 1169272,
+        "lastModified": "2026-06-26T14:32:23.352Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC07425 - Copy.webp",
+        "path": "gallery/portraits/DSC07425 - Copy.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC07425 - Copy.webp",
+        "url": "/media/gallery/portraits/DSC07425 - Copy.webp",
+        "size": 988322,
+        "lastModified": "2026-06-09T18:01:00.525Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC07971.webp",
+        "path": "gallery/portraits/DSC07971.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\DSC07971.webp",
+        "url": "/media/gallery/portraits/DSC07971.webp",
+        "size": 2318650,
+        "lastModified": "2026-06-26T14:32:28.413Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0836.webp",
+        "path": "gallery/portraits/IMG_0836.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_0836.webp",
+        "url": "/media/gallery/portraits/IMG_0836.webp",
+        "size": 1041198,
+        "lastModified": "2026-06-26T14:32:33.953Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0837.webp",
+        "path": "gallery/portraits/IMG_0837.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_0837.webp",
+        "url": "/media/gallery/portraits/IMG_0837.webp",
+        "size": 1438072,
+        "lastModified": "2026-06-26T14:32:36.619Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_1690.webp",
+        "path": "gallery/portraits/IMG_1690.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_1690.webp",
+        "url": "/media/gallery/portraits/IMG_1690.webp",
+        "size": 1439822,
+        "lastModified": "2026-06-26T14:32:50.433Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_1695.webp",
+        "path": "gallery/portraits/IMG_1695.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_1695.webp",
+        "url": "/media/gallery/portraits/IMG_1695.webp",
+        "size": 1159530,
+        "lastModified": "2026-06-26T14:32:51.958Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2041.webp",
+        "path": "gallery/portraits/IMG_2041.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_2041.webp",
+        "url": "/media/gallery/portraits/IMG_2041.webp",
+        "size": 84982,
+        "lastModified": "2026-06-26T14:34:32.533Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2333.webp",
+        "path": "gallery/portraits/IMG_2333.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_2333.webp",
+        "url": "/media/gallery/portraits/IMG_2333.webp",
+        "size": 1153284,
+        "lastModified": "2026-06-26T14:32:57.392Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2334.webp",
+        "path": "gallery/portraits/IMG_2334.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_2334.webp",
+        "url": "/media/gallery/portraits/IMG_2334.webp",
+        "size": 3545112,
+        "lastModified": "2026-06-26T14:33:04.237Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2336.webp",
+        "path": "gallery/portraits/IMG_2336.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_2336.webp",
+        "url": "/media/gallery/portraits/IMG_2336.webp",
+        "size": 3288564,
+        "lastModified": "2026-06-26T14:33:10.407Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2337.webp",
+        "path": "gallery/portraits/IMG_2337.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_2337.webp",
+        "url": "/media/gallery/portraits/IMG_2337.webp",
+        "size": 3286554,
+        "lastModified": "2026-06-26T14:33:16.496Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2339.webp",
+        "path": "gallery/portraits/IMG_2339.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_2339.webp",
+        "url": "/media/gallery/portraits/IMG_2339.webp",
+        "size": 23128,
+        "lastModified": "2026-06-26T14:33:16.710Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -172,6 +432,16 @@
         "url": "/media/gallery/portraits/IMG_7647.webp",
         "size": 627252,
         "lastModified": "2026-06-09T18:01:14.022Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7826.webp",
+        "path": "gallery/portraits/IMG_7826.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_7826.webp",
+        "url": "/media/gallery/portraits/IMG_7826.webp",
+        "size": 1293844,
+        "lastModified": "2026-06-09T18:01:24.936Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -236,26 +506,6 @@
         "extension": ".jpg"
       },
       {
-        "filename": "IMG_9454.webp",
-        "path": "gallery/portraits/IMG_9454.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_9454.webp",
-        "url": "/media/gallery/portraits/IMG_9454.webp",
-        "size": 408020,
-        "lastModified": "2026-06-09T18:01:37.647Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "IMG_9457.webp",
-        "path": "gallery/portraits/IMG_9457.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_9457.webp",
-        "url": "/media/gallery/portraits/IMG_9457.webp",
-        "size": 771858,
-        "lastModified": "2026-06-09T18:01:38.618Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
         "filename": "IMG_9546.webp",
         "path": "gallery/portraits/IMG_9546.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\portraits\\IMG_9546.webp",
@@ -268,12 +518,52 @@
     ],
     "gallery/wides": [
       {
+        "filename": "_DEC3799.webp",
+        "path": "gallery/wides/_DEC3799.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\_DEC3799.webp",
+        "url": "/media/gallery/wides/_DEC3799.webp",
+        "size": 2421428,
+        "lastModified": "2026-06-26T14:34:10.416Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "_DEC6661.webp",
+        "path": "gallery/wides/_DEC6661.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\_DEC6661.webp",
+        "url": "/media/gallery/wides/_DEC6661.webp",
+        "size": 1968206,
+        "lastModified": "2026-06-09T18:01:50.513Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "_DEC8578.webp",
         "path": "gallery/wides/_DEC8578.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\_DEC8578.webp",
         "url": "/media/gallery/wides/_DEC8578.webp",
         "size": 1805286,
         "lastModified": "2026-06-09T18:01:58.058Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "01-bookings.webp",
+        "path": "gallery/wides/01-bookings.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\01-bookings.webp",
+        "url": "/media/gallery/wides/01-bookings.webp",
+        "size": 3446570,
+        "lastModified": "2026-06-27T18:35:36.256Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC00110.webp",
+        "path": "gallery/wides/DSC00110.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC00110.webp",
+        "url": "/media/gallery/wides/DSC00110.webp",
+        "size": 3454766,
+        "lastModified": "2026-06-26T14:34:24.739Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -318,6 +608,36 @@
         "extension": ".webp"
       },
       {
+        "filename": "DSC02221.webp",
+        "path": "gallery/wides/DSC02221.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC02221.webp",
+        "url": "/media/gallery/wides/DSC02221.webp",
+        "size": 2319628,
+        "lastModified": "2026-06-26T14:32:09.461Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC03936.webp",
+        "path": "gallery/wides/DSC03936.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC03936.webp",
+        "url": "/media/gallery/wides/DSC03936.webp",
+        "size": 598568,
+        "lastModified": "2026-06-09T18:00:51.712Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC04231.webp",
+        "path": "gallery/wides/DSC04231.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC04231.webp",
+        "url": "/media/gallery/wides/DSC04231.webp",
+        "size": 2169028,
+        "lastModified": "2026-06-27T16:40:02.611Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "DSC04315.webp",
         "path": "gallery/wides/DSC04315.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC04315.webp",
@@ -328,64 +648,132 @@
         "extension": ".webp"
       },
       {
-        "filename": "DSC09631.webp",
-        "path": "gallery/wides/DSC09631.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC09631.webp",
-        "url": "/media/gallery/wides/DSC09631.webp",
-        "size": 2281734,
-        "lastModified": "2026-06-09T18:01:02.173Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "IMG_7807.webp",
-        "path": "gallery/wides/IMG_7807.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_7807.webp",
-        "url": "/media/gallery/wides/IMG_7807.webp",
-        "size": 717510,
-        "lastModified": "2026-06-09T18:01:15.270Z",
-        "type": "image",
-        "extension": ".webp"
-      }
-    ],
-    "heroes/about": [
-      {
-        "filename": "DSC03936.webp",
-        "path": "heroes/about/DSC03936.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\about\\DSC03936.webp",
-        "url": "/media/heroes/about/DSC03936.webp",
-        "size": 598568,
-        "lastModified": "2026-06-09T18:00:51.712Z",
+        "filename": "DSC05228 bw.webp",
+        "path": "gallery/wides/DSC05228 bw.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC05228 bw.webp",
+        "url": "/media/gallery/wides/DSC05228 bw.webp",
+        "size": 223872,
+        "lastModified": "2026-06-09T18:00:59.328Z",
         "type": "image",
         "extension": ".webp"
       },
       {
         "filename": "DSC09695.webp",
-        "path": "heroes/about/DSC09695.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\about\\DSC09695.webp",
-        "url": "/media/heroes/about/DSC09695.webp",
+        "path": "gallery/wides/DSC09695.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\DSC09695.webp",
+        "url": "/media/gallery/wides/DSC09695.webp",
         "size": 3446570,
         "lastModified": "2026-06-09T18:01:04.183Z",
         "type": "image",
         "extension": ".webp"
       },
       {
+        "filename": "IMG_0846.webp",
+        "path": "gallery/wides/IMG_0846.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_0846.webp",
+        "url": "/media/gallery/wides/IMG_0846.webp",
+        "size": 1581422,
+        "lastModified": "2026-06-26T14:32:39.315Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0882.webp",
+        "path": "gallery/wides/IMG_0882.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_0882.webp",
+        "url": "/media/gallery/wides/IMG_0882.webp",
+        "size": 1116070,
+        "lastModified": "2026-06-26T14:32:41.720Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0884.webp",
+        "path": "gallery/wides/IMG_0884.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_0884.webp",
+        "url": "/media/gallery/wides/IMG_0884.webp",
+        "size": 728300,
+        "lastModified": "2026-06-26T14:32:43.530Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_5540.webp",
+        "path": "gallery/wides/IMG_5540.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_5540.webp",
+        "url": "/media/gallery/wides/IMG_5540.webp",
+        "size": 1213296,
+        "lastModified": "2026-06-26T14:33:19.000Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_5555.webp",
+        "path": "gallery/wides/IMG_5555.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_5555.webp",
+        "url": "/media/gallery/wides/IMG_5555.webp",
+        "size": 882484,
+        "lastModified": "2026-06-26T14:33:21.359Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "IMG_7808.webp",
-        "path": "heroes/about/IMG_7808.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\about\\IMG_7808.webp",
-        "url": "/media/heroes/about/IMG_7808.webp",
+        "path": "gallery/wides/IMG_7808.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_7808.webp",
+        "url": "/media/gallery/wides/IMG_7808.webp",
         "size": 1498798,
         "lastModified": "2026-06-09T18:01:16.726Z",
         "type": "image",
         "extension": ".webp"
       },
       {
+        "filename": "IMG_7823.webp",
+        "path": "gallery/wides/IMG_7823.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_7823.webp",
+        "url": "/media/gallery/wides/IMG_7823.webp",
+        "size": 1610614,
+        "lastModified": "2026-06-09T18:01:21.058Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7824.webp",
+        "path": "gallery/wides/IMG_7824.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_7824.webp",
+        "url": "/media/gallery/wides/IMG_7824.webp",
+        "size": 764124,
+        "lastModified": "2026-06-09T18:01:22.201Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "IMG_7825.webp",
-        "path": "heroes/about/IMG_7825.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\about\\IMG_7825.webp",
-        "url": "/media/heroes/about/IMG_7825.webp",
+        "path": "gallery/wides/IMG_7825.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_7825.webp",
+        "url": "/media/gallery/wides/IMG_7825.webp",
         "size": 942472,
         "lastModified": "2026-06-09T18:01:23.540Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7958.webp",
+        "path": "gallery/wides/IMG_7958.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_7958.webp",
+        "url": "/media/gallery/wides/IMG_7958.webp",
+        "size": 2039464,
+        "lastModified": "2026-06-09T18:01:26.545Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_9548 (1).webp",
+        "path": "gallery/wides/IMG_9548 (1).webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\gallery\\wides\\IMG_9548 (1).webp",
+        "url": "/media/gallery/wides/IMG_9548 (1).webp",
+        "size": 773640,
+        "lastModified": "2026-06-09T18:01:40.747Z",
         "type": "image",
         "extension": ".webp"
       }
@@ -404,22 +792,22 @@
     ],
     "heroes/home": [
       {
+        "filename": "1DSC05228 bw.webp",
+        "path": "heroes/home/1DSC05228 bw.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\home\\1DSC05228 bw.webp",
+        "url": "/media/heroes/home/1DSC05228 bw.webp",
+        "size": 223872,
+        "lastModified": "2026-06-09T18:00:59.328Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "DSC04231.webp",
         "path": "heroes/home/DSC04231.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\home\\DSC04231.webp",
         "url": "/media/heroes/home/DSC04231.webp",
         "size": 2169028,
-        "lastModified": "2026-06-09T18:00:54.544Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "DSC05228 bw.webp",
-        "path": "heroes/home/DSC05228 bw.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\heroes\\home\\DSC05228 bw.webp",
-        "url": "/media/heroes/home/DSC05228 bw.webp",
-        "size": 223872,
-        "lastModified": "2026-06-09T18:00:59.328Z",
+        "lastModified": "2026-06-27T16:40:02.611Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -436,121 +824,135 @@
     ],
     "home/about_teaser": [
       {
-        "filename": "_DEC6727.jpg",
-        "path": "home/about_teaser/_DEC6727.jpg",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\_DEC6727.jpg",
-        "url": "/media/home/about_teaser/_DEC6727.jpg",
-        "size": 2755592,
-        "lastModified": "2026-06-10T16:50:42.035Z",
-        "type": "image",
-        "extension": ".jpg"
-      },
-      {
-        "filename": "DSC07425.webp",
-        "path": "home/about_teaser/DSC07425.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\DSC07425.webp",
-        "url": "/media/home/about_teaser/DSC07425.webp",
-        "size": 988322,
-        "lastModified": "2026-06-09T18:01:00.525Z",
+        "filename": "1DSC01421.webp",
+        "path": "home/about_teaser/1DSC01421.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\1DSC01421.webp",
+        "url": "/media/home/about_teaser/1DSC01421.webp",
+        "size": 1384792,
+        "lastModified": "2026-06-26T14:31:49.169Z",
         "type": "image",
         "extension": ".webp"
       },
       {
-        "filename": "IMG_7644.webp",
-        "path": "home/about_teaser/IMG_7644.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\IMG_7644.webp",
-        "url": "/media/home/about_teaser/IMG_7644.webp",
-        "size": 2788306,
-        "lastModified": "2026-06-09T18:01:06.292Z",
+        "filename": "2DSC01427.webp",
+        "path": "home/about_teaser/2DSC01427.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\2DSC01427.webp",
+        "url": "/media/home/about_teaser/2DSC01427.webp",
+        "size": 1400214,
+        "lastModified": "2026-06-26T14:31:51.656Z",
         "type": "image",
         "extension": ".webp"
       },
       {
-        "filename": "IMG_7645.webp",
-        "path": "home/about_teaser/IMG_7645.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\IMG_7645.webp",
-        "url": "/media/home/about_teaser/IMG_7645.webp",
+        "filename": "3IMG_7645.webp",
+        "path": "home/about_teaser/3IMG_7645.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\3IMG_7645.webp",
+        "url": "/media/home/about_teaser/3IMG_7645.webp",
         "size": 4980126,
         "lastModified": "2026-06-09T18:01:13.677Z",
         "type": "image",
         "extension": ".webp"
       },
       {
-        "filename": "IMG_9546 (1).webp",
-        "path": "home/about_teaser/IMG_9546 (1).webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\IMG_9546 (1).webp",
-        "url": "/media/home/about_teaser/IMG_9546 (1).webp",
-        "size": 785278,
-        "lastModified": "2026-06-09T18:01:39.416Z",
+        "filename": "4IMG_7644.webp",
+        "path": "home/about_teaser/4IMG_7644.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\4IMG_7644.webp",
+        "url": "/media/home/about_teaser/4IMG_7644.webp",
+        "size": 2788306,
+        "lastModified": "2026-06-09T18:01:06.292Z",
         "type": "image",
         "extension": ".webp"
       },
       {
-        "filename": "IMG_9548 (1).webp",
-        "path": "home/about_teaser/IMG_9548 (1).webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\IMG_9548 (1).webp",
-        "url": "/media/home/about_teaser/IMG_9548 (1).webp",
+        "filename": "6IMG_9546 (1).webp",
+        "path": "home/about_teaser/6IMG_9546 (1).webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\6IMG_9546 (1).webp",
+        "url": "/media/home/about_teaser/6IMG_9546 (1).webp",
+        "size": 785278,
+        "lastModified": "2026-06-09T18:01:40.210Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "6IMG_9548 (1).webp",
+        "path": "home/about_teaser/6IMG_9548 (1).webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\about_teaser\\6IMG_9548 (1).webp",
+        "url": "/media/home/about_teaser/6IMG_9548 (1).webp",
         "size": 773640,
         "lastModified": "2026-06-09T18:01:40.747Z",
         "type": "image",
         "extension": ".webp"
       }
     ],
-    "home/intro": [
-      {
-        "filename": "IMG_7810.webp",
-        "path": "home/intro/IMG_7810.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\intro\\IMG_7810.webp",
-        "url": "/media/home/intro/IMG_7810.webp",
-        "size": 1013724,
-        "lastModified": "2026-06-09T18:01:18.090Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "IMG_7811.webp",
-        "path": "home/intro/IMG_7811.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\intro\\IMG_7811.webp",
-        "url": "/media/home/intro/IMG_7811.webp",
-        "size": 1909208,
-        "lastModified": "2026-06-09T18:01:19.584Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "IMG_7826.webp",
-        "path": "home/intro/IMG_7826.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\intro\\IMG_7826.webp",
-        "url": "/media/home/intro/IMG_7826.webp",
-        "size": 1293844,
-        "lastModified": "2026-06-09T18:01:24.936Z",
-        "type": "image",
-        "extension": ".webp"
-      },
-      {
-        "filename": "IMG_9457 (1).webp",
-        "path": "home/intro/IMG_9457 (1).webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\intro\\IMG_9457 (1).webp",
-        "url": "/media/home/intro/IMG_9457 (1).webp",
-        "size": 771858,
-        "lastModified": "2026-06-09T18:01:38.131Z",
-        "type": "image",
-        "extension": ".webp"
-      }
-    ],
-    "home/parallax": [
+    "home/approach": [
       {
         "filename": "IMG_7808.webp",
-        "path": "home/parallax/IMG_7808.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\parallax\\IMG_7808.webp",
-        "url": "/media/home/parallax/IMG_7808.webp",
+        "path": "home/approach/IMG_7808.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\approach\\IMG_7808.webp",
+        "url": "/media/home/approach/IMG_7808.webp",
         "size": 1498798,
         "lastModified": "2026-06-09T18:01:16.726Z",
         "type": "image",
         "extension": ".webp"
       }
     ],
+    "home/bookings": [
+      {
+        "filename": "IMG_5555.webp",
+        "path": "home/bookings/IMG_5555.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\bookings\\IMG_5555.webp",
+        "url": "/media/home/bookings/IMG_5555.webp",
+        "size": 882484,
+        "lastModified": "2026-06-26T14:33:21.359Z",
+        "type": "image",
+        "extension": ".webp"
+      }
+    ],
+    "home/notes": [
+      {
+        "filename": "01-note.webp",
+        "path": "home/notes/01-note.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\notes\\01-note.webp",
+        "url": "/media/home/notes/01-note.webp",
+        "size": 2259752,
+        "lastModified": "2026-06-27T18:35:36.126Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "path": "home/notes/3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\notes\\3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "url": "/media/home/notes/3aa9b478-8519-4d3a-b34e-8dc3c98f4627.webp",
+        "size": 362152,
+        "lastModified": "2026-06-26T14:31:40.856Z",
+        "type": "image",
+        "extension": ".webp"
+      }
+    ],
+    "home/parallax": [
+      {
+        "filename": "_DEC1382.jpg",
+        "path": "home/parallax/_DEC1382.jpg",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\parallax\\_DEC1382.jpg",
+        "url": "/media/home/parallax/_DEC1382.jpg",
+        "size": 3309357,
+        "lastModified": "2026-06-27T19:49:54.279Z",
+        "type": "image",
+        "extension": ".jpg"
+      }
+    ],
     "home/portfolio_slideshow/landscapes": [
+      {
+        "filename": "_DEC3799.webp",
+        "path": "home/portfolio_slideshow/landscapes/_DEC3799.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\_DEC3799.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/_DEC3799.webp",
+        "size": 2421428,
+        "lastModified": "2026-06-26T14:34:10.416Z",
+        "type": "image",
+        "extension": ".webp"
+      },
       {
         "filename": "_DEC6661.webp",
         "path": "home/portfolio_slideshow/landscapes/_DEC6661.webp",
@@ -562,12 +964,152 @@
         "extension": ".webp"
       },
       {
-        "filename": "IMG_7824.webp",
-        "path": "home/portfolio_slideshow/landscapes/IMG_7824.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_7824.webp",
-        "url": "/media/home/portfolio_slideshow/landscapes/IMG_7824.webp",
-        "size": 764124,
-        "lastModified": "2026-06-09T18:01:22.201Z",
+        "filename": "01-approach.webp",
+        "path": "home/portfolio_slideshow/landscapes/01-approach.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\01-approach.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/01-approach.webp",
+        "size": 2169028,
+        "lastModified": "2026-06-27T18:35:36.052Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "2IMG_7825.webp",
+        "path": "home/portfolio_slideshow/landscapes/2IMG_7825.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\2IMG_7825.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/2IMG_7825.webp",
+        "size": 942472,
+        "lastModified": "2026-06-09T18:01:23.540Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC00110.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC00110.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC00110.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC00110.webp",
+        "size": 3454766,
+        "lastModified": "2026-06-26T14:34:24.739Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC01662.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC01662.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC01662.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC01662.webp",
+        "size": 1902648,
+        "lastModified": "2026-06-09T18:00:43.540Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC02221.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC02221.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC02221.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC02221.webp",
+        "size": 2319628,
+        "lastModified": "2026-06-26T14:32:09.461Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC03206.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC03206.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC03206.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC03206.webp",
+        "size": 543220,
+        "lastModified": "2026-06-26T14:32:11.702Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC03936.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC03936.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC03936.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC03936.webp",
+        "size": 598568,
+        "lastModified": "2026-06-09T18:00:51.712Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC04315.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC04315.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC04315.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC04315.webp",
+        "size": 3299358,
+        "lastModified": "2026-06-09T18:00:56.513Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC09631.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC09631.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC09631.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC09631.webp",
+        "size": 2281734,
+        "lastModified": "2026-06-09T18:01:02.173Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC09695.webp",
+        "path": "home/portfolio_slideshow/landscapes/DSC09695.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\DSC09695.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/DSC09695.webp",
+        "size": 3446570,
+        "lastModified": "2026-06-09T18:01:04.183Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0882.webp",
+        "path": "home/portfolio_slideshow/landscapes/IMG_0882.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_0882.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/IMG_0882.webp",
+        "size": 1116070,
+        "lastModified": "2026-06-26T14:32:41.720Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0884.webp",
+        "path": "home/portfolio_slideshow/landscapes/IMG_0884.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_0884.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/IMG_0884.webp",
+        "size": 728300,
+        "lastModified": "2026-06-26T14:32:43.530Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_5540.webp",
+        "path": "home/portfolio_slideshow/landscapes/IMG_5540.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_5540.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/IMG_5540.webp",
+        "size": 1213296,
+        "lastModified": "2026-06-26T14:33:19.000Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7807.webp",
+        "path": "home/portfolio_slideshow/landscapes/IMG_7807.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_7807.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/IMG_7807.webp",
+        "size": 717510,
+        "lastModified": "2026-06-09T18:01:15.270Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7808.webp",
+        "path": "home/portfolio_slideshow/landscapes/IMG_7808.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_7808.webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/IMG_7808.webp",
+        "size": 1498798,
+        "lastModified": "2026-06-09T18:01:16.726Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -580,18 +1122,38 @@
         "lastModified": "2026-06-09T18:01:26.545Z",
         "type": "image",
         "extension": ".webp"
+      },
+      {
+        "filename": "IMG_9548 (1).webp",
+        "path": "home/portfolio_slideshow/landscapes/IMG_9548 (1).webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\landscapes\\IMG_9548 (1).webp",
+        "url": "/media/home/portfolio_slideshow/landscapes/IMG_9548 (1).webp",
+        "size": 773640,
+        "lastModified": "2026-06-09T18:01:40.747Z",
+        "type": "image",
+        "extension": ".webp"
       }
     ],
     "home/portfolio_slideshow/portraits": [
       {
-        "filename": "_DEC1382.jpg",
-        "path": "home/portfolio_slideshow/portraits/_DEC1382.jpg",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\_DEC1382.jpg",
-        "url": "/media/home/portfolio_slideshow/portraits/_DEC1382.jpg",
-        "size": 3309357,
-        "lastModified": "2026-06-10T16:52:24.529Z",
+        "filename": "_04.webp",
+        "path": "home/portfolio_slideshow/portraits/_04.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\_04.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/_04.webp",
+        "size": 2689706,
+        "lastModified": "2026-06-26T14:33:57.808Z",
         "type": "image",
-        "extension": ".jpg"
+        "extension": ".webp"
+      },
+      {
+        "filename": "_DEC3792.webp",
+        "path": "home/portfolio_slideshow/portraits/_DEC3792.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\_DEC3792.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/_DEC3792.webp",
+        "size": 740918,
+        "lastModified": "2026-06-26T14:34:07.690Z",
+        "type": "image",
+        "extension": ".webp"
       },
       {
         "filename": "_DEC6748.jpg",
@@ -600,6 +1162,46 @@
         "url": "/media/home/portfolio_slideshow/portraits/_DEC6748.jpg",
         "size": 3515822,
         "lastModified": "2026-06-10T16:52:37.294Z",
+        "type": "image",
+        "extension": ".jpg"
+      },
+      {
+        "filename": "_DEC8027.webp",
+        "path": "home/portfolio_slideshow/portraits/_DEC8027.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\_DEC8027.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/_DEC8027.webp",
+        "size": 424616,
+        "lastModified": "2026-06-26T15:15:10.510Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "03-moments-a.webp",
+        "path": "home/portfolio_slideshow/portraits/03-moments-a.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\03-moments-a.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/03-moments-a.webp",
+        "size": 634882,
+        "lastModified": "2026-06-27T19:06:02.491Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "05-together-a.webp",
+        "path": "home/portfolio_slideshow/portraits/05-together-a.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\05-together-a.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/05-together-a.webp",
+        "size": 594354,
+        "lastModified": "2026-06-27T19:06:02.631Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "5_DEC6727.jpg",
+        "path": "home/portfolio_slideshow/portraits/5_DEC6727.jpg",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\5_DEC6727.jpg",
+        "url": "/media/home/portfolio_slideshow/portraits/5_DEC6727.jpg",
+        "size": 2755592,
+        "lastModified": "2026-06-10T16:50:13.192Z",
         "type": "image",
         "extension": ".jpg"
       },
@@ -614,12 +1216,62 @@
         "extension": ".webp"
       },
       {
+        "filename": "DSC01467.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC01467.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC01467.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC01467.webp",
+        "size": 1552160,
+        "lastModified": "2026-06-26T14:31:56.094Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC01479.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC01479.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC01479.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC01479.webp",
+        "size": 1242804,
+        "lastModified": "2026-06-26T14:31:58.491Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC01488.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC01488.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC01488.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC01488.webp",
+        "size": 1060072,
+        "lastModified": "2026-06-26T14:32:00.981Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "DSC03228.webp",
         "path": "home/portfolio_slideshow/portraits/DSC03228.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC03228.webp",
         "url": "/media/home/portfolio_slideshow/portraits/DSC03228.webp",
         "size": 2259752,
         "lastModified": "2026-06-09T18:00:50.297Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC03311.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC03311.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC03311.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC03311.webp",
+        "size": 2431118,
+        "lastModified": "2026-06-26T14:34:28.250Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "DSC03333.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC03333.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC03333.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC03333.webp",
+        "size": 2001474,
+        "lastModified": "2026-06-26T14:34:31.690Z",
         "type": "image",
         "extension": ".webp"
       },
@@ -644,6 +1296,16 @@
         "extension": ".webp"
       },
       {
+        "filename": "DSC06350.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC06350.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC06350.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC06350.webp",
+        "size": 594354,
+        "lastModified": "2026-06-26T14:32:20.762Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
         "filename": "DSC07425.webp",
         "path": "home/portfolio_slideshow/portraits/DSC07425.webp",
         "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC07425.webp",
@@ -654,16 +1316,116 @@
         "extension": ".webp"
       },
       {
-        "filename": "IMG_7647.webp",
-        "path": "home/portfolio_slideshow/portraits/IMG_7647.webp",
-        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_7647.webp",
-        "url": "/media/home/portfolio_slideshow/portraits/IMG_7647.webp",
-        "size": 627252,
-        "lastModified": "2026-06-09T18:01:14.022Z",
+        "filename": "DSC07987.webp",
+        "path": "home/portfolio_slideshow/portraits/DSC07987.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\DSC07987.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/DSC07987.webp",
+        "size": 2361782,
+        "lastModified": "2026-06-26T14:32:31.381Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_0836.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_0836.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_0836.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_0836.webp",
+        "size": 1041198,
+        "lastModified": "2026-06-26T14:32:33.953Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_1690.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_1690.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_1690.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_1690.webp",
+        "size": 1439822,
+        "lastModified": "2026-06-26T14:32:50.433Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_1695.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_1695.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_1695.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_1695.webp",
+        "size": 1159530,
+        "lastModified": "2026-06-26T14:32:51.958Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2040.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_2040.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_2040.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_2040.webp",
+        "size": 263306,
+        "lastModified": "2026-06-26T14:34:32.283Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2041.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_2041.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_2041.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_2041.webp",
+        "size": 84982,
+        "lastModified": "2026-06-26T14:34:32.533Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2334.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_2334.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_2334.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_2334.webp",
+        "size": 3545112,
+        "lastModified": "2026-06-26T14:33:04.237Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2336.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_2336.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_2336.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_2336.webp",
+        "size": 3288564,
+        "lastModified": "2026-06-26T14:33:10.407Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_2339.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_2339.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_2339.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_2339.webp",
+        "size": 23128,
+        "lastModified": "2026-06-26T14:33:16.710Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7810.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_7810.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_7810.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_7810.webp",
+        "size": 795952,
+        "lastModified": "2026-06-26T14:33:23.569Z",
+        "type": "image",
+        "extension": ".webp"
+      },
+      {
+        "filename": "IMG_7811.webp",
+        "path": "home/portfolio_slideshow/portraits/IMG_7811.webp",
+        "fullPath": "C:\\Users\\coffi\\Documents\\proj\\portofolio-webbsite\\media\\home\\portfolio_slideshow\\portraits\\IMG_7811.webp",
+        "url": "/media/home/portfolio_slideshow/portraits/IMG_7811.webp",
+        "size": 1909208,
+        "lastModified": "2026-06-09T18:01:19.584Z",
         "type": "image",
         "extension": ".webp"
       }
     ]
   },
-  "lastUpdated": "2026-06-24T19:26:15.149Z"
+  "lastUpdated": "2026-06-28T09:42:36.277Z"
 }

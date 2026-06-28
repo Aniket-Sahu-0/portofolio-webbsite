@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { API_HOST } from '../../utils/media';
+import { loadFolderImages } from '../../utils/media';
 
 const HomeParallax = () => {
   const [bgUrl, setBgUrl] = useState<string>('');
 
+  // Reads the first image from media/home/parallax/. Swap the file in that folder
+  // to change the parallax background; empty folder just shows the dark backdrop.
   useEffect(() => {
-    fetch(`${API_HOST}/api/database/category/gallery/portraits`)
-      .then(r => r.json())
-      .then(d => {
-        const images: any[] = d?.data?.images ?? [];
-        const first = images[0];
-        if (!first) return;
-        const url: string = first.url ?? '';
-        setBgUrl(url.startsWith('/') ? `${API_HOST}${url}` : url);
-      })
-      .catch(() => {});
+    const ctrl = new AbortController();
+    loadFolderImages('home/parallax', { limit: 1, signal: ctrl.signal })
+      .then((imgs) => { if (imgs[0]) setBgUrl(imgs[0].url); });
+    return () => ctrl.abort();
   }, []);
 
   return (

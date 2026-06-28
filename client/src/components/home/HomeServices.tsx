@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { animate, motion, MotionValue, useMotionValue, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Camera, Film, Images, Mail, Quote, Sparkles } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
-import { API_HOST } from '../../utils/media';
+import { loadFolderImages } from '../../utils/media';
 
 const services = [
   { title: 'Wedding Day', copy: 'Documentary coverage, family frames, portraits, and the in-between moments that carry the day.', Icon: Camera },
@@ -16,12 +16,12 @@ const reviews = [
   { quote: 'The portraits were elegant, but the quiet candid frames are what still stop us.', name: 'Mira & Sam' },
 ];
 
-const rawImageUrl = `${API_HOST}/media/heroes/home/DSC04231.webp`;
-const bookingImageUrl = `${API_HOST}/media/contact/backgrounds/_DEC6470.jpg`;
-const reviewImageUrls = [
-  `${API_HOST}/media/gallery/portraits/DSC03228.webp`,
-  `${API_HOST}/media/gallery/portraits/IMG_8640.webp`,
-];
+// Each panel reads its image(s) live from its own media folder, so dropping or
+// removing files in these folders is reflected on the site automatically:
+//   media/home/approach/  -> [0] = Approach panel image
+//   media/home/notes/     -> [0..] = Notes card backgrounds (filename order)
+//   media/home/bookings/  -> [0] = Bookings panel image
+// Empty folder = the panel just shows its background, no broken image.
 
 const PANEL_COUNT = 4;
 const LAST = PANEL_COUNT - 1;
@@ -106,6 +106,26 @@ const HomeServices: React.FC = () => {
     typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
   );
 
+  // Panel imagery, read live from each panel's media folder.
+  const [rawImageUrl, setRawImageUrl] = useState('');
+  const [bookingImageUrl, setBookingImageUrl] = useState('');
+  const [reviewImageUrls, setReviewImageUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+    (async () => {
+      const [approach, notes, bookings] = await Promise.all([
+        loadFolderImages('home/approach', { signal: ctrl.signal }),
+        loadFolderImages('home/notes', { signal: ctrl.signal }),
+        loadFolderImages('home/bookings', { signal: ctrl.signal }),
+      ]);
+      if (approach[0]) setRawImageUrl(approach[0].url);
+      setReviewImageUrls(notes.map((i) => i.url));
+      if (bookings[0]) setBookingImageUrl(bookings[0].url);
+    })();
+    return () => ctrl.abort();
+  }, []);
+
   // Scroll-driven progress for touch/mobile — maps section scroll 1:1 to progress
   // so each panel takes ~100 vh of natural scroll. No wheel hijacking needed.
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
@@ -115,13 +135,13 @@ const HomeServices: React.FC = () => {
     return unsub;
   }, [scrollYProgress, progress]);
 
-  // Pre-decode all card images so they are GPU-ready before animating in.
+  // Pre-decode panel images so they are GPU-ready before animating in.
   useEffect(() => {
-    [rawImageUrl, bookingImageUrl, ...reviewImageUrls].forEach((url) => {
+    [rawImageUrl, bookingImageUrl, ...reviewImageUrls].filter(Boolean).forEach((url) => {
       const img = new Image();
       img.src = url;
     });
-  }, []);
+  }, [rawImageUrl, bookingImageUrl, reviewImageUrls]);
 
   // Sync initial panel from scroll position (handles refresh / back-button restore).
   useEffect(() => {
@@ -281,17 +301,19 @@ const HomeServices: React.FC = () => {
         <ServiceCard index={1} progress={progress} label="Approach" className="border-[#edf1ee]/20 bg-[#151817] text-white">
           <div className="grid h-full w-full grid-rows-[0.82fr_1fr] gap-3 p-5 pt-16 sm:gap-6 sm:p-8 sm:pt-20 lg:grid-cols-[1.02fr_0.98fr] lg:grid-rows-1 lg:p-12 lg:pt-20">
             <div className="relative min-h-0 overflow-hidden rounded-lg bg-[#0f1110] lg:min-h-full">
-              <OptimizedImage
-                src={rawImageUrl}
-                alt="Wedding story"
-                width={1300}
-                height={1100}
-                quality={78}
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                loading="eager"
-                decoding="async"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              {rawImageUrl && (
+                <OptimizedImage
+                  src={rawImageUrl}
+                  alt="Wedding story"
+                  width={1300}
+                  height={1100}
+                  quality={78}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  loading="eager"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              )}
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,17,16,0.08),rgba(15,17,16,0.36))]" />
             </div>
             <div className="flex min-h-0 flex-col justify-center rounded-lg border border-white/10 bg-[#202522] p-4 sm:p-8 lg:p-12">
@@ -326,7 +348,7 @@ const HomeServices: React.FC = () => {
                 >
                   <div
                     className="absolute inset-0 scale-105 bg-cover bg-center blur-[3px] transition duration-500 group-hover:blur-0"
-                    style={{ backgroundImage: `url("${reviewImageUrls[reviewIndex]}")` }}
+                    style={reviewImageUrls[reviewIndex] ? { backgroundImage: `url("${reviewImageUrls[reviewIndex]}")` } : { background: '#26211a' }}
                   />
                   {/* Legibility gradient under the quote. */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5" />
@@ -347,17 +369,19 @@ const HomeServices: React.FC = () => {
         <ServiceCard index={3} progress={progress} label="Bookings" className="border-[#d7d0c3]/25 bg-[#14171a] text-white">
           <div className="grid h-full w-full grid-rows-[0.82fr_1fr] gap-3 p-5 pt-16 sm:gap-6 sm:p-8 sm:pt-20 md:grid-cols-2 md:grid-rows-1 lg:p-12 lg:pt-20">
             <div className="relative min-h-0 overflow-hidden rounded-lg bg-[#22262a] ring-1 ring-white/10">
-              <OptimizedImage
-                src={bookingImageUrl}
-                alt="Wedding celebration"
-                width={1200}
-                height={900}
-                quality={78}
-                sizes="(min-width: 768px) 50vw, 100vw"
-                loading="eager"
-                decoding="async"
-                className="absolute inset-0 h-full w-full object-cover object-center"
-              />
+              {bookingImageUrl && (
+                <OptimizedImage
+                  src={bookingImageUrl}
+                  alt="Wedding celebration"
+                  width={1200}
+                  height={900}
+                  quality={78}
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  loading="eager"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover object-center"
+                />
+              )}
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,23,26,0.06),rgba(20,23,26,0.44))]" />
             </div>
 

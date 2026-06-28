@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import OptimizedImage from '../media/OptimizedImage';
-import { loadMediaOrFallback, MediaItem } from '../../utils/media';
+import { loadFolderImages, MediaItem } from '../../utils/media';
+
+// Cap on how many images the marquee renders. The strip duplicates each row for a
+// seamless loop, so the actual <img> count is roughly double this — keep it modest.
+const MAX_STRIP_IMAGES = 20;
 
 const css = `
 @keyframes home-marquee-left {
@@ -43,7 +47,11 @@ const HomeGalleryStrip: React.FC = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    loadMediaOrFallback('gallery', { limit: 10, signal: controller.signal }).then(setImages);
+    // Pull portraits from media/home/portfolio_slideshow/portraits (capped for perf).
+    loadFolderImages('home/portfolio_slideshow/portraits', {
+      limit: MAX_STRIP_IMAGES,
+      signal: controller.signal,
+    }).then(setImages);
     return () => controller.abort();
   }, []);
 

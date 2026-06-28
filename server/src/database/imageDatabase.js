@@ -1,152 +1,100 @@
-const fs = require('fs');
-const path = require('path');
+const { v2: cloudinary } = require('cloudinary');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Images were uploaded inside a "media/" root folder in Cloudinary.
+// asset_folder = "media/heroes/home", public_id = "IMG_7823_j5allh"
+// We strip the "media/" prefix from asset_folder so callers see "heroes/home" as before.
+function mapResource(r) {
+  const filename = r.filename + '.' + r.format;
+  const folder = (r.asset_folder || '').replace(/^media\/?/, ''); // strip "media/" prefix
+  return {
+    filename,
+    path: folder ? `${folder}/${filename}` : filename,
+    url: r.secure_url,
+    size: r.bytes,
+    type: r.resource_type === 'video' ? 'video' : 'image',
+    extension: '.' + r.format,
+  };
+}
 
 class ImageDatabase {
   constructor() {
-    this.dbPath = path.join(__dirname, '../../data/images.json');
-    this.mediaPath = path.join(__dirname, '../../../media'); // Fixed path
-    this.ensureDataDirectory();
-    this.loadDatabase();
+    this.cache = {};
+    this.cacheTTL = 5 * 60 * 1000; // 5 minutes
+    this.cacheTimestamps = {};
   }
 
-  ensureDataDirectory() {
-    const dataDir = path.dirname(this.dbPath);
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
+  _isCacheValid(key) {
+    const ts = this.cacheTimestamps[key];
+    return ts && Date.now() - ts < this.cacheTTL;
   }
 
-  loadDatabase() {
-    try {
-      if (fs.existsSync(this.dbPath)) {
-        const data = fs.readFileSync(this.dbPath, 'utf8');
-        this.database = JSON.parse(data);
-      } else {
-        this.database = {
-          images: {},
-          lastUpdated: new Date().toISOString()
-        };
-        this.saveDatabase();
-      }
-    } catch (error) {
-      console.error('Error loading image database:', error);
-      this.database = {
-        images: {},
-        lastUpdated: new Date().toISOString()
-      };
-    }
+  async _search(expression) {
+    const resources = [];
+    let nextCursor = null;
+    do {
+      const q = cloudinary.search
+        .expression(expression)
+        .sort_by('public_id', 'asc')
+        .max_results(500);
+      if (nextCursor) q.next_cursor(nextCursor);
+      const result = await q.execute();
+      resources.push(...result.resources);
+      nextCursor = result.next_cursor || null;
+    } while (nextCursor);
+    return resources;
   }
 
-  saveDatabase() {
-    try {
-      this.database.lastUpdated = new Date().toISOString();
-      fs.writeFileSync(this.dbPath, JSON.stringify(this.database, null, 2));
-    } catch (error) {
-      console.error('Error saving image database:', error);
-    }
+  async getImagesByCategory(folder) {
+    if (this._isCacheValid(folder)) return this.cache[folder];
+    // folder = "heroes/home", Cloudinary stores it as "media/heroes/home"
+    const cloudFolder = `media/${folder}`;
+    const resources = await this._search(`folder="${cloudFolder}"`);
+    const images = resources.map(mapResource);
+    this.cache[folder] = images;
+    this.cacheTimestamps[folder] = Date.now();
+    return images;
   }
 
-  scanMediaDirectory() {
+  async getAllImages() {
+    const cacheKey = '__all__';
+    if (this._isCacheValid(cacheKey)) return this.cache[cacheKey];
+    const resources = await this._search('folder:media/*');
     const categories = {};
-
-    if (!fs.existsSync(this.mediaPath)) {
-      return this.database.images || {};
-    }
-    
-    const scanDirectory = (dir, relativePath = '') => {
-      const items = fs.readdirSync(dir);
-      
-      items.forEach(item => {
-        const fullPath = path.join(dir, item);
-        const itemRelativePath = relativePath ? `${relativePath}/${item}` : item;
-        
-        if (fs.statSync(fullPath).isDirectory()) {
-          scanDirectory(fullPath, itemRelativePath);
-        } else {
-          const ext = path.extname(item).toLowerCase();
-          if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.mp4', '.webm', '.mov'].includes(ext)) {
-            if (!categories[relativePath]) {
-              categories[relativePath] = [];
-            }
-            
-            const imageInfo = {
-              filename: item,
-              path: itemRelativePath,
-              fullPath: fullPath,
-              url: `/media/${itemRelativePath}`,
-              size: fs.statSync(fullPath).size,
-              lastModified: fs.statSync(fullPath).mtime.toISOString(),
-              type: ext === '.mp4' || ext === '.webm' || ext === '.mov' ? 'video' : 'image',
-              extension: ext
-            };
-            
-            categories[relativePath].push(imageInfo);
-          }
-        }
-      });
-    };
-
-    scanDirectory(this.mediaPath);
-
-    if (Object.keys(categories).length === 0) {
-      return this.database.images || {};
-    }
-    
-    // Sort images by filename for consistent ordering
-    Object.keys(categories).forEach(category => {
-      categories[category].sort((a, b) => a.filename.localeCompare(b.filename));
+    resources.forEach((r) => {
+      const img = mapResource(r);
+      const folder = (r.asset_folder || '').replace(/^media\/?/, '');
+      if (!categories[folder]) categories[folder] = [];
+      categories[folder].push(img);
     });
-
-    this.database.images = categories;
-    this.saveDatabase();
-    
+    this.cache[cacheKey] = categories;
+    this.cacheTimestamps[cacheKey] = Date.now();
     return categories;
   }
 
-  getImagesByCategory(category) {
-    this.scanMediaDirectory(); // Refresh the database
-    return this.database.images[category] || [];
-  }
-
-  getAllImages() {
-    this.scanMediaDirectory(); // Refresh the database
-    return this.database.images;
-  }
-
-  getImageByPath(imagePath) {
-    this.scanMediaDirectory(); // Refresh the database
-    
-    for (const category in this.database.images) {
-      const image = this.database.images[category].find(img => img.path === imagePath);
-      if (image) return image;
-    }
-    return null;
-  }
-
-  // Get statistics
-  getStats() {
-    this.scanMediaDirectory();
-    const stats = {
-      totalCategories: Object.keys(this.database.images).length,
-      totalImages: 0,
-      totalVideos: 0,
-      totalSize: 0,
-      lastUpdated: this.database.lastUpdated
-    };
-
-    Object.values(this.database.images).forEach(images => {
-      images.forEach(img => {
-        stats.totalSize += img.size;
-        if (img.type === 'video') {
-          stats.totalVideos++;
-        } else {
-          stats.totalImages++;
-        }
-      });
+  async getStats() {
+    const all = await this.getAllImages();
+    let totalImages = 0, totalSize = 0;
+    Object.values(all).forEach((imgs) => {
+      totalImages += imgs.length;
+      imgs.forEach((img) => (totalSize += img.size));
     });
+    return {
+      totalCategories: Object.keys(all).length,
+      totalImages,
+      totalVideos: 0,
+      totalSize,
+      lastUpdated: new Date().toISOString(),
+    };
+  }
 
-    stats.totalFiles = stats.totalImages + stats.totalVideos;
-    return stats;
+  async scanMediaDirectory() {
+    return this.getAllImages();
   }
 }
 

@@ -3,7 +3,7 @@ import { motion, MotionValue, useScroll, useSpring, useTransform } from 'framer-
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
-import { loadMediaOrFallback, MediaItem } from '../../utils/media';
+import { loadFolderImages, MediaItem } from '../../utils/media';
 
 const panelData = [
   {
@@ -129,10 +129,13 @@ const HomeIntro: React.FC = () => {
     [images]
   );
 
+  // Reads the first 6 images from media/home/about_teaser/ (2 stacked per story
+  // panel, in filename order). Add/remove files in that folder to update the scene;
+  // an empty folder just shows the dark image frames.
   useEffect(() => {
-    const controller = new AbortController();
-    loadMediaOrFallback('aboutTeaser', { limit: 6, signal: controller.signal }).then(setImages);
-    return () => controller.abort();
+    const ctrl = new AbortController();
+    loadFolderImages('home/about_teaser', { limit: 6, signal: ctrl.signal }).then(setImages);
+    return () => ctrl.abort();
   }, []);
 
   return (

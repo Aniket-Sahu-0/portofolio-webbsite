@@ -65,6 +65,33 @@ export async function fetchMediaCategory(
   return normalizeImages(json.data?.images || json.images || []);
 }
 
+// Loads images straight from a media folder path (e.g. 'home/parallax'), retrying
+// on transient backend failures so a momentarily slow/cold server doesn't leave the
+// section blank until a manual reload. Returns [] for a genuinely empty/missing
+// folder (no placeholder fallback) — these sections stay purely folder-driven.
+export async function loadFolderImages(
+  categoryPath: string,
+  options: { limit?: number; signal?: AbortSignal; retries?: number; retryDelayMs?: number } = {}
+): Promise<MediaItem[]> {
+  const retries = options.retries ?? 6;
+  const retryDelayMs = options.retryDelayMs ?? 600;
+
+  for (let attempt = 0; attempt < retries; attempt++) {
+    if (options.signal?.aborted) return [];
+    try {
+      const res = await fetch(`${API_HOST}/api/database/category/${categoryPath}`, { signal: options.signal });
+      if (!res.ok) throw new Error(`Failed to fetch ${categoryPath}`);
+      const json = await res.json();
+      const items = normalizeImages(json?.data?.images ?? json?.images ?? []);
+      return options.limit ? items.slice(0, options.limit) : items; // success (even if empty) — done
+    } catch (_) {
+      if (options.signal?.aborted) return [];
+      if (attempt < retries - 1) await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+    }
+  }
+  return [];
+}
+
 export async function loadMediaOrFallback(
   category: MediaCategory,
   options: { limit?: number; signal?: AbortSignal; retries?: number; retryDelayMs?: number } = {}

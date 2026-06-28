@@ -40,10 +40,12 @@ const Contact = () => {
     const controller = new AbortController();
     (async () => {
       try {
-        const res = await fetch(`${API_HOST}/api/media/list?path=contact/backgrounds`, { signal: controller.signal });
-        const json = await res.json().catch(() => ({ items: [] }));
-        if (json.items && json.items[0]) {
-          const url = json.items[0].url;
+        const res = await fetch(`${API_HOST}/api/database/category/contact/backgrounds`, { signal: controller.signal });
+        const json = await res.json().catch(() => ({ data: { images: [] } }));
+        const images: any[] = json.data?.images ?? [];
+        const first = images[0];
+        if (first?.url) {
+          const url: string = first.url;
           setBgUrl(url.startsWith('/') ? `${API_HOST}${url}` : url);
         }
       } catch (_) {

@@ -201,19 +201,56 @@ Fonts: `Cormorant Garamond` (serif/display), `Helvetica Neue` (sans/body)
 
 ---
 
-## Media Folder Convention
+## Media folders → site sections
 
-```
-media/
-  heroes/home/          → HomeHero slideshow
-  about/approach/       → Photographer portrait (flip card + approach image)
-  gallery/portraits/    → Portrait sessions gallery + HomeParallax background
-  gallery/weddings/     → Wedding gallery
-  contact/backgrounds/  → Contact page hero
-```
+Every section reads its images **live** from a media folder. The server rescans the
+folders on each request, so adding/removing a file shows up on the next page reload —
+no restart. Folder-driven sections show images **sorted by filename**, so prefix names
+(`01-`, `02-`…) to control which ones show and in what order. An empty folder degrades
+gracefully (dark frame / no image), never a broken image.
+
+| Folder | Feeds | Reads |
+|--------|-------|-------|
+| `heroes/home/` | HomeHero slideshow | first 5 (Unsplash fallback) |
+| `home/about_teaser/` | HomeIntro "Scroll Scene" | first 6 (2 per story panel) |
+| `home/portfolio_slideshow/portraits/` | HomeGalleryStrip marquee | first 20 (capped for perf) |
+| `home/parallax/` | HomeParallax background | first 1 |
+| `home/approach/` | HomeServices · Approach panel | first 1 |
+| `home/notes/` | HomeServices · Notes card backgrounds | first 2 |
+| `home/bookings/` | HomeServices · Bookings panel | first 1 |
+| `about/portrait/` | About flip-card portrait | first 1 |
+| `about/testimonials/` | About testimonial cards | first 4 |
+| `gallery/portraits/` | Gallery page (`/gallery`) main grid | up to 500 (Unsplash fallback) |
+| `gallery/wides/` | Gallery page wide row | up to 500 (Unsplash fallback) |
+| `heroes/gallery/` | Gallery page hero | first 1 |
+| `contact/backgrounds/` | Contact page background | first 1 |
+
+Two loaders in `client/src/utils/media.ts`:
+- `loadMediaOrFallback(category)` — retries, then falls back to Unsplash placeholders.
+  Used by HomeHero + the Gallery page (categories listed in `categoryEndpoint`).
+- `loadFolderImages(folderPath)` — retries, returns **empty** on failure or empty
+  folder (no Unsplash). Used by every folder-driven panel above.
+
+**Not read by the site** (leftovers — safe to ignore or delete): `home/intro/`,
+`home/scroll-scene/`, `about/approach/`, `home/portfolio_slideshow/landscapes/`.
 
 `media/` is gitignored — photos never enter version control.
-`server/data/images.json` is committed (filenames only, regenerated on server start).
+`server/data/images.json` is committed (filenames only, regenerated on every scan).
+
+---
+
+## Rate limiting
+
+Two separate per-IP limiters (`server/src/index.js`, tuned in `server/src/config.js`):
+
+- **API** (`/api/*`) — `RATE_LIMIT_MAX`, default **100**/15 min in prod (1000 in dev).
+  Guards the contact form and data endpoints (abuse-sensitive).
+- **Media** (`/media/*`) — `RATE_LIMIT_MEDIA_MAX`, default **1500**/15 min in prod
+  (20000 in dev). Photos need their own generous bucket: one page pulls ~30 images, so
+  a single shared limiter would 429 normal browsing and make images fail to load.
+
+Raise `RATE_LIMIT_MEDIA_MAX` if pages get heavier (more images) or you expect high
+traffic. The two limiters must stay split — never put `/media` under the API limiter.
 
 ---
 

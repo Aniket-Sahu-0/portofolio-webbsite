@@ -24,10 +24,15 @@ const config = {
     origin: process.env.CLIENT_URL || (process.env.NODE_ENV === 'production' ? false : devOrigins),
   },
   
-  // Rate Limiting
+  // Rate Limiting (per IP, per window). Two separate caps — see server/src/index.js:
+  //   max      -> /api routes (contact form, data). Strict; abuse-sensitive.
+  //   mediaMax -> /media photos. Generous, because one page pulls ~30 images, so a
+  //               visitor browsing several pages legitimately makes hundreds of
+  //               image requests. ~1500/15min ≈ 50 page views before any throttling.
   rateLimit: {
     windowMs: process.env.RATE_LIMIT_WINDOW_MS ? parseInt(process.env.RATE_LIMIT_WINDOW_MS) : 15 * 60 * 1000, // 15 minutes
     max: process.env.RATE_LIMIT_MAX ? parseInt(process.env.RATE_LIMIT_MAX) : (process.env.NODE_ENV === 'development' ? 1000 : 100), // Higher limit in dev for HMR
+    mediaMax: process.env.RATE_LIMIT_MEDIA_MAX ? parseInt(process.env.RATE_LIMIT_MEDIA_MAX) : (process.env.NODE_ENV === 'development' ? 20000 : 1500),
   },
   
   // Email Configuration

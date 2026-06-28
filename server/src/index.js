@@ -7,7 +7,7 @@ const fs = require('fs');
 const config = require('./config');
 const logger = require('./utils/logger');
 const apiRoutes = require('./routes/api/index');
-const imageOptimizer = require('./middleware/imageOptimizer');
+// imageOptimizer removed — images now served from Cloudinary CDN
 
 // Initialize Express app
 const app = express();
@@ -38,13 +38,11 @@ if (config.cors.enabled) {
   );
 }
 
-// Rate limiting
-const limiter = rateLimit({
+const apiLimiter = rateLimit({
   windowMs: config.rateLimit.windowMs,
   max: config.rateLimit.max,
   message: 'Too many requests from this IP, please try again later',
 });
-app.use(limiter);
 
 // Request logging
 app.use(require('morgan')(config.morgan.format, { stream: logger.stream }));
@@ -53,17 +51,6 @@ app.use(require('morgan')(config.morgan.format, { stream: logger.stream }));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Serve static media files
-const mediaRoot = path.join(__dirname, '../../media');
-if (!fs.existsSync(mediaRoot)) {
-  fs.mkdirSync(mediaRoot, { recursive: true });
-}
-app.use('/media', imageOptimizer, express.static(mediaRoot, {
-  maxAge: '1h',
-  setHeaders: (res) => {
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-  }
-}));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -75,7 +62,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // API routes
-app.use('/api', apiRoutes);
+app.use('/api', apiLimiter, apiRoutes);
 
 // Handle 404 - Route not found
 app.use((req, res, next) => {
