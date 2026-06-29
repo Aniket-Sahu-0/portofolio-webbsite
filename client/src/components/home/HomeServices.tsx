@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Camera, Film, Images, Mail, Quote, Sparkles } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
 import { loadFolderImages } from '../../utils/media';
+import { optimizeImageUrl } from '../../utils/imageOptimizer';
 
 const services = [
   { title: 'Wedding Day', copy: 'Documentary coverage, family frames, portraits, and the in-between moments that carry the day.', Icon: Camera },
@@ -88,7 +89,7 @@ const ServiceCard: React.FC<CardProps> = ({ index, progress, className, label, c
         <span className="h-px w-8 bg-current" />
         <span>{label}</span>
       </div>
-      <motion.div className="relative z-10 flex h-full w-full" style={{ opacity: contentOpacity }}>
+      <motion.div className="relative z-10 flex h-full w-full" style={{ opacity: contentOpacity, willChange: 'opacity' }}>
         {children}
       </motion.div>
       <motion.div className="pointer-events-none absolute inset-0 z-20 bg-black" style={{ opacity: overlayOpacity }} />
@@ -135,13 +136,16 @@ const HomeServices: React.FC = () => {
     return unsub;
   }, [scrollYProgress, progress]);
 
-  // Pre-decode panel images so they are GPU-ready before animating in.
+  // Warm the Notes background images so they are GPU-ready before animating in.
+  // These are CSS backgrounds, so they bypass OptimizedImage's eager loading —
+  // pre-decode the SAME optimized URL the panel renders (not the ~2 MB original).
+  // Approach and Bookings already load eagerly through OptimizedImage.
   useEffect(() => {
-    [rawImageUrl, bookingImageUrl, ...reviewImageUrls].filter(Boolean).forEach((url) => {
+    reviewImageUrls.filter(Boolean).forEach((url) => {
       const img = new Image();
-      img.src = url;
+      img.src = optimizeImageUrl(url, { width: 800, quality: 70 });
     });
-  }, [rawImageUrl, bookingImageUrl, reviewImageUrls]);
+  }, [reviewImageUrls]);
 
   // Sync initial panel from scroll position (handles refresh / back-button restore).
   useEffect(() => {
@@ -348,7 +352,7 @@ const HomeServices: React.FC = () => {
                 >
                   <div
                     className="absolute inset-0 scale-105 bg-cover bg-center blur-[3px] transition duration-500 group-hover:blur-0"
-                    style={reviewImageUrls[reviewIndex] ? { backgroundImage: `url("${reviewImageUrls[reviewIndex]}")` } : { background: '#26211a' }}
+                    style={reviewImageUrls[reviewIndex] ? { backgroundImage: `url("${optimizeImageUrl(reviewImageUrls[reviewIndex], { width: 800, quality: 70 })}")` } : { background: '#26211a' }}
                   />
                   {/* Legibility gradient under the quote. */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5" />
