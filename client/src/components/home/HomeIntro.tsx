@@ -147,8 +147,8 @@ const HomeIntro: React.FC = () => {
           className="absolute inset-0"
           style={{ background: 'radial-gradient(70% 70% at 50% 20%, rgba(139,115,85,0.12), transparent 68%)' }}
         />
-        <div className="container relative z-10 grid h-full items-center gap-6 py-20 md:grid-cols-[1fr_0.9fr] md:gap-12 lg:gap-16">
-          <div className="relative mx-auto h-[34vh] w-full max-w-[560px] sm:h-[42vh] md:h-[68vh] md:max-w-none">
+        <div className="container relative z-10 grid h-full content-start items-center gap-5 pt-28 pb-10 md:content-center md:grid-cols-[1fr_0.9fr] md:gap-12 md:py-20 lg:gap-16">
+          <div className="relative mx-auto h-[30vh] w-full max-w-[560px] sm:h-[42vh] md:h-[68vh] md:max-w-none">
             {panels.map((panel, index) => (
               <IntroImages key={index} progress={progress} index={index} images={panel.images} />
             ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
@@ -6,10 +6,18 @@ import OptimizedImage from '../media/OptimizedImage';
 import { EASE_CURVE, SLIDE_DURATION_MS, TRANSITION_DURATION_S } from '../../config/animation';
 import { loadMediaOrFallback, MediaItem } from '../../utils/media';
 
-const HomeHero: React.FC = () => {
+const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
   const [slides, setSlides] = useState<MediaItem[]>([]);
   const [index, setIndex] = useState(0);
   const reduceMotion = useReducedMotion();
+  const readyFired = useRef(false);
+
+  const signalReady = () => {
+    if (!readyFired.current) {
+      readyFired.current = true;
+      onReady?.();
+    }
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -51,6 +59,7 @@ const HomeHero: React.FC = () => {
                 quality={80}
                 sizes="100vw"
                 priority
+                onLoad={signalReady}
                 className="h-full w-full object-cover"
               />
             </motion.div>
