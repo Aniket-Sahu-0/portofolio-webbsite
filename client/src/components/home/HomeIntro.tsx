@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
 import { loadFolderImages, MediaItem } from '../../utils/media';
+import { useIsTouch } from '../../utils/useIsTouch';
+import MobileReveal from './MobileReveal';
 
 const panelData = [
   {
@@ -116,6 +118,7 @@ const Dot: React.FC<{ progress: MotionValue<number>; index: number }> = ({ progr
 const HomeIntro: React.FC = () => {
   const [images, setImages] = useState<MediaItem[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+  const isTouch = useIsTouch();
 
   // Native scroll drives everything — no wheel hijacking. The spring smooths the
   // raw (and on trackpads, very granular) scroll stream into a silky scrub. Tuned
@@ -137,6 +140,62 @@ const HomeIntro: React.FC = () => {
     loadFolderImages('home/about_teaser', { limit: 6, signal: ctrl.signal }).then(setImages);
     return () => ctrl.abort();
   }, []);
+
+  // Mobile/touch: a clean, normal-scroll stack — no 300vh scrub zone, no sticky
+  // pin. Each story panel fades + rises in as it enters the viewport.
+  if (isTouch) {
+    return (
+      <section className="relative overflow-hidden bg-primary">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(85% 45% at 50% 0%, rgba(139,115,85,0.12), transparent 62%)' }}
+        />
+        <div className="container relative z-10 space-y-20 py-24">
+          {panels.map((panel, index) => (
+            <MobileReveal key={index} className="flex flex-col gap-8">
+              <div className="relative mx-auto aspect-[5/6] w-full max-w-[400px]">
+                <div className="absolute left-0 top-0 h-[74%] w-[68%] overflow-hidden rounded-md bg-primary">
+                  {panel.images[0] && (
+                    <OptimizedImage
+                      src={panel.images[0].url}
+                      alt={panel.images[0].alt || 'Wedding moment'}
+                      width={760}
+                      quality={76}
+                      sizes="68vw"
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                </div>
+                <div className="absolute bottom-0 right-0 h-[74%] w-[68%] overflow-hidden rounded-md bg-primary ring-1 ring-primary">
+                  {panel.images[1] && (
+                    <OptimizedImage
+                      src={panel.images[1].url}
+                      alt={panel.images[1].alt || 'Wedding moment'}
+                      width={760}
+                      quality={76}
+                      sizes="68vw"
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="max-w-xl">
+                <p className="mb-4 text-xs uppercase tracking-[0.32em] text-accent">{panel.eyebrow}</p>
+                <h2 className="text-4xl sm:text-5xl">{panel.title}</h2>
+                <p className="mt-6 text-base leading-8 text-light/78">{panel.description1}</p>
+                <p className="mt-4 text-base leading-8 text-muted">{panel.description2}</p>
+                {index === panels.length - 1 && (
+                  <Link to="/about" className="btn btn-ghost mt-8 w-fit gap-3">
+                    About The Artist <ArrowRight size={17} />
+                  </Link>
+                )}
+              </div>
+            </MobileReveal>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={sectionRef} className="relative bg-primary" style={{ height: `${panelData.length * 100}vh` }}>

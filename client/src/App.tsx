@@ -33,12 +33,18 @@ const App = () => {
   );
 };
 
-// Mount Lenis only on non-home routes — Home has its own wheel hijacking for
-// the stacked panels and Lenis's preventDefault conflicts with it even when stopped.
+// Lenis mounting:
+//  • Home (any device) → NO Lenis. On desktop the stacked-panel wheel hijacking
+//    owns the input (Lenis's preventDefault conflicts with it even when stopped);
+//    on touch the home scroll sections render as a plain normal-scroll stack, so
+//    native scrolling is exactly what we want. This also retires the old Lenis
+//    touch-damping hack that fought mobile fling momentum.
+//  • All other routes  → Lenis smooth scrolling.
 const InnerWrapper = () => {
   const location = useLocation();
+  const isHome = location.pathname === '/';
 
-  if (location.pathname === '/') {
+  if (isHome) {
     return <App />;
   }
 

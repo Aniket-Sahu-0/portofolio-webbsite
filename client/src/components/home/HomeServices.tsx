@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { animate, motion, MotionValue, useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { animate, motion, MotionValue, useMotionValue, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Camera, Film, Images, Mail, Quote, Sparkles } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
 import { loadFolderImages } from '../../utils/media';
 import { optimizeImageUrl } from '../../utils/imageOptimizer';
+import { useIsTouch } from '../../utils/useIsTouch';
+import MobileReveal from './MobileReveal';
 
 const services = [
   { title: 'Wedding Day', copy: 'Documentary coverage, family frames, portraits, and the in-between moments that carry the day.', Icon: Camera },
@@ -103,9 +105,9 @@ const HomeServices: React.FC = () => {
   const currentPanel = useRef(0);
   const lastAdvanceTime = useRef(-Infinity);
   const isExiting = useRef(false);
-  const isTouchDevice = useRef(
-    typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
-  );
+  const isTouch = useIsTouch();
+  // Desktop-only effects (wheel hijack + scroll sync) gate on this ref.
+  const isTouchDevice = useRef(isTouch);
 
   // Panel imagery, read live from each panel's media folder.
   const [rawImageUrl, setRawImageUrl] = useState('');
@@ -126,15 +128,6 @@ const HomeServices: React.FC = () => {
     })();
     return () => ctrl.abort();
   }, []);
-
-  // Scroll-driven progress for touch/mobile — maps section scroll 1:1 to progress
-  // so each panel takes ~100 vh of natural scroll. No wheel hijacking needed.
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
-  useEffect(() => {
-    if (!isTouchDevice.current) return;
-    const unsub = scrollYProgress.on('change', v => progress.set(v));
-    return unsub;
-  }, [scrollYProgress, progress]);
 
   // Warm the Notes background images so they are GPU-ready before animating in.
   // These are CSS backgrounds, so they bypass OptimizedImage's eager loading —
@@ -254,6 +247,146 @@ const HomeServices: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [progress]);
+
+  // Mobile/touch: the card deck reflows into a clean, normal-scroll stack — no
+  // sticky pin, no wheel hijack, no absolute layering. Each card fades + rises
+  // in as it enters the viewport.
+  if (isTouch) {
+    return (
+      <section className="relative bg-[#0e1110]">
+        <div className="container space-y-6 py-20">
+          {/* 01 — Services */}
+          <MobileReveal className="overflow-hidden rounded-[1.25rem] border border-[#d8c5a6]/20 bg-[#2f3433] p-6 text-white ring-1 ring-inset ring-white/10 sm:p-8">
+            <div className="mb-6 flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/70">
+              <span>01</span><span className="h-px w-8 bg-current" /><span>Services</span>
+            </div>
+            <p className="mb-2 text-[0.65rem] uppercase tracking-[0.34em] text-[#d8c5a6]">Photography &amp; Film</p>
+            <h2 className="text-[clamp(2.05rem,9vw,2.8rem)] leading-[1.04] text-white">
+              Coverage shaped around <span className="italic text-[#d0ac78]">the day.</span>
+            </h2>
+            <div className="my-4 flex items-center gap-3 text-[#d0ac78]/70">
+              <span className="h-px w-10 bg-current" />
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
+              <span className="h-2.5 w-2.5 rotate-45 border border-current" />
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
+              <span className="h-px w-10 bg-current" />
+            </div>
+            <p className="max-w-md text-sm leading-6 text-white/60">
+              Calm planning, gentle direction, and a documentary eye for the moments that need room to unfold.
+            </p>
+            <div className="mt-6 grid gap-3">
+              {services.map(({ title, copy, Icon }, itemIndex) => (
+                <div key={title} className="flex items-start gap-4 rounded-2xl border border-[#d0ac78]/25 bg-[#303534] p-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d0ac78]/35 bg-[#3a3933] text-[#d0ac78]">
+                    <Icon size={18} strokeWidth={1.6} />
+                  </span>
+                  <div>
+                    <div className="flex items-baseline gap-2">
+                      <p className="font-serif text-xs tracking-[0.34em] text-[#d0ac78]">0{itemIndex + 1}</p>
+                      <h3 className="text-xl leading-tight text-white">{title}</h3>
+                    </div>
+                    <p className="mt-1 text-sm leading-6 text-white/60">{copy}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </MobileReveal>
+
+          {/* 02 — Approach */}
+          <MobileReveal className="overflow-hidden rounded-[1.25rem] border border-[#edf1ee]/20 bg-[#151817] text-white ring-1 ring-inset ring-white/10">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0f1110]">
+              {rawImageUrl && (
+                <OptimizedImage
+                  src={rawImageUrl}
+                  alt="Wedding story"
+                  width={900}
+                  quality={78}
+                  sizes="100vw"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              )}
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,17,16,0.08),rgba(15,17,16,0.4))]" />
+            </div>
+            <div className="p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/70">
+                <span>02</span><span className="h-px w-8 bg-current" /><span>Approach</span>
+              </div>
+              <Sparkles className="mb-4 text-accent" size={24} strokeWidth={1.5} />
+              <p className="mb-2 text-[0.65rem] uppercase tracking-[0.28em] text-accent">The Feel</p>
+              <h2 className="text-[clamp(2rem,9vw,2.8rem)] leading-tight text-white">Natural, composed, never overworked.</h2>
+              <p className="mt-4 text-sm leading-7 text-light/74">
+                I look for images that feel effortless but still hold shape: clean light, honest movement, and portraits that do not pull you out of the moment.
+              </p>
+              <Link to="/gallery" className="btn btn-outline mt-6 w-fit gap-2 px-6 py-3 text-xs">
+                View Work <ArrowRight size={16} />
+              </Link>
+            </div>
+          </MobileReveal>
+
+          {/* 03 — Notes */}
+          <MobileReveal className="overflow-hidden rounded-[1.25rem] border border-[#171a1d]/10 bg-[#e4ded2] p-6 text-[#171a1d] ring-1 ring-inset ring-black/5 sm:p-8">
+            <div className="mb-6 flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-[#171a1d]/60">
+              <span>03</span><span className="h-px w-8 bg-current" /><span>Notes</span>
+            </div>
+            <Quote size={30} strokeWidth={1.4} className="mb-4 text-[#8b7355]" />
+            <p className="mb-2 text-[0.65rem] uppercase tracking-[0.28em] text-[#171a1d]/55">Client Notes</p>
+            <h2 className="text-[clamp(2rem,9vw,2.8rem)] leading-tight text-[#171a1d]">Remembered for feeling true.</h2>
+            <div className="mt-6 grid gap-3">
+              {reviews.map((review, reviewIndex) => (
+                <figure key={review.name} className="relative aspect-[5/4] overflow-hidden rounded-lg ring-1 ring-black/10">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={reviewImageUrls[reviewIndex] ? { backgroundImage: `url("${optimizeImageUrl(reviewImageUrls[reviewIndex], { width: 800, quality: 70 })}")` } : { background: '#26211a' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-5">
+                    <blockquote className="font-serif text-[clamp(1.05rem,5vw,1.5rem)] leading-snug text-white">
+                      "{review.quote}"
+                    </blockquote>
+                    <figcaption className="mt-3 text-[0.65rem] uppercase tracking-[0.24em] text-white/70">{review.name}</figcaption>
+                  </div>
+                </figure>
+              ))}
+            </div>
+          </MobileReveal>
+
+          {/* 04 — Bookings */}
+          <MobileReveal className="overflow-hidden rounded-[1.25rem] border border-[#d7d0c3]/25 bg-[#14171a] text-white ring-1 ring-inset ring-white/10">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#22262a]">
+              {bookingImageUrl && (
+                <OptimizedImage
+                  src={bookingImageUrl}
+                  alt="Wedding celebration"
+                  width={900}
+                  quality={78}
+                  sizes="100vw"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover object-center"
+                />
+              )}
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,23,26,0.06),rgba(20,23,26,0.46))]" />
+            </div>
+            <div className="p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-white/70">
+                <span>04</span><span className="h-px w-8 bg-current" /><span>Bookings</span>
+              </div>
+              <p className="mb-2 text-[0.65rem] uppercase tracking-[0.28em] text-accent">Enquiries</p>
+              <h2 className="text-[clamp(2rem,9vw,2.8rem)] leading-tight text-white">Tell me where the story begins.</h2>
+              <p className="mt-4 text-sm leading-7 text-light/72">
+                Share your date, city, and the kind of celebration you are planning. I will come back with availability, coverage options, and a simple next step.
+              </p>
+              <Link to="/contact" className="btn btn-primary mt-6 w-fit gap-2 px-6 py-3 text-xs">
+                Start Enquiry <Mail size={17} />
+              </Link>
+            </div>
+          </MobileReveal>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={sectionRef} className="relative bg-[#0e1110]" style={{ height: `${(PANEL_COUNT + OUTRO) * 100}vh`, contain: 'paint style' }}>
