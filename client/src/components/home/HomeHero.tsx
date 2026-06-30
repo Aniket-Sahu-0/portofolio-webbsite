@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
 import { EASE_CURVE, SLIDE_DURATION_MS, TRANSITION_DURATION_S } from '../../config/animation';
 import { loadMediaOrFallback, MediaItem } from '../../utils/media';
-import { useIsTouch } from '../../utils/useIsTouch';
 
 const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
   const [slides, setSlides] = useState<MediaItem[]>([]);
   const [index, setIndex] = useState(0);
   const reduceMotion = useReducedMotion();
-  const isTouch = useIsTouch();
   const readyFired = useRef(false);
 
   const signalReady = () => {
@@ -73,38 +70,34 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,10,0.78),rgba(10,10,10,0.22),rgba(10,10,10,0.66))]" />
       </div>
 
-      <div className="container relative z-10 flex min-h-[calc(100vh-6rem)] items-center">
+      <div className="container relative z-10 flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center text-center">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE_CURVE }}
-          className={`max-w-3xl ${isTouch ? 'mx-auto text-center' : ''}`}
+          className="max-w-2xl"
         >
-          {/* Eyebrow — desktop only; phone hero is just name + line over the image */}
-          {!isTouch && (
-            <div className="mb-5 flex items-center gap-3">
-              <span className="h-px w-8 bg-accent/70" />
-              <p className="text-xs uppercase tracking-[0.38em] text-accent">Wedding Photography</p>
-            </div>
-          )}
-          <h1 className="text-5xl font-light leading-[0.95] tracking-wide text-white sm:text-6xl md:text-7xl lg:text-8xl">
-            The Wedding Shade
-          </h1>
-          <p className={`mt-6 max-w-md text-base leading-7 text-light/75 md:text-lg ${isTouch ? 'mx-auto' : ''}`}>
-            Quiet, editorial wedding stories — built around the moments that matter.
+          <p className="mb-5 text-[0.7rem] uppercase tracking-[0.4em] text-light/70 sm:text-xs">
+            Wedding Photography &amp; Film
           </p>
-          {/* CTAs — desktop only */}
-          {!isTouch && (
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link to="/gallery" className="btn btn-primary gap-3">
-                View Portfolio <ArrowRight size={17} />
-              </Link>
-              <Link to="/contact" className="btn btn-outline">
-                Enquire Now
-              </Link>
-            </div>
-          )}
+          <h1 className="text-[2rem] font-light leading-[1.12] tracking-wide text-white sm:text-4xl md:text-5xl lg:text-6xl">
+            Cinematic stories of the day that matters
+          </h1>
+          <p className="mx-auto mt-6 max-w-md text-sm leading-7 text-light/75 sm:text-base">
+            Documentary-led coverage with a quiet, editorial eye.
+          </p>
+          <Link
+            to="/gallery"
+            className="mt-9 inline-flex items-center border border-light/30 px-8 py-3.5 text-[0.7rem] uppercase tracking-[0.28em] text-light transition-colors duration-300 hover:border-accent hover:text-accent"
+          >
+            Browse Portfolio
+          </Link>
         </motion.div>
+      </div>
+      {/* Scroll cue — signals there's more below the fold */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-7 z-10 flex flex-col items-center gap-2 text-light/45">
+        <span className="text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
+        <span className="h-8 w-px bg-light/25" />
       </div>
     </section>
   );
