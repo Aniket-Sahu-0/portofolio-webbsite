@@ -5,11 +5,13 @@ import { ArrowRight } from 'lucide-react';
 import OptimizedImage from '../media/OptimizedImage';
 import { EASE_CURVE, SLIDE_DURATION_MS, TRANSITION_DURATION_S } from '../../config/animation';
 import { loadMediaOrFallback, MediaItem } from '../../utils/media';
+import { useIsTouch } from '../../utils/useIsTouch';
 
 const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
   const [slides, setSlides] = useState<MediaItem[]>([]);
   const [index, setIndex] = useState(0);
   const reduceMotion = useReducedMotion();
+  const isTouch = useIsTouch();
   const readyFired = useRef(false);
 
   const signalReady = () => {
@@ -76,26 +78,32 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
           initial={reduceMotion ? false : { opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE_CURVE }}
-          className="max-w-3xl"
+          className={`max-w-3xl ${isTouch ? 'mx-auto text-center' : ''}`}
         >
-          <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-8 bg-accent/70" />
-            <p className="text-xs uppercase tracking-[0.38em] text-accent">Wedding Photography</p>
-          </div>
-          <h1 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-wide text-white sm:text-6xl md:text-7xl lg:text-8xl">
+          {/* Eyebrow — desktop only; phone hero is just name + line over the image */}
+          {!isTouch && (
+            <div className="mb-5 flex items-center gap-3">
+              <span className="h-px w-8 bg-accent/70" />
+              <p className="text-xs uppercase tracking-[0.38em] text-accent">Wedding Photography</p>
+            </div>
+          )}
+          <h1 className="text-5xl font-light leading-[0.95] tracking-wide text-white sm:text-6xl md:text-7xl lg:text-8xl">
             The Wedding Shade
           </h1>
-          <p className="mt-6 max-w-md text-base leading-7 text-light/75 md:text-lg">
+          <p className={`mt-6 max-w-md text-base leading-7 text-light/75 md:text-lg ${isTouch ? 'mx-auto' : ''}`}>
             Quiet, editorial wedding stories — built around the moments that matter.
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link to="/gallery" className="btn btn-primary gap-3">
-              View Portfolio <ArrowRight size={17} />
-            </Link>
-            <Link to="/contact" className="btn btn-outline">
-              Enquire Now
-            </Link>
-          </div>
+          {/* CTAs — desktop only */}
+          {!isTouch && (
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link to="/gallery" className="btn btn-primary gap-3">
+                View Portfolio <ArrowRight size={17} />
+              </Link>
+              <Link to="/contact" className="btn btn-outline">
+                Enquire Now
+              </Link>
+            </div>
+          )}
         </motion.div>
       </div>
     </section>
