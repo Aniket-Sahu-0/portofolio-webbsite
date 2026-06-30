@@ -78,13 +78,15 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
           transition={{ duration: 0.8, ease: EASE_CURVE }}
           className="max-w-3xl"
         >
-          <p className="mb-5 text-xs uppercase tracking-[0.38em] text-accent">Wedding Photography</p>
+          <div className="mb-5 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" />
+            <p className="text-xs uppercase tracking-[0.38em] text-accent">Wedding Photography</p>
+          </div>
           <h1 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-wide text-white sm:text-6xl md:text-7xl lg:text-8xl">
             The Wedding Shade
           </h1>
-          <p className="mt-7 max-w-2xl text-base leading-8 text-light/78 md:text-lg">
-            Cinematic wedding stories with a quiet editorial eye, built around real moments,
-            refined color, and images that feel alive years later.
+          <p className="mt-6 max-w-md text-base leading-7 text-light/75 md:text-lg">
+            Quiet, editorial wedding stories — built around the moments that matter.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link to="/gallery" className="btn btn-primary gap-3">

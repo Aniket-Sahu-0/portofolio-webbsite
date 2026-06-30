@@ -5,6 +5,7 @@ import HomeGalleryStrip from '../components/home/HomeGalleryStrip';
 import HomeParallax from '../components/home/HomeParallax';
 import HomeServices from '../components/home/HomeServices';
 import PageLoader from '../components/PageLoader';
+import MobileEnquireBar from '../components/home/MobileEnquireBar';
 
 const Home = () => {
   const [ready, setReady] = useState(false);
@@ -24,6 +25,7 @@ const Home = () => {
       <HomeGalleryStrip />
       <HomeParallax />
       <HomeServices />
+      <MobileEnquireBar />
     </div>
   );
 };

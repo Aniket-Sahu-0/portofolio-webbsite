@@ -150,48 +150,46 @@ const HomeIntro: React.FC = () => {
           className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(85% 45% at 50% 0%, rgba(139,115,85,0.12), transparent 62%)' }}
         />
-        <div className="container relative z-10 space-y-20 py-24">
-          {panels.map((panel, index) => (
-            <MobileReveal key={index} className="flex flex-col gap-8">
-              <div className="relative mx-auto aspect-[5/6] w-full max-w-[400px]">
-                <div className="absolute left-0 top-0 h-[74%] w-[68%] overflow-hidden rounded-md bg-primary">
-                  {panel.images[0] && (
-                    <OptimizedImage
-                      src={panel.images[0].url}
-                      alt={panel.images[0].alt || 'Wedding moment'}
-                      width={760}
-                      quality={76}
-                      sizes="68vw"
-                      className="h-full w-full object-cover"
-                    />
+        <div className="container relative z-10 divide-y divide-white/10 py-10">
+          {panels.map((panel, index) => {
+            const [num, label] = panel.eyebrow.split(' / ');
+            return (
+              <MobileReveal key={index} className="flex flex-col gap-7 py-12 first:pt-4">
+                {/* editorial header — serif number + hairline + label */}
+                <div className="flex items-center gap-3">
+                  <span className="font-serif text-2xl leading-none text-accent">{num}</span>
+                  <span className="h-px w-10 bg-accent/40" />
+                  <span className="text-[0.7rem] uppercase tracking-[0.3em] text-accent/90">{label}</span>
+                </div>
+                {/* stacked image pair — consistent radius, hairline ring, depth gradient */}
+                <div className="relative mx-auto aspect-[5/6] w-full max-w-[400px]">
+                  <div className="absolute left-0 top-0 h-[74%] w-[68%] overflow-hidden rounded-xl bg-primary ring-1 ring-white/10">
+                    {panel.images[0] && (
+                      <OptimizedImage src={panel.images[0].url} alt={panel.images[0].alt || 'Wedding moment'} width={760} quality={76} sizes="68vw" className="h-full w-full object-cover" />
+                    )}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+                  </div>
+                  <div className="absolute bottom-0 right-0 h-[74%] w-[68%] overflow-hidden rounded-xl bg-primary ring-1 ring-white/15 shadow-[0_18px_44px_rgba(0,0,0,0.5)]">
+                    {panel.images[1] && (
+                      <OptimizedImage src={panel.images[1].url} alt={panel.images[1].alt || 'Wedding moment'} width={760} quality={76} sizes="68vw" className="h-full w-full object-cover" />
+                    )}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+                  </div>
+                </div>
+                {/* text */}
+                <div className="max-w-xl">
+                  <h2 className="text-4xl leading-[1.1] text-white">{panel.title}</h2>
+                  <p className="mt-5 text-[0.95rem] leading-7 text-light/75">{panel.description1}</p>
+                  <p className="mt-3 text-[0.95rem] leading-7 text-muted">{panel.description2}</p>
+                  {index === panels.length - 1 && (
+                    <Link to="/about" className="btn btn-ghost mt-7 w-fit gap-3">
+                      About The Artist <ArrowRight size={17} />
+                    </Link>
                   )}
                 </div>
-                <div className="absolute bottom-0 right-0 h-[74%] w-[68%] overflow-hidden rounded-md bg-primary ring-1 ring-primary">
-                  {panel.images[1] && (
-                    <OptimizedImage
-                      src={panel.images[1].url}
-                      alt={panel.images[1].alt || 'Wedding moment'}
-                      width={760}
-                      quality={76}
-                      sizes="68vw"
-                      className="h-full w-full object-cover"
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="max-w-xl">
-                <p className="mb-4 text-xs uppercase tracking-[0.32em] text-accent">{panel.eyebrow}</p>
-                <h2 className="text-4xl sm:text-5xl">{panel.title}</h2>
-                <p className="mt-6 text-base leading-8 text-light/78">{panel.description1}</p>
-                <p className="mt-4 text-base leading-8 text-muted">{panel.description2}</p>
-                {index === panels.length - 1 && (
-                  <Link to="/about" className="btn btn-ghost mt-8 w-fit gap-3">
-                    About The Artist <ArrowRight size={17} />
-                  </Link>
-                )}
-              </div>
-            </MobileReveal>
-          ))}
+              </MobileReveal>
+            );
+          })}
         </div>
       </section>
     );
