@@ -64,25 +64,25 @@ const services = [
 
 const testimonials = [
   {
-    couple: 'Riya & Arjun',
+    couple: 'Ishaa & Archit',
     date: 'March 2025',
     quote: "Mohit didn't just capture our wedding — he captured the feeling of it. Every photo tells a story we never want to forget.",
     gradient: 'from-[#2a1f14] to-[#1a1208]',
   },
   {
-    couple: 'Priya & Rohan',
+    couple: 'Priya & Sarthak',
     date: 'November 2024',
     quote: "From our pre-wedding shoot to the reception, every frame felt cinematic. We couldn't be happier with how beautifully our day was preserved.",
     gradient: 'from-[#14201a] to-[#0c1510]',
   },
   {
-    couple: 'Sneha & Vikram',
+    couple: 'Shubham & Harshita',
     date: 'February 2025',
     quote: 'The candid shots were absolutely breathtaking. Mohit has a rare gift for finding the perfect moment in the middle of beautiful chaos.',
     gradient: 'from-[#1a1520] to-[#100c15]',
   },
   {
-    couple: 'Ananya & Nikhil',
+    couple: 'Gulshan & Suman',
     date: 'January 2025',
     quote: 'We felt completely at ease throughout the shoot. The photos look like they belong in a magazine — truly world-class work.',
     gradient: 'from-[#201418] to-[#150c10]',

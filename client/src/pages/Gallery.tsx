@@ -52,7 +52,7 @@ const Gallery = () => {
   const [numColumns, setNumColumns] = useState(() => {
     if (typeof window === 'undefined') return 3;
     const w = window.innerWidth;
-    return w < 640 ? 1 : w < 1024 ? 2 : 3;
+    return w < 1024 ? 2 : 3; // phones + tablets: 2-col masonry, desktop: 3
   });
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const Gallery = () => {
   useEffect(() => {
     const onResize = () => {
       const w = window.innerWidth;
-      setNumColumns(w < 640 ? 1 : w < 1024 ? 2 : 3);
+      setNumColumns(w < 1024 ? 2 : 3);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
