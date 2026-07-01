@@ -211,7 +211,8 @@ gracefully (dark frame / no image), never a broken image.
 
 | Folder | Feeds | Reads |
 |--------|-------|-------|
-| `heroes/home/` | HomeHero slideshow | first 5 (Unsplash fallback) |
+| `heroes/home/` | HomeHero slideshow (desktop + fallback) | first 5 (Unsplash fallback) |
+| `heroes/home_mobile/` | HomeHero slideshow **on touch/phones** — portrait images | first 5; falls back to `heroes/home` when empty |
 | `home/about_teaser/` | HomeIntro "Scroll Scene" | first 6 (2 per story panel) |
 | `home/portfolio_slideshow/portraits/` | HomeGalleryStrip marquee | first 20 (capped for perf) |
 | `home/parallax/` | HomeParallax background | first 1 |
