@@ -5,108 +5,88 @@ import { Link } from 'react-router-dom';
 const CONTACT_EMAIL = 'Mohitsahu1662@gmail.com';
 const INSTAGRAM_URL = 'https://www.instagram.com/the_wedding_shade?igsh=MWQ2a3V1Ymh0ZzBtcA==';
 
+const socialLinks = [
+  { icon: <Instagram size={18} />, url: INSTAGRAM_URL, label: 'Instagram', external: true },
+  { icon: <Mail size={18} />, url: `mailto:${CONTACT_EMAIL}`, label: 'Email', external: false },
+];
+
+const quickLinks = [
+  { name: 'Home', url: '/' },
+  { name: 'Gallery', url: '/gallery' },
+  { name: 'About', url: '/about' },
+  { name: 'Contact', url: '/contact' },
+];
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const socialLinks = [
-    { icon: <Instagram size={24} />, url: INSTAGRAM_URL, label: 'Instagram', external: true },
-    { icon: <Mail size={24} />, url: `mailto:${CONTACT_EMAIL}`, label: 'Email', external: false },
-  ];
-
-  const quickLinks = [
-    { name: 'Home', url: '/' },
-    { name: 'Gallery', url: '/gallery' },
-    { name: 'About', url: '/about' },
-    { name: 'Contact', url: '/contact' },
-  ];
-
   return (
-    <footer className="bg-rich text-gray-300 pt-14 pb-10">
-      <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10 justify-items-center md:justify-items-stretch text-center md:text-left">
-          {/* Brand + Social */}
-          <div>
-            <h3 className="text-2xl font-serif font-bold text-white mb-3">The Wedding Shade</h3>
-            <p className="mb-6 text-gray-400 max-w-sm">
-              Capturing stories worldwide.
-            </p>
-            <div className="flex items-center justify-center md:justify-start space-x-5">
-              {socialLinks.map((s, i) => (
-                <motion.a
-                  key={i}
-                  href={s.url}
-                  {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="text-gray-300 hover:text-accent transition-colors"
-                  whileHover={{ y: -2 }}
-                  aria-label={s.label}
-                >
-                  {s.icon}
-                </motion.a>
-              ))}
-            </div>
-          </div>
+    <footer className="relative overflow-hidden bg-primary text-gray-300">
+      {/* top hairline + soft warm glow */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(139,115,85,0.10),transparent_70%)]" />
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Links</h4>
-            <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.name} className="flex justify-center md:justify-start">
-                  <Link 
-                    to={link.url} 
-                    className="text-gray-400 hover:text-accent transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="container relative z-10 pt-16">
+        {/* Brand */}
+        <div className="flex flex-col items-center text-center">
+          <Link to="/" className="font-serif text-2xl tracking-[0.15em] text-white transition-colors hover:text-accent">
+            The Wedding Shade
+          </Link>
+          <p className="mt-3 text-[0.7rem] uppercase tracking-[0.28em] text-gray-500">
+            Cinematic Wedding Photography &amp; Film
+          </p>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Contact</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start justify-center md:justify-start">
-                <Mail className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-accent transition-colors break-all">
-                  {CONTACT_EMAIL}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Brand logo on far right */}
-          <div className="w-full flex justify-center md:justify-end md:text-right">
-            {/* Inline simple brand mark (replace with your SVG/logo later) */}
-            <div className="inline-flex items-center space-x-3 justify-self-end">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="rounded-full shadow-sm"
+          {/* Socials */}
+          <div className="mt-7 flex items-center gap-3">
+            {socialLinks.map((s, i) => (
+              <motion.a
+                key={i}
+                href={s.url}
+                {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                whileHover={{ y: -2 }}
+                aria-label={s.label}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 text-gray-300 transition-colors hover:border-accent hover:text-accent"
               >
-                <circle cx="24" cy="24" r="24" fill="#b87333" />
-                <path d="M16 30V18h6.5a4.5 4.5 0 010 9H19v3h-3zm14-12h3v12h-3l-5-7.2V30h-3V18h3l5 7.2V18z" fill="#0f172a" />
-              </svg>
-              <div className="text-left">
-                <div className="text-white font-serif font-bold text-lg leading-tight">The Wedding Shade</div>
-                <div className="text-gray-400 text-xs">Documentary Studio</div>
-              </div>
-            </div>
+                {s.icon}
+              </motion.a>
+            ))}
           </div>
         </div>
 
-        {/* Bottom Row */}
-        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center text-center">
-          <p className="text-gray-500 text-sm">&copy; {currentYear} The Wedding Shade. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0 text-sm">
-            <Link to="/privacy" className="text-gray-500 hover:text-gray-300">Privacy</Link>
-            <Link to="/terms" className="text-gray-500 hover:text-gray-300">Terms</Link>
+        {/* Nav links */}
+        <nav className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[0.7rem] uppercase tracking-[0.22em] text-gray-400">
+          {quickLinks.map((l) => (
+            <Link key={l.name} to={l.url} className="transition-colors hover:text-accent">
+              {l.name}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Email */}
+        <div className="mt-7 text-center">
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="text-sm tracking-wide text-gray-300 transition-colors hover:text-accent break-all"
+          >
+            {CONTACT_EMAIL}
+          </a>
+        </div>
+
+        {/* Bottom row */}
+        <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/10 py-6 text-[0.7rem] text-gray-500 sm:flex-row sm:justify-between">
+          <p>© {currentYear} The Wedding Shade. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Link to="/privacy" className="transition-colors hover:text-gray-300">Privacy</Link>
+            <Link to="/terms" className="transition-colors hover:text-gray-300">Terms</Link>
           </div>
         </div>
+      </div>
+
+      {/* Giant faded site-name watermark (mirrors the About page treatment) */}
+      <div className="pointer-events-none select-none overflow-hidden">
+        <p className="whitespace-nowrap text-center font-serif text-[10vw] leading-[0.85] tracking-tight text-white/[0.04]">
+          The Wedding Shade
+        </p>
       </div>
     </footer>
   );

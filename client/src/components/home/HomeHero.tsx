@@ -35,7 +35,7 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
   const current = slides[index];
 
   return (
-    <section className="relative h-screen min-h-screen overflow-hidden bg-primary pt-24">
+    <section className="relative h-[100svh] min-h-[100svh] overflow-hidden bg-primary pt-24">
       <div className="absolute inset-0">
         {current ? (
           <AnimatePresence mode="wait">
@@ -66,11 +66,12 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
         ) : (
           <div className="h-full w-full bg-secondary" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/45 via-primary/48 to-primary" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,10,0.78),rgba(10,10,10,0.22),rgba(10,10,10,0.66))]" />
+        {/* Lighter scrims so the photo reads as the focus; a soft radial keeps the centered text legible */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/55" />
+        <div className="absolute inset-0 bg-[radial-gradient(75%_55%_at_50%_60%,rgba(0,0,0,0.55),transparent_74%)]" />
       </div>
 
-      <div className="container relative z-10 flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center text-center">
+      <div className="container relative z-10 flex min-h-[calc(100svh-6rem)] flex-col items-center justify-center text-center">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,16 +89,16 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
           </p>
           <Link
             to="/gallery"
-            className="mt-9 inline-flex items-center border border-light/30 px-8 py-3.5 text-[0.7rem] uppercase tracking-[0.28em] text-light transition-colors duration-300 hover:border-accent hover:text-accent"
+            className="mt-9 inline-flex items-center border border-accent bg-accent/10 px-8 py-3.5 text-[0.7rem] uppercase tracking-[0.28em] text-accent transition-colors duration-300 hover:bg-accent hover:text-white"
           >
             Browse Portfolio
           </Link>
         </motion.div>
       </div>
       {/* Scroll cue — signals there's more below the fold */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-7 z-10 flex flex-col items-center gap-2 text-light/45">
+      <div className="pointer-events-none absolute inset-x-0 bottom-10 z-10 flex flex-col items-center gap-2 text-light/50">
         <span className="text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
-        <span className="h-8 w-px bg-light/25" />
+        <span className="h-7 w-px bg-light/30" />
       </div>
     </section>
   );
