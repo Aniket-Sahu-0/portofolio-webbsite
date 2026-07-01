@@ -1,6 +1,17 @@
 # The Wedding Shade — Project Context
 
 Wedding photography portfolio for Mohit (photographer). Dark, cinematic aesthetic.
+
+**LIVE in production** at **https://theweddingshade.com**
+- **Frontend → Vercel** (static build of `client/`), tracks the `main` branch
+- **Backend → Railway** (Express, root dir `server/`), tracks `main`, public URL
+  `https://portofolio-webbsite-production.up.railway.app`
+- **Media → Cloudinary** CDN (cloud name `djh2c4bgu`) — all photos live there, not in git
+
+**Workflow:** `main` is the production branch. Push to `main` → **both** Vercel and
+Railway auto-deploy (~1–2 min). Verify a Vercel deploy by curling the live JS bundle
+(`https://theweddingshade.com` → grep `assets/index-*.js`) for expected strings.
+
 Client (React/Vite) on port 3000, server (Express) on port 5000.
 Run both: `npm run dev` from root (uses concurrently).
 
@@ -10,15 +21,17 @@ Run both: `npm run dev` from root (uses concurrently).
 
 **Frontend** `client/`
 - React 18 + TypeScript, Vite, Tailwind CSS
-- Framer Motion — scroll animations, spring physics, stacked panels
-- Lenis (`lenis/react`) — smooth scroll on all non-home routes
+- Framer Motion — scroll animations, spring physics, the desktop stacked panels
+- Lenis (`lenis/react`) — smooth wheel scroll on all non-home routes
 - React Router v6
 
 **Backend** `server/`
-- Express + Node.js
-- Serves images from local `media/` folder via `/media/*`
-- `ImageDatabase` class scans `media/` on startup, builds JSON catalogue
-- Nodemailer for contact form emails (Ethereal in dev)
+- Express + Node.js (**requires Node ≥18** — see `engines` in `server/package.json`;
+  Railway/Railpack otherwise picks Node 14 + npm 6, which can't parse lockfileVersion 3)
+- **Cloudinary SDK** — `imageDatabase.js` fetches the image catalogue from Cloudinary
+  by folder (no local `media/` scanning, no `sharp`). 5-minute in-memory cache.
+- Nodemailer for contact-form emails (SMTP currently unconfigured → contact emails
+  disabled; the front-end contact form uses EmailJS directly)
 
 ---
 
@@ -27,60 +40,78 @@ Run both: `npm run dev` from root (uses concurrently).
 ```
 portofolio-webbsite/
 ├── client/src/
-│   ├── App.tsx                        # Router + conditional Lenis mount
+│   ├── App.tsx                        # Router + conditional Lenis mount (non-home only)
 │   ├── pages/
-│   │   ├── Home.tsx                   # Assembles home section components
-│   │   ├── About.tsx                  # Full about page (flip card + sections)
-│   │   ├── Gallery.tsx
+│   │   ├── Home.tsx                   # Assembles home sections + PageLoader
+│   │   ├── About.tsx                  # Full about page (flip card + testimonials + MOHIT watermark)
+│   │   ├── Gallery.tsx                # Masonry grid (2-col mobile / 3-col desktop) + infinite scroll
 │   │   ├── Contact.tsx
-│   │   └── Admin.tsx                  # Image database admin UI
+│   │   └── Admin.tsx
 │   ├── components/
-│   │   ├── Navbar.tsx                 # Sticky nav, mobile hamburger menu
-│   │   ├── Footer.tsx
-│   │   ├── StatsSection.tsx           # 500+ clients / 5k+ photos / 100% stats bar
-│   │   ├── ScrollOnRouteChange.tsx    # Scroll to top on route change
+│   │   ├── Navbar.tsx                 # Sticky nav, mobile hamburger menu (solid bg)
+│   │   ├── Footer.tsx                 # Modern centered footer + giant faded name watermark
+│   │   ├── StatsSection.tsx           # Editorial "By the numbers" band (500+/5k+/100%)
+│   │   ├── PageLoader.tsx             # Branded first-paint loader (gates home until hero loads)
+│   │   ├── ScrollOnRouteChange.tsx
 │   │   ├── home/
-│   │   │   ├── HomeHero.tsx           # Auto-playing full-screen slideshow
-│   │   │   ├── HomeIntro.tsx          # Scroll-driven 3-panel story section (300vh)
+│   │   │   ├── HomeHero.tsx           # KT-Merry-style hero (statement + CTA) over full-bleed slideshow
+│   │   │   ├── HomeIntro.tsx          # Desktop: 300vh scrub scene · Mobile: static stacked panels
 │   │   │   ├── HomeGalleryStrip.tsx   # Infinite marquee gallery (2 rows)
-│   │   │   ├── HomeParallax.tsx       # Fixed-bg bridal photo + quote + stats
-│   │   │   └── HomeServices.tsx       # Stacked card deck (4 panels, wheel-driven)
+│   │   │   ├── HomeParallax.tsx       # Bridal photo + quote + stats
+│   │   │   ├── HomeServices.tsx       # Desktop: wheel-driven card deck · Mobile: static stacked cards
+│   │   │   └── MobileReveal.tsx       # Static wrapper for the mobile stacked layouts (no motion)
 │   │   └── media/
-│   │       └── OptimizedImage.tsx     # Img with ?w=&q=&f=webp server-side transform
+│   │       └── OptimizedImage.tsx     # <img> whose src/srcSet run through optimizeImageUrl
 │   ├── utils/
-│   │   ├── media.ts                   # API_HOST, API_BASE, loadMediaOrFallback()
-│   │   └── imageOptimizer.ts
+│   │   ├── media.ts                   # API_BASE/API_HOST, loadMediaOrFallback(), loadFolderImages()
+│   │   ├── imageOptimizer.ts          # optimizeImageUrl() — injects Cloudinary path transforms
+│   │   └── useIsTouch.ts              # Touch detection (resolved once); drives mobile/desktop split
 │   ├── data/
-│   │   └── fallbackMedia.ts           # Static fallback images if API fails
+│   │   └── fallbackMedia.ts           # Static Unsplash fallbacks if the API fails
 │   └── config/
-│       └── animation.ts               # SLIDE_DURATION_MS, EASE_CURVE constants
+│       └── animation.ts
 │
 ├── server/src/
-│   ├── index.js                       # Express entry, mounts routes, serves /media
+│   ├── index.js                       # Express entry (API only — no /media static serving)
 │   ├── database/
-│   │   └── imageDatabase.js           # Scans media/, builds category catalogue
+│   │   └── imageDatabase.js           # Fetches image catalogue from Cloudinary (media/ root), 5-min cache
 │   ├── routes/api/
 │   │   ├── index.js                   # /api router
-│   │   ├── media.js                   # GET /api/database/category/:cat/:sub
+│   │   ├── media.js                   # GET /api/database/category/:path (async)
 │   │   └── contact.js                 # POST /api/contact (email)
-│   ├── middleware/
-│   │   └── imageOptimizer.js          # ?w=&q=&f= query → sharp transform
 │   └── services/
-│       ├── email.service.js           # Nodemailer wrapper
+│       ├── email.service.js
 │       └── mediaService.js
 │
-├── media/                             # LOCAL ONLY — gitignored, never committed
-│   ├── heroes/home/                   # Hero slideshow images
-│   ├── gallery/portraits/             # Portrait gallery
-│   ├── gallery/weddings/
-│   ├── about/approach/                # About page portrait of photographer
-│   └── contact/backgrounds/
-│
-├── server/data/
-│   └── images.json                    # Auto-generated catalogue (filenames only, no photos)
-│
+├── server/data/images.json            # Legacy catalogue file (Cloudinary is the live source now)
 └── CLAUDE.md                          # This file
 ```
+
+Note: `sharp` and the old `server/src/middleware/imageOptimizer.js` (on-the-fly sharp
+transforms) were removed — Cloudinary handles all resizing/format via URL transforms.
+
+---
+
+## Responsive split — mobile vs desktop (important)
+
+The home page's two scroll-driven sections branch on **touch capability**
+(`useIsTouch()`), NOT viewport width — because the desktop experiences depend on wheel
+hijacking / scroll-scrubbing that only make sense with a pointer:
+
+- **HomeIntro** — Desktop: 300vh sticky scrub scene (spring-smoothed cross-fading
+  panels). Touch: plain **static stacked panels** in normal document flow (editorial
+  header + image pair + text), no scrub, no animation.
+- **HomeServices** — Desktop: wheel-driven stacked **card deck** (one gesture = one
+  panel). Touch: **static stacked cards** in normal flow, no hijacking.
+- **HomeHero** — same centered layout on all sizes, but loads **portrait images on
+  touch** (`heroes/home_mobile/`, falling back to `heroes/home/`).
+
+`MobileReveal` is the (intentionally motion-free) wrapper for these mobile layouts — the
+client explicitly wanted zero animation on mobile to avoid any laggy feel.
+
+**Editing HomeIntro/HomeServices means touching BOTH render paths.** `useIsTouch` has a
+`?forceTouch` dev override you can temporarily add to preview the mobile path on a
+desktop browser — remove before committing.
 
 ---
 
@@ -88,99 +119,61 @@ portofolio-webbsite/
 
 ### Home (`/`)
 
-Lenis is **not** mounted on Home. Home has its own `wheel` event hijacking for the
-stacked panels and Lenis's `preventDefault` would conflict even when stopped.
+No Lenis on Home (wheel hijacking owns pointer input on desktop; mobile is native
+scroll on static stacks). `PageLoader` covers the first paint until the hero image loads
+(4s safety timeout).
 
-Sections in order:
+1. **HomeHero** — Full-bleed auto-advancing slideshow. Centered, KT-Merry editorial
+   style: small tracked label ("Wedding Photography & Film") → serif statement headline
+   ("Cinematic stories of the day that matters") → one-line tagline → a single gold
+   "Browse Portfolio" outline button → a "Scroll" cue. Uses `100svh` so the cue sits in
+   view on mobile. Lighter image scrims (photo is the focus).
 
-1. **HomeHero** — Full-screen auto-advancing slideshow (5 s per slide, crossfade).
-   `loadMediaOrFallback('hero')` fetches from `heroes/home`.
+2. **HomeIntro** — Story / Moments / Together (see Responsive split above).
 
-2. **HomeIntro** — 300 vh scroll-driven scene. Three panels (My Story / Unseen Moments /
-   Let's Create Together). Two stacked images per panel. Native scroll drives a
-   `useSpring`-smoothed progress value; no wheel hijacking.
+3. **HomeGalleryStrip** — Two rows, infinite CSS marquee, opposite directions.
 
-3. **HomeGalleryStrip** — Two rows of images in infinite CSS marquee (rows go opposite
-   directions). No JS scroll interaction.
+4. **HomeParallax** — Bridal portrait + quote + stats.
 
-4. **HomeParallax** — 80 vh section. Bridal portrait from `gallery/portraits` fetched from
-   API. `background-attachment: fixed` gives the "window scrolling past the image" feel.
-   Dark overlay + quote + 200+/8yrs/India stats.
+5. **HomeServices** — Services / Approach / Notes / Bookings (see Responsive split).
+   Cards: 0 Services, 1 Approach, 2 Notes (cream, client quotes — names removed), 3 Bookings.
 
-5. **HomeServices** — Stacked card deck, 425 vh tall (4 panels + 0.25 vh outro buffer).
-   Desktop: one `wheel` gesture = one panel advance (650 ms cooldown, `ease-out-expo`).
-   Mobile/touch: `useScroll` on the section drives `progress` directly (each panel ~100 vh).
-   Background `#0e1110`. `contain: paint style` + `willChange: transform` for performance.
-
-   Cards:
-   - 0 Services (dark charcoal) — Photography/Film/Video offerings grid
-   - 1 Approach (near-black) — Editorial style image + philosophy text
-   - 2 Notes (cream `#e4ded2`) — Client testimonials with portrait background images
-   - 3 Bookings (near-black) — Contact CTA
-
-StatsSection + Footer render below HomeServices (excluded on `/about`).
-
----
+**StatsSection** (editorial "By the numbers" band) + **Footer** render below (excluded on `/about`).
 
 ### About (`/about`)
 
-Lenis IS active here (mounted in `InnerWrapper` for all non-home routes).
+Lenis active. Hero + 3D flip portrait card, services grid, 4 hover-flip testimonials
+(couples: Ishaa & Archit, Priya & Sarthak, Shubham & Harshita, Gulshan & Suman),
+thoughts/CTA, and a giant faded "MOHIT" watermark. StatsSection/Footer hidden here.
 
-Sections:
+### Gallery (`/gallery`)
 
-1. **Hero + Portrait** — 160 vh sticky section.
-   - Left: "Visual / Storyteller." heading + bio paragraph + available badge
-   - Right: Portrait card with **3D flip animation**
-     - Front: B&W portrait
-     - Back: Full-colour portrait with name overlay
-   - Desktop: `lenis.stop()` → wheel events drive `rawProgress` (0→1) →
-     `useSpring` smoothed `rotateY` (0→180°) + `scale` (82%→100%).
-     Releases when spring settles at ≥176°, calls `lenis.start()`.
-   - Mobile: auto-plays flip after 800 ms on mount. No scroll lock.
-   - Card sizes: `13rem×17rem` (mobile) → `19rem×25rem` (sm) → `24rem×31rem` (md) → `27rem×35rem` (lg)
-
-2. **Services** — 2-column grid (Photography/Film, Approach, Pricing overview).
-
-3. **Testimonials** — 4 hover-flip cards (CSS 3D, not scroll-driven).
-
-4. **Thoughts** — 3 editorial cards + CTA.
-
-StatsSection and Footer are hidden on `/about`.
+Height-aware masonry: **2 columns on phones + tablets, 3 on desktop** (`< 1024px → 2`),
+tight 4px gutters near the screen edges, infinite scroll (reveal 12 then +8 on a
+sentinel). Hero is a static optimized `<img>` (no `background-attachment: fixed` and no
+scroll parallax — both caused mobile stutter/vibration).
 
 ---
 
-## Key Architectural Decisions
+## Image pipeline (Cloudinary)
 
-### Lenis conditional mount (`App.tsx`)
 ```
-/ (Home)          → no Lenis (wheel hijacking owns the input)
-all other routes  → ReactLenis root, lerp: 0.18, smoothWheel: true
+OptimizedImage / bg URLs → optimizeImageUrl() injects Cloudinary PATH transforms
+  https://res.cloudinary.com/<cloud>/image/upload/f_auto,q_auto,w_<n>,c_limit/v.../file.webp
 ```
+- Cloudinary **ignores query params** — transforms go in the URL path after `/upload/`.
+  `f_auto` (AVIF/WebP), `q_auto` (smart quality), `w_<n>` + `c_limit` (cap width). This
+  turns ~2MB originals into ~70KB.
+- API shape: `GET /api/database/category/<folder/path>` →
+  `{ success, data: { category, images: [{ filename, url, path, size }] } }`.
+  `url` is a full Cloudinary `secure_url`.
+- `API_BASE` (`media.ts` + About/Contact/Admin) = `VITE_API_URL` if set, else the Railway
+  URL in production (`import.meta.env.PROD`), else `localhost:5000`. This is why the site
+  works even if the Vercel env var is missing.
 
-### Image serving pipeline
-```
-browser request → OptimizedImage (adds ?w=&q=&f=webp to URL)
-               → Express imageOptimizer middleware (sharp transforms)
-               → serves from media/ directory
-```
-API shape: `GET /api/database/category/:category/:subcategory`
-Returns: `{ success: true, data: { category, images: [{ filename, url, path, size }] } }`
-`url` is always a root-relative path: `/media/gallery/portraits/foo.jpg`
-Frontend prepends `API_HOST` to build the full URL.
-
-### HomeServices scroll-lock exit
-When the last panel is active and the user scrolls forward (or first panel + backward):
-1. `syncY = section.offsetTop + currentPanel * innerHeight` — sync actual scroll to virtual panel position
-2. `exitY = section.offsetTop + section.offsetHeight - innerHeight + 10` — just past the sticky zone
-3. Two `requestAnimationFrame` calls ensure Chrome compositor re-syncs before `scrollTo({ behavior: 'smooth' })`
-
-### About flip spring
-```ts
-const FLIP_SPRING = { stiffness: 100, damping: 26, mass: 0.5 }
-```
-`rawProgress` (0→1) is a `useMotionValue` driven by wheel deltaY / 420.
-`rawRotateY = useTransform(rawProgress, [0, 0.7], [0, 180])`
-`rotateY = useSpring(rawRotateY, FLIP_SPRING)`
+**Tailwind quirk:** only opacity classes whose value is in the default scale AND appear
+literally in source compile (e.g. `bg-primary/98` silently produced NO css → transparent;
+use solid `bg-primary`). Watch for this when using `/NN` opacity.
 
 ---
 
@@ -189,69 +182,52 @@ const FLIP_SPRING = { stiffness: 100, damping: 26, mass: 0.5 }
 ```
 primary   #0a0a0a   Deep black — main backgrounds
 secondary #1a1a1a   Charcoal — card/section backgrounds
-accent    #8b7355   Dark bronze — buttons, highlights
+accent    #8b7355   Dark bronze/gold — buttons, highlights, accents
 light     #f5f5f5   Off-white — main body text
 muted     #888888   Medium gray — secondary text
 border    #333333   Dark gray — dividers
-
-accent CSS var: #c9a96e (used directly in some components — warm gold)
 ```
-
-Fonts: `Cormorant Garamond` (serif/display), `Helvetica Neue` (sans/body)
+Fonts: `Cormorant Garamond` (serif/display), `Helvetica Neue` (sans/body).
 
 ---
 
-## Media folders → site sections
+## Media folders → site sections (Cloudinary)
 
-Every section reads its images **live** from a media folder. The server rescans the
-folders on each request, so adding/removing a file shows up on the next page reload —
-no restart. Folder-driven sections show images **sorted by filename**, so prefix names
-(`01-`, `02-`…) to control which ones show and in what order. An empty folder degrades
-gracefully (dark frame / no image), never a broken image.
+All photos live in Cloudinary under a **`media/` root folder** (e.g.
+`media/heroes/home`). `imageDatabase.js` prepends `media/` to lookups and strips it from
+returned paths, so the app/table below use paths WITHOUT the `media/` prefix. Cloudinary
+`asset_folder` holds the path; `public_id` is the bare filename. Images are served
+**sorted by filename** — prefix `01-`, `02-` to control order. Empty folder = graceful
+dark frame. Changes appear within the 5-minute server cache (no redeploy).
 
 | Folder | Feeds | Reads |
 |--------|-------|-------|
 | `heroes/home/` | HomeHero slideshow (desktop + fallback) | first 5 (Unsplash fallback) |
-| `heroes/home_mobile/` | HomeHero slideshow **on touch/phones** — portrait images | first 5; falls back to `heroes/home` when empty |
-| `home/about_teaser/` | HomeIntro "Scroll Scene" | first 6 (2 per story panel) |
-| `home/portfolio_slideshow/portraits/` | HomeGalleryStrip marquee | first 20 (capped for perf) |
+| `heroes/home_mobile/` | HomeHero **on touch/phones** — portrait images | first 5; falls back to `heroes/home` |
+| `home/about_teaser/` | HomeIntro story panels | first 6 (2 per panel) |
+| `home/portfolio_slideshow/portraits/` | HomeGalleryStrip marquee | first 20 |
 | `home/parallax/` | HomeParallax background | first 1 |
-| `home/approach/` | HomeServices · Approach panel | first 1 |
+| `home/approach/` | HomeServices · Approach | first 1 |
 | `home/notes/` | HomeServices · Notes card backgrounds | first 2 |
-| `home/bookings/` | HomeServices · Bookings panel | first 1 |
+| `home/bookings/` | HomeServices · Bookings | first 1 |
 | `about/portrait/` | About flip-card portrait | first 1 |
 | `about/testimonials/` | About testimonial cards | first 4 |
-| `gallery/portraits/` | Gallery page (`/gallery`) main grid | up to 500 (Unsplash fallback) |
-| `gallery/wides/` | Gallery page wide row | up to 500 (Unsplash fallback) |
+| `gallery/portraits/` | Gallery main grid | up to 500 (Unsplash fallback) |
+| `gallery/wides/` | Gallery wide row | up to 500 (Unsplash fallback) |
 | `heroes/gallery/` | Gallery page hero | first 1 |
 | `contact/backgrounds/` | Contact page background | first 1 |
 
-Two loaders in `client/src/utils/media.ts`:
-- `loadMediaOrFallback(category)` — retries, then falls back to Unsplash placeholders.
-  Used by HomeHero + the Gallery page (categories listed in `categoryEndpoint`).
-- `loadFolderImages(folderPath)` — retries, returns **empty** on failure or empty
-  folder (no Unsplash). Used by every folder-driven panel above.
-
-**Not read by the site** (leftovers — safe to ignore or delete): `home/intro/`,
-`home/scroll-scene/`, `about/approach/`, `home/portfolio_slideshow/landscapes/`.
-
-`media/` is gitignored — photos never enter version control.
-`server/data/images.json` is committed (filenames only, regenerated on every scan).
+Loaders in `client/src/utils/media.ts`:
+- `loadMediaOrFallback(category)` — retries, then Unsplash fallback (HomeHero + Gallery).
+- `loadFolderImages(folderPath)` — retries, returns **empty** on failure/empty (no Unsplash).
 
 ---
 
 ## Rate limiting
 
-Two separate per-IP limiters (`server/src/index.js`, tuned in `server/src/config.js`):
-
-- **API** (`/api/*`) — `RATE_LIMIT_MAX`, default **100**/15 min in prod (1000 in dev).
-  Guards the contact form and data endpoints (abuse-sensitive).
-- **Media** (`/media/*`) — `RATE_LIMIT_MEDIA_MAX`, default **1500**/15 min in prod
-  (20000 in dev). Photos need their own generous bucket: one page pulls ~30 images, so
-  a single shared limiter would 429 normal browsing and make images fail to load.
-
-Raise `RATE_LIMIT_MEDIA_MAX` if pages get heavier (more images) or you expect high
-traffic. The two limiters must stay split — never put `/media` under the API limiter.
+Single per-IP API limiter (`server/src/index.js`): `/api/*` — `RATE_LIMIT_MAX`, default
+**100**/15 min in prod (1000 in dev). There is no `/media` limiter anymore — photos are
+served by the Cloudinary CDN, not this server.
 
 ---
 
@@ -263,14 +239,24 @@ npm run dev:client       # client only
 npm run dev:server       # server only
 ```
 
-Server `.env` needs: `PORT=5000`, `CLIENT_URL=http://localhost:3000`
+`server/.env` needs: `PORT=5000`, `CLIENT_URL=http://localhost:3000`, and the
+**Cloudinary** creds: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`,
+`CLOUDINARY_API_SECRET`. `.env` is gitignored.
 
 ---
 
-## Deployment Notes
+## Deployment (LIVE)
 
-- Frontend → Vercel (static), set `VITE_API_URL` env var to backend URL
-- Backend → needs persistent server (Railway / Render) OR refactor to serverless
-- `media/` folder → needs cloud storage (Cloudinary recommended) for production;
-  update `API_HOST` in frontend to point at CDN
-- `server/data/images.json` is auto-rebuilt on server startup from whatever is in `media/`
+- **Vercel** (frontend): tracks `main`, Root Directory **empty** (`vercel.json` runs
+  `cd client && npm run build` + SPA rewrite). Env `VITE_API_URL` = Railway URL. To force
+  a clean rebuild, push a commit (dashboard "Redeploy" reuses the build cache and can
+  ship a stale bundle — a real gotcha we hit).
+- **Railway** (backend): tracks `main`, Root Directory `server`, start `node src/index.js`.
+  Env: `NODE_ENV=production`, `PORT`, `CLIENT_URL` = comma-separated live origins
+  (`https://theweddingshade.com,https://www.theweddingshade.com`) for CORS, plus the
+  Cloudinary creds. `config.js` splits `CLIENT_URL` on commas.
+- **Cloudinary** (media): upload to the `media/...` folder tree above.
+
+**Verification note:** the Claude preview screenshot tool times out on the home page
+(continuous slideshow/marquee animation never reaches a stable paint) — verify via
+`preview_eval` DOM checks + `curl` instead of screenshots.
