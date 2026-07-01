@@ -82,10 +82,11 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Giant faded site-name watermark (mirrors the About page treatment) */}
-      <div className="pointer-events-none select-none overflow-hidden">
-        <p className="whitespace-nowrap text-center font-serif text-[10vw] leading-[0.85] tracking-tight text-white/[0.04]">
-          The Wedding Shade
+      {/* Giant faded site-name watermark — bold & oversized like the About page's "MOHIT" */}
+      <div className="pointer-events-none select-none overflow-hidden px-2 pt-4 text-center">
+        <p className="font-sans font-black uppercase leading-[0.8] tracking-tight text-white/[0.05]">
+          <span className="block text-[13.5vw]">The Wedding</span>
+          <span className="block text-[13.5vw]">Shade</span>
         </p>
       </div>
     </footer>
