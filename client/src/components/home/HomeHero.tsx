@@ -3,12 +3,14 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../media/OptimizedImage';
 import { EASE_CURVE, SLIDE_DURATION_MS, TRANSITION_DURATION_S } from '../../config/animation';
-import { loadMediaOrFallback, MediaItem } from '../../utils/media';
+import { loadFolderImages, loadMediaOrFallback, MediaItem } from '../../utils/media';
+import { useIsTouch } from '../../utils/useIsTouch';
 
 const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
   const [slides, setSlides] = useState<MediaItem[]>([]);
   const [index, setIndex] = useState(0);
   const reduceMotion = useReducedMotion();
+  const isTouch = useIsTouch();
   const readyFired = useRef(false);
 
   const signalReady = () => {
@@ -18,11 +20,25 @@ const HomeHero: React.FC<{ onReady?: () => void }> = ({ onReady }) => {
     }
   };
 
+  // Phones get portrait-oriented hero images (they fill a vertical screen far
+  // better than cropped landscapes) from media/heroes/home_mobile/. If that
+  // folder is empty we fall back to the standard hero set, so nothing breaks
+  // before the portrait images are uploaded.
   useEffect(() => {
     const controller = new AbortController();
-    loadMediaOrFallback('hero', { limit: 5, signal: controller.signal }).then(setSlides);
+    (async () => {
+      if (isTouch) {
+        const portraits = await loadFolderImages('heroes/home_mobile', { limit: 5, signal: controller.signal });
+        if (portraits.length) {
+          setSlides(portraits);
+          return;
+        }
+      }
+      const standard = await loadMediaOrFallback('hero', { limit: 5, signal: controller.signal });
+      setSlides(standard);
+    })();
     return () => controller.abort();
-  }, []);
+  }, [isTouch]);
 
   useEffect(() => {
     if (slides.length < 2 || reduceMotion) return;
