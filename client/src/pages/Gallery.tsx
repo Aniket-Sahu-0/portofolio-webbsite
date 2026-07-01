@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import OptimizedImage from '../components/media/OptimizedImage';
 import { loadMediaOrFallback, MediaItem } from '../utils/media';
 
@@ -34,16 +34,6 @@ function interleave<T>(a: T[], b: T[]): T[] {
 }
 
 const Gallery = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-
-  // Parallax transforms - content moves while background stays fixed
-  const yContent = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacityContent = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
   const [displayCount, setDisplayCount] = useState(12); // Reveal the first 12, then infinite-scroll
@@ -132,8 +122,8 @@ const Gallery = () => {
 
   return (
     <div className="bg-rich">
-      {/* Parallax Hero Section */}
-      <section ref={heroRef} className="relative h-screen overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative h-screen overflow-hidden">
         {/* Background image — optimized <img>, no background-attachment:fixed
             (bg-fixed is what stutters on mobile; other page heroes don't use it) */}
         <div className="absolute inset-0">
@@ -153,11 +143,8 @@ const Gallery = () => {
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/60" />
         
-        {/* Moving Content with Enhanced Typography */}
-        <motion.div 
-          className="relative z-10 h-full flex items-center justify-center text-center px-4"
-          style={{ y: yContent, opacity: opacityContent }}
-        >
+        {/* Hero content — static (no scroll parallax; that vibrated the text on mobile) */}
+        <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
           <div className="max-w-5xl">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -191,7 +178,7 @@ const Gallery = () => {
               </motion.p>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Gallery Grid Section with Enhanced Aesthetics */}
