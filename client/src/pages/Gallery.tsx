@@ -134,14 +134,22 @@ const Gallery = () => {
     <div className="bg-rich">
       {/* Parallax Hero Section */}
       <section ref={heroRef} className="relative h-screen overflow-hidden">
-        {/* Fixed Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-fixed mono"
-          style={{
-            backgroundImage: heroUrl ? `url('${heroUrl}')` : undefined
-          }}
-        />
-        
+        {/* Background image — optimized <img>, no background-attachment:fixed
+            (bg-fixed is what stutters on mobile; other page heroes don't use it) */}
+        <div className="absolute inset-0">
+          {heroUrl && (
+            <OptimizedImage
+              src={heroUrl}
+              alt="Featured wedding photography"
+              width={1920}
+              quality={80}
+              sizes="100vw"
+              priority
+              className="h-full w-full object-cover"
+            />
+          )}
+        </div>
+
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/60" />
         

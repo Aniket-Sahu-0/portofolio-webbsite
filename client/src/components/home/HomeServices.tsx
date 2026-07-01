@@ -345,7 +345,6 @@ const HomeServices: React.FC = () => {
                     <blockquote className="font-serif text-[clamp(1.05rem,5vw,1.5rem)] leading-snug text-white">
                       "{review.quote}"
                     </blockquote>
-                    <figcaption className="mt-3 text-[0.65rem] uppercase tracking-[0.24em] text-white/70">{review.name}</figcaption>
                   </div>
                 </figure>
               ))}
@@ -493,9 +492,6 @@ const HomeServices: React.FC = () => {
                     <blockquote className="font-serif text-[clamp(1.05rem,3vw,1.55rem)] leading-snug text-white">
                       "{review.quote}"
                     </blockquote>
-                    <figcaption className="mt-3 text-[0.65rem] uppercase tracking-[0.24em] text-white/70 sm:text-xs">
-                      {review.name}
-                    </figcaption>
                   </div>
                 </figure>
               ))}

@@ -62,16 +62,6 @@ const Footer = () => {
           ))}
         </nav>
 
-        {/* Email */}
-        <div className="mt-7 text-center">
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className="text-sm tracking-wide text-gray-300 transition-colors hover:text-accent break-all"
-          >
-            {CONTACT_EMAIL}
-          </a>
-        </div>
-
         {/* Bottom row */}
         <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/10 py-6 text-[0.7rem] text-gray-500 sm:flex-row sm:justify-between">
           <p>© {currentYear} The Wedding Shade. All rights reserved.</p>
