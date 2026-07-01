@@ -188,7 +188,7 @@ const Gallery = () => {
 
       {/* Gallery Grid Section with Enhanced Aesthetics */}
       <section className="relative py-20 md:py-32">
-        <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
+        <div className="max-w-[1600px] mx-auto px-1 sm:px-6">
           {/* Refined Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -225,9 +225,9 @@ const Gallery = () => {
 
           {/* Unsplash-style masonry: equal-width columns, natural aspect ratios,
               square corners, flat (no shadow), even gutters. */}
-          <div className="flex gap-4 sm:gap-6">
+          <div className="flex gap-1">
             {columns.map((col, ci) => (
-              <div key={ci} className="flex min-w-0 flex-1 flex-col gap-4 sm:gap-6">
+              <div key={ci} className="flex min-w-0 flex-1 flex-col gap-1">
                 {col.map((image) => (
                   <motion.div
                     key={image.id}
